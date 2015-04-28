@@ -3,8 +3,8 @@
     "webroot": "wwwroot",
     "version": "1.0.0-*",
     "dependencies": {
-	"Microsoft.AspNet.Server.IIS": "1.0.0-beta3",
-	"Microsoft.AspNet.Mvc": "6.0.0-beta3",
+        "Microsoft.AspNet.Server.IIS": "1.0.0-beta3",
+        "Microsoft.AspNet.Mvc": "6.0.0-beta3",
         "Microsoft.AspNet.StaticFiles": "1.0.0-beta3",
         "Microsoft.AspNet.Server.WebListener": "1.0.0-beta3"
     },
@@ -23,5 +23,8 @@
         "**.kproj",
         "**.user",
         "**.vspscc"
-    ]
+    ],
+    "commands": {
+        "web": "Microsoft.AspNet.Hosting --server Microsoft.AspNet.Server.WebListener --server.urls http://localhost:5000"
+    }
 }
