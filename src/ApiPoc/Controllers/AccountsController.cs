@@ -25,7 +25,7 @@ namespace ApiPoc.Controllers
                 {
                     new AccountModel() {
                         Links = new[] {
-                            Url.LinkSelf<AccountsController>(x => x.GetItem(0), new { accountId = CURRENT_ACCOUNT_ID })
+                            Url.LinkSelf<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID))
                         },
                         FirstName = "Andrés",
                         LastName = "Moschini"
@@ -49,7 +49,7 @@ namespace ApiPoc.Controllers
                 {
                     new AccountModel() {
                         Links = new[] {
-                            Url.LinkSelf<AccountsController>(x => x.GetItem(0), new { accountId = CURRENT_ACCOUNT_ID })
+                            Url.LinkSelf<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID))
                         },
                         FirstName = "Andrés",
                         LastName = "Moschini",

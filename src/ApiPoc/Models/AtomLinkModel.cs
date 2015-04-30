@@ -32,21 +32,21 @@ namespace ApiPoc.Controllers
             return new AtomLinkModel() { Href = helper.Action(), Rel = "self" };
         }
 
-        public static AtomLinkModel LinkSelf<T>(this IUrlHelper helper, Expression<Action<T>> expression, object values = null)
+        public static AtomLinkModel LinkSelf<T>(this IUrlHelper helper, Expression<Action<T>> expression)
             where T : Controller
         {
-            return new AtomLinkModel() { Href = helper.Action(expression, values), Rel = "self" };
+            return new AtomLinkModel() { Href = helper.ActionWithValues(expression), Rel = "self" };
         }
 
-        public static AtomLinkModel LinkParent<T>(this IUrlHelper helper, Expression<Action<T>> expression, object values = null)
+        public static AtomLinkModel LinkParent<T>(this IUrlHelper helper, Expression<Action<T>> expression)
             where T : Controller
         {
-            return new AtomLinkModel() { Href = helper.Action(expression, values), Rel = "parent" };
+            return new AtomLinkModel() { Href = helper.ActionWithValues(expression), Rel = "parent" };
         }
 
         public static AtomLinkModel LinkAccountResource(this IUrlHelper helper, int accountId)
         {
-            return new AtomLinkModel() { Href = helper.Action<AccountsController>(x => x.GetItem(0), new { accountId = accountId }), Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-resource" };
+            return new AtomLinkModel() { Href = helper.ActionWithValues<AccountsController>(x => x.GetItem(accountId)), Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-resource" };
         }
 
         public static AtomLinkModel LinkAccountCollection(this IUrlHelper helper)
@@ -68,7 +68,24 @@ namespace ApiPoc.Controllers
 
     public static class TypedUrlHelper
     {
-        // Quick and dirty pattch to have type
+        // Quick and dirty pattch to have type safety
+        public static string ActionWithValues<T>(this IUrlHelper helper, Expression<Action<T>> expression)
+            where T : Controller
+        {
+            var method = expression.Body as MethodCallExpression;
+            var arguments = method.Arguments;
+            var parameters = method.Method.GetParameters();
+            var values = Enumerable.Range(0, arguments.Count).ToDictionary(
+                x => parameters[x].Name,
+                x => Expression.Lambda(arguments[x]).Compile().DynamicInvoke());
+            var actionMember = method.Method;
+            var controllerType = actionMember.DeclaringType.GetTypeInfo();
+            var actionName = actionMember.Name;
+            var controllerName = controllerType.Name.EndsWith("Controller") ? controllerType.Name.Substring(0, controllerType.Name.Length - "Controller".Length) : controllerType.Name;
+            return helper.Action(actionName, controllerName, values);
+        }
+
+        // Quick and dirty pattch to have type safety
         public static string Action<T>(this IUrlHelper helper, Expression<Action<T>> expression, object values = null)
             where T : Controller
         {
@@ -77,7 +94,7 @@ namespace ApiPoc.Controllers
             var controllerType = actionMember.DeclaringType.GetTypeInfo();
             var actionName = actionMember.Name;
             var controllerName = controllerType.Name.EndsWith("Controller") ? controllerType.Name.Substring(0, controllerType.Name.Length - "Controller".Length) : controllerType.Name;
-            return helper.Action(actionName, controllerName, values); 
+            return helper.Action(actionName, controllerName, values);
         }
 
     }
