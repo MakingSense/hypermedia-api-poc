@@ -51,9 +51,11 @@ namespace ApiPoc.Controllers
 
         public static AtomLinkModel LinkAccountCollection(this IUrlHelper helper)
         {
-            return new AtomLinkModel() {
+            return new AtomLinkModel()
+            {
                 Href = helper.Action<AccountsController>(x => x.GetCollection()),
-                Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-collection" };
+                Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-collection"
+            };
         }
 
         public static AtomLinkModel LinkAccountDetailedCollection(this IUrlHelper helper)
@@ -64,6 +66,26 @@ namespace ApiPoc.Controllers
                 Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-detailed-collection"
             };
         }
+
+        public static AtomLinkModel LinkSubscriptorsCollection(this IUrlHelper helper, int accountId)
+        {
+            return new AtomLinkModel()
+            {
+                Href = helper.Action<SubscriptorsController>(x => x.GetCollection(accountId)),
+                Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/subscriptors-collection"
+            };
+        }
+
+        public static AtomLinkModel LinkSubscriptorsDetailedCollection(this IUrlHelper helper, int accountId)
+        {
+            return new AtomLinkModel()
+            {
+                Href = helper.Action<SubscriptorsController>(x => x.GetDetailedCollection(accountId)),
+                Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-detailed-collection"
+            };
+        }
+
+        
     }
 
     public static class TypedUrlHelper

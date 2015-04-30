@@ -66,7 +66,8 @@ namespace ApiPoc.Controllers
             return new ObjectResult(new AccountModel() {
                 Links = new[] {
                     Url.LinkSelf(),
-                    Url.LinkParent<AccountsController>(x => x.GetCollection())
+                    Url.LinkParent<AccountsController>(x => x.GetCollection()),
+                    Url.LinkSubscriptorsCollection(accountId)
                 },
                 FirstName = "Andrés",
                 LastName = "Moschini",
