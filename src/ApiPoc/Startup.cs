@@ -5,6 +5,7 @@ using Microsoft.AspNet.Http;
 using Microsoft.AspNet.Routing;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.AspNet.Mvc;
+using System.Linq;
 
 namespace ApiPoc
 {
@@ -18,10 +19,21 @@ namespace ApiPoc
         {
             services.AddMvc().Configure<MvcOptions>(options =>
             {
-                //Quick and dirty patch to have json indentation
-                ((Microsoft.AspNet.Mvc.JsonOutputFormatter)options.OutputFormatters[2].Instance).SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                foreach (var formater in options.OutputFormatters.Select(x => x.Instance).OfType<JsonOutputFormatter>())
+                {
+                    formater.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
+                    formater.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                }
+
+                // TODO: It is not paying attention to System.Xml.Serialization attributes 
+
                 options.AddXmlDataContractSerializerFormatter();
-                ((Microsoft.AspNet.Mvc.XmlDataContractSerializerOutputFormatter)options.OutputFormatters[3].Instance).WriterSettings.Indent = true;
+
+                foreach (var formater in options.OutputFormatters.Select(x => x.Instance).OfType<XmlDataContractSerializerOutputFormatter>())
+                {
+                    formater.WriterSettings.Indent = true;
+                }
+
             });
         }
 
