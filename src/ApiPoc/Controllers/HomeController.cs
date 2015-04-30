@@ -16,8 +16,8 @@ namespace ApiPoc.Controllers
             return new ObjectResult(new HomeModel() {
                 Links = new[] {
                     Url.LinkSelf(),
-                    Url.LinkAccountsRoot(),
-                    Url.LinkAccountHome(CURRENT_ACCOUNT_ID)
+                    Url.LinkAccountCollection(),
+                    Url.LinkAccountResource(CURRENT_ACCOUNT_ID)
                 }
             });
         }

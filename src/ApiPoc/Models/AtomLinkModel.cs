@@ -32,22 +32,37 @@ namespace ApiPoc.Controllers
             return new AtomLinkModel() { Href = helper.Action(), Rel = "self" };
         }
 
+        public static AtomLinkModel LinkSelf<T>(this IUrlHelper helper, Expression<Action<T>> expression, object values = null)
+            where T : Controller
+        {
+            return new AtomLinkModel() { Href = helper.Action(expression, values), Rel = "self" };
+        }
+
         public static AtomLinkModel LinkParent<T>(this IUrlHelper helper, Expression<Action<T>> expression, object values = null)
             where T : Controller
         {
             return new AtomLinkModel() { Href = helper.Action(expression, values), Rel = "parent" };
         }
 
-        public static AtomLinkModel LinkAccountHome(this IUrlHelper helper, int accountId)
+        public static AtomLinkModel LinkAccountResource(this IUrlHelper helper, int accountId)
         {
-            return new AtomLinkModel() { Href = helper.Action<AccountsController>(x => x.GetItem(0), new { accountId = accountId }), Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-home" };
+            return new AtomLinkModel() { Href = helper.Action<AccountsController>(x => x.GetItem(0), new { accountId = accountId }), Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-resource" };
         }
 
-        public static AtomLinkModel LinkAccountsRoot(this IUrlHelper helper)
+        public static AtomLinkModel LinkAccountCollection(this IUrlHelper helper)
         {
             return new AtomLinkModel() {
                 Href = helper.Action<AccountsController>(x => x.GetCollection()),
                 Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-collection" };
+        }
+
+        public static AtomLinkModel LinkAccountDetailedCollection(this IUrlHelper helper)
+        {
+            return new AtomLinkModel()
+            {
+                Href = helper.Action<AccountsController>(x => x.GetDetailedCollection()),
+                Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-detailed-collection"
+            };
         }
     }
 
