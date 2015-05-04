@@ -1,0 +1,18 @@
+﻿@using ApiPoc.Representations
+@using ApiPoc.Helpers
+@model ApiPoc.Representations.AccountRepresentation
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Account detail</title>
+</head>
+<body>
+    <div id="account-@Model.Id">
+        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Account " + Model.Id)</h1>
+        <footer>
+            @Html.Links(Model.GetLinkBag().GetUnusedLinks())
+        </footer>
+    </div>
+</body>
+</html>

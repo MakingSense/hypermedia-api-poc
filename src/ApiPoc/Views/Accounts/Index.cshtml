@@ -15,7 +15,7 @@
             {
                 var itemLinkBag = new LinkBag(item.Links);
                 <li>
-                    <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
+                    <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
                 </li>
             }
         </ul>

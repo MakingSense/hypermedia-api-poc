@@ -19,7 +19,7 @@ namespace ApiPoc.Controllers
                 Links = new[] {
                     Url.LinkSelf(Rel.Home),
                     Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Account List"),
-                    Url.Link<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details")
+                    Url.Link<AccountsController>(x => x.Item(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details")
                 }
             });
         }
