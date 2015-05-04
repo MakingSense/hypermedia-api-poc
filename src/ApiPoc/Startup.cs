@@ -6,6 +6,7 @@ using Microsoft.AspNet.Routing;
 using Microsoft.Framework.DependencyInjection;
 using Microsoft.AspNet.Mvc;
 using System.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace ApiPoc
 {
@@ -23,6 +24,7 @@ namespace ApiPoc
                 {
                     formater.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                     formater.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                    formater.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 }
 
                 //// TODO: It is not paying attention to System.Xml.Serialization attributes 
