@@ -17,15 +17,16 @@ namespace ApiPoc.Controllers
             return new ObjectResult(new SubscriptorCollectionRepresentation()
             {
                 Links = new[] {
-                    Url.LinkSelf(),
-                    Url.LinkParent<AccountsController>(x => x.GetItem(accountId)),
-                    Url.LinkSubscriptorsDetailedCollection(accountId)
+                    Url.LinkHome(),
+                    Url.LinkSelf(Rel.SubscriptorCollection),
+                    Url.Link<AccountsController>(x => x.GetItem(accountId), Rel.Parent | Rel.AccountCollection, "Account details"),
+                    Url.Link<SubscriptorsController>(x => x.GetDetailedCollection(accountId), Rel.SubscriptorCollection, "Subscription list (detailed)"),
                 },
                 Items = new[]
                 {
                     new SubscriptorRepresentation() {
                         Links = new[] {
-                            Url.LinkSelf<SubscriptorsController>(x => x.GetItem(accountId, 155))
+                            Url.Link<SubscriptorsController>(x => x.GetItem(accountId, 155), Rel.Self | Rel.SubscriptorItem, "Subscriptor details")
                         },
                         FirstName = "Juan",
                         LastName = "Perez"
@@ -40,15 +41,16 @@ namespace ApiPoc.Controllers
             return new ObjectResult(new SubscriptorCollectionRepresentation()
             {
                 Links = new[] {
-                    Url.LinkSelf(),
-                    Url.LinkParent<AccountsController>(x => x.GetItem(accountId)),
-                    Url.LinkSubscriptorsCollection(accountId)
+                    Url.LinkHome(),
+                    Url.LinkSelf(Rel.SubscriptorDetailCollection),
+                    Url.Link<AccountsController>(x => x.GetItem(accountId), Rel.Parent | Rel.AccountCollection, "Account details"),
+                    Url.Link<SubscriptorsController>(x => x.GetCollection(accountId), Rel.SubscriptorCollection, "Subscription list (simple)"),
                 },
                 Items = new[]
                 {
                     new SubscriptorRepresentation() {
                         Links = new[] {
-                            Url.LinkSelf<SubscriptorsController>(x => x.GetItem(accountId, 155))
+                            Url.Link<SubscriptorsController>(x => x.GetItem(accountId, 155), Rel.Self | Rel.SubscriptorItem, "Subscriptor details")
                         },
                         FirstName = "Juan",
                         LastName = "Perez",
@@ -65,8 +67,9 @@ namespace ApiPoc.Controllers
             return new ObjectResult(new AccountRepresentation()
             {
                 Links = new[] {
-                    Url.LinkSelf(),
-                    Url.LinkParent<SubscriptorsController>(x => x.GetCollection(accountId))
+                    Url.LinkHome(),
+                    Url.LinkSelf(Rel.SubscriptorItem),
+                    Url.Link<SubscriptorsController>(x => x.GetCollection(accountId), Rel.Parent | Rel.SubscriptorCollection, "Subscriptors list"),
                 },
                 FirstName = "Andrés",
                 LastName = "Moschini",

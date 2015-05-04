@@ -16,18 +16,19 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts")]
         public IActionResult GetCollection()
         {
+
             return new ObjectResult(new AccountCollectionRepresentation() {
                 Links = new[] {
-                    Url.LinkSelf(),
-                    Url.LinkParent<HomeController>(x => x.GetRoot()),
-                    Url.LinkAccountResource(CURRENT_ACCOUNT_ID),
-                    Url.LinkAccountDetailedCollection()
+                    Url.LinkHome(),
+                    Url.LinkSelf(Rel.AccountCollection),
+                    Url.Link<HomeController>(x => x.GetRoot(), Rel.Parent | Rel.Home, "Home"),
+                    Url.Link<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details")
                 },
                 Items = new []
                 {
                     new AccountRepresentation() {
                         Links = new[] {
-                            Url.LinkSelf<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID))
+                            Url.Link<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID), Rel.Self | Rel.AccountItem, "Account details")
                         },
                         FirstName = "Andrés",
                         LastName = "Moschini"
@@ -36,40 +37,15 @@ namespace ApiPoc.Controllers
             });   
         }
 
-        [HttpGet("/accounts/detail")]
-        public IActionResult GetDetailedCollection()
-        {
-            return new ObjectResult(new AccountCollectionRepresentation()
-            {
-                Links = new[] {
-                    Url.LinkSelf(),
-                    Url.LinkParent<HomeController>(x => x.GetRoot()),
-                    Url.LinkAccountResource(CURRENT_ACCOUNT_ID),
-                    Url.LinkAccountCollection()
-                },
-                Items = new[]
-                {
-                    new AccountRepresentation() {
-                        Links = new[] {
-                            Url.LinkSelf<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID))
-                        },
-                        FirstName = "Andrés",
-                        LastName = "Moschini",
-                        Email = "private@andresmoschini.com",
-                        Birday = DateTime.Parse("1978-12-02")
-                    }
-                }
-            });
-        }
-
         [HttpGet("/accounts/{accountId}")]
         public IActionResult GetItem(int accountId)
         {
             return new ObjectResult(new AccountRepresentation() {
                 Links = new[] {
-                    Url.LinkSelf(),
-                    Url.LinkParent<AccountsController>(x => x.GetCollection()),
-                    Url.LinkSubscriptorsCollection(accountId)
+                    Url.LinkHome(),
+                    Url.LinkSelf(Rel.AccountItem),
+                    Url.Link<AccountsController>(x => x.GetCollection(), Rel.Parent | Rel.AccountItem, "Accounts list"),
+                    Url.Link<SubscriptorsController>(x => x.GetCollection(accountId), Rel.SubscriptorCollection, "Subscription list"),
                 },
                 FirstName = "Andrés",
                 LastName = "Moschini",

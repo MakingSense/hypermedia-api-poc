@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNet.Mvc;
 using ApiPoc.Helpers;
+using ApiPoc.Representations;
 
 namespace ApiPoc.Controllers
 {
@@ -16,9 +17,9 @@ namespace ApiPoc.Controllers
         {
             return new ObjectResult(new HomeRepresentation() {
                 Links = new[] {
-                    Url.LinkSelf(),
-                    Url.LinkAccountCollection(),
-                    Url.LinkAccountResource(CURRENT_ACCOUNT_ID)
+                    Url.LinkSelf(Rel.Home),
+                    Url.Link<AccountsController>(x => x.GetCollection(), Rel.AccountCollection, "Account List"),
+                    Url.Link<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details")
                 }
             });
         }

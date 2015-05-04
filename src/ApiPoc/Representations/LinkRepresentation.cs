@@ -11,13 +11,8 @@ namespace ApiPoc.Representations
     public class LinkRepresentation
     {
         public string Href { get; set; }
-
         public string Rel { get; set; }
-        
-        public static LinkRepresentation AccountHome(string href)
-        {
-            return new LinkRepresentation() { Href = href, Rel = "ClientHome" };
-        }
+        public string Description { get; set; }
 
     }
    
