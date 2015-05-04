@@ -1,10 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@using ApiPoc.Representations
+@using ApiPoc.Helpers 
+@model ApiPoc.Representations.HomeRepresentation
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Home</title>
 </head>
 <body>
-    Welcome to your ASP.NET 5 Web API app! Click <a href="api/Values"> here</a> to access the Web API api/values
+    <div id="home">
+        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Home")</h1>
+        <footer>
+            @Html.Links(Model.GetLinkBag().GetUnusedLinks())
+        </footer>
+    </div>
 </body>
 </html>

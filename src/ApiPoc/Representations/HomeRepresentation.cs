@@ -5,7 +5,7 @@ using System.Xml.Serialization;
 
 namespace ApiPoc.Representations
 {
-    public class HomeModel : BaseRepresentation
+    public class HomeRepresentation : BaseRepresentation
     {
 
     }

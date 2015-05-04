@@ -8,17 +8,17 @@ using ApiPoc.Representations;
 
 namespace ApiPoc.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private const int CURRENT_ACCOUNT_ID = 128;
 
         [HttpGet("/")]
-        public IActionResult GetRoot()
+        public IActionResult Index()
         {
-            return new ObjectResult(new HomeRepresentation() {
+            return Negotiated(new HomeRepresentation() {
                 Links = new[] {
                     Url.LinkSelf(Rel.Home),
-                    Url.Link<AccountsController>(x => x.GetCollection(), Rel.AccountCollection, "Account List"),
+                    Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Account List"),
                     Url.Link<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details")
                 }
             });

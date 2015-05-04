@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 
 namespace ApiPoc.Helpers
 {
-    public static class LinkHelpers
+    public static class LinkUrlHelpers
     {
         // Quick and dirty pattch to have type safety
         private static string ActionWithValues<T>(this IUrlHelper helper, Expression<Action<T>> expression)
@@ -40,7 +40,7 @@ namespace ApiPoc.Helpers
             return helper.Action(actionName, controllerName, values).Replace("%7B", "{").Replace("%7D", "}");
         }
 
-        private static string ToRelString(this Rel relation)
+        public static string ToRelString(this Rel relation)
         {
             //UglyPatch
             return relation == 0
@@ -55,24 +55,25 @@ namespace ApiPoc.Helpers
             {
                 Href = helper.ActionWithValues<T>(expression),
                 Rel = relation.ToRelString(), 
-                Description = description
+                Description = description ?? relation.ToString()
             };
         }
 
-        public static LinkRepresentation LinkSelf(this IUrlHelper helper, Rel relation = 0, string description = null)
+        public static LinkRepresentation LinkSelf(this IUrlHelper helper, Rel relation = Rel.None, string description = null)
         {
-            relation = relation | Rel.Self;
+            relation |= Rel.Self;
             return new LinkRepresentation()
             {
                 Href = helper.Action(),
                 Rel = relation.ToRelString(),
-                Description = description
+                Description = description ?? "Self"
             };
         }
 
-        public static LinkRepresentation LinkHome(this IUrlHelper helper)
+        public static LinkRepresentation LinkHome(this IUrlHelper helper, Rel relation = Rel.None, string description = null)
         {
-            return helper.Link<HomeController>(x => x.GetRoot(), Rel.Home);
+            relation |= Rel.Home;
+            return helper.Link<HomeController>(x => x.Index(), relation, description ?? "Home");
         }
 
     }

@@ -9,7 +9,7 @@ using ApiPoc.Representations;
 
 namespace ApiPoc.Controllers
 {
-    public class SubscriptorsController : Controller
+    public class SubscriptorsController : BaseController
     {
         [HttpGet("/accounts/{accountId}/subscriptors")]
         public IActionResult GetCollection(int accountId)

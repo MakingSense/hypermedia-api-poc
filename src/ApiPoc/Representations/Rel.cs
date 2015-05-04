@@ -6,6 +6,7 @@ namespace ApiPoc.Representations
     [Flags]
     public enum Rel
     {
+        None = 0,
         Self = 1,
         Parent = 2,
         Home = 4,

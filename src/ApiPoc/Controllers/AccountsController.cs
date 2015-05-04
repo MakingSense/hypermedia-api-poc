@@ -9,19 +9,18 @@ using ApiPoc.Helpers;
 
 namespace ApiPoc.Controllers
 {
-    public class AccountsController : Controller
+    public class AccountsController : BaseController
     {
         private const int CURRENT_ACCOUNT_ID = 128;
 
         [HttpGet("/accounts")]
-        public IActionResult GetCollection()
+        public IActionResult Index()
         {
 
-            return new ObjectResult(new AccountCollectionRepresentation() {
+            return Negotiated(new AccountCollectionRepresentation() {
                 Links = new[] {
-                    Url.LinkHome(),
+                    Url.LinkHome(Rel.Parent),
                     Url.LinkSelf(Rel.AccountCollection),
-                    Url.Link<HomeController>(x => x.GetRoot(), Rel.Parent | Rel.Home, "Home"),
                     Url.Link<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details")
                 },
                 Items = new []
@@ -44,7 +43,7 @@ namespace ApiPoc.Controllers
                 Links = new[] {
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.AccountItem),
-                    Url.Link<AccountsController>(x => x.GetCollection(), Rel.Parent | Rel.AccountItem, "Accounts list"),
+                    Url.Link<AccountsController>(x => x.Index(), Rel.Parent | Rel.AccountItem, "Accounts list"),
                     Url.Link<SubscriptorsController>(x => x.GetCollection(accountId), Rel.SubscriptorCollection, "Subscription list"),
                 },
                 FirstName = "Andrés",
