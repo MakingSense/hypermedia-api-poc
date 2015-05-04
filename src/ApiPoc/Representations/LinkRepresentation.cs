@@ -6,20 +6,17 @@ using Microsoft.AspNet.Mvc;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ApiPoc.Controllers
+namespace ApiPoc.Representations
 {
-    [XmlType("link", Namespace = "http://www.w3.org/2005/Atom")]
-    public class AtomLinkModel
+    public class LinkRepresentation
     {
-        [XmlAttribute("href")]
         public string Href { get; set; }
 
-        [XmlAttribute("rel")]
         public string Rel { get; set; }
         
-        public static AtomLinkModel AccountHome(string href)
+        public static LinkRepresentation AccountHome(string href)
         {
-            return new AtomLinkModel() { Href = href, Rel = "ClientHome" };
+            return new LinkRepresentation() { Href = href, Rel = "ClientHome" };
         }
 
     }

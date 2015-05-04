@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNet.Mvc;
+using ApiPoc.Helpers;
 
 namespace ApiPoc.Controllers
 {
@@ -13,7 +14,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/")]
         public IActionResult GetRoot()
         {
-            return new ObjectResult(new HomeModel() {
+            return new ObjectResult(new HomeRepresentation() {
                 Links = new[] {
                     Url.LinkSelf(),
                     Url.LinkAccountCollection(),

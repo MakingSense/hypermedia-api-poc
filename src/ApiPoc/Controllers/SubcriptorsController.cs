@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNet.Mvc;
 using System.Xml.Serialization;
+using ApiPoc.Helpers;
+using ApiPoc.Representations;
 
 namespace ApiPoc.Controllers
 {
@@ -12,7 +14,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts/{accountId}/subscriptors")]
         public IActionResult GetCollection(int accountId)
         {
-            return new ObjectResult(new SubscriptorCollectionModel()
+            return new ObjectResult(new SubscriptorCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkSelf(),
@@ -21,7 +23,7 @@ namespace ApiPoc.Controllers
                 },
                 Items = new[]
                 {
-                    new SubscriptorModel() {
+                    new SubscriptorRepresentation() {
                         Links = new[] {
                             Url.LinkSelf<SubscriptorsController>(x => x.GetItem(accountId, 155))
                         },
@@ -35,7 +37,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts/{accountId}/subscriptors/detail")]
         public IActionResult GetDetailedCollection(int accountId)
         {
-            return new ObjectResult(new SubscriptorCollectionModel()
+            return new ObjectResult(new SubscriptorCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkSelf(),
@@ -44,7 +46,7 @@ namespace ApiPoc.Controllers
                 },
                 Items = new[]
                 {
-                    new SubscriptorModel() {
+                    new SubscriptorRepresentation() {
                         Links = new[] {
                             Url.LinkSelf<SubscriptorsController>(x => x.GetItem(accountId, 155))
                         },
@@ -60,7 +62,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts/{accountId}/subscriptors/{subscriptorId}")]
         public IActionResult GetItem(int accountId, int subscriptorId)
         {
-            return new ObjectResult(new AccountModel()
+            return new ObjectResult(new AccountRepresentation()
             {
                 Links = new[] {
                     Url.LinkSelf(),

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNet.Mvc;
 using System.Xml.Serialization;
+using ApiPoc.Representations;
+using ApiPoc.Helpers;
 
 namespace ApiPoc.Controllers
 {
@@ -14,7 +16,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts")]
         public IActionResult GetCollection()
         {
-            return new ObjectResult(new AccountCollectionModel() {
+            return new ObjectResult(new AccountCollectionRepresentation() {
                 Links = new[] {
                     Url.LinkSelf(),
                     Url.LinkParent<HomeController>(x => x.GetRoot()),
@@ -23,7 +25,7 @@ namespace ApiPoc.Controllers
                 },
                 Items = new []
                 {
-                    new AccountModel() {
+                    new AccountRepresentation() {
                         Links = new[] {
                             Url.LinkSelf<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID))
                         },
@@ -37,7 +39,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts/detail")]
         public IActionResult GetDetailedCollection()
         {
-            return new ObjectResult(new AccountCollectionModel()
+            return new ObjectResult(new AccountCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkSelf(),
@@ -47,7 +49,7 @@ namespace ApiPoc.Controllers
                 },
                 Items = new[]
                 {
-                    new AccountModel() {
+                    new AccountRepresentation() {
                         Links = new[] {
                             Url.LinkSelf<AccountsController>(x => x.GetItem(CURRENT_ACCOUNT_ID))
                         },
@@ -63,7 +65,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts/{accountId}")]
         public IActionResult GetItem(int accountId)
         {
-            return new ObjectResult(new AccountModel() {
+            return new ObjectResult(new AccountRepresentation() {
                 Links = new[] {
                     Url.LinkSelf(),
                     Url.LinkParent<AccountsController>(x => x.GetCollection()),

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace ApiPoc.Controllers
+namespace ApiPoc.Representations
 {
-    [XmlRoot("subcriptor", Namespace = "http://andresmoschini.github.io/hypermedia-api-poc")]
-    public class SubscriptorModel : BaseModel
+    public class AccountRepresentation : BaseRepresentation
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -25,14 +25,12 @@ namespace ApiPoc
                     formater.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 }
 
-                // TODO: It is not paying attention to System.Xml.Serialization attributes 
-
-                options.AddXmlDataContractSerializerFormatter();
-
-                foreach (var formater in options.OutputFormatters.Select(x => x.Instance).OfType<XmlDataContractSerializerOutputFormatter>())
-                {
-                    formater.WriterSettings.Indent = true;
-                }
+                //// TODO: It is not paying attention to System.Xml.Serialization attributes 
+                //options.AddXmlDataContractSerializerFormatter();
+                //foreach (var formater in options.OutputFormatters.Select(x => x.Instance).OfType<XmlDataContractSerializerOutputFormatter>())
+                //{
+                //    formater.WriterSettings.Indent = true;
+                //}
 
             });
         }

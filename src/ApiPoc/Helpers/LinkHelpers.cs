@@ -1,66 +1,68 @@
-﻿using Microsoft.AspNet.Mvc;
+﻿using ApiPoc.Controllers;
+using ApiPoc.Representations;
+using Microsoft.AspNet.Mvc;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace ApiPoc.Controllers
+namespace ApiPoc.Helpers
 {
     // TODO: move all of this logic to a better place
     public static class LinkHelpers
     {
-        public static AtomLinkModel LinkSelf(this IUrlHelper helper)
+        public static LinkRepresentation LinkSelf(this IUrlHelper helper)
         {
-            return new AtomLinkModel() { Href = helper.Action(), Rel = "self" };
+            return new LinkRepresentation() { Href = helper.Action(), Rel = "self" };
         }
 
-        public static AtomLinkModel LinkSelf<T>(this IUrlHelper helper, Expression<Action<T>> expression)
+        public static LinkRepresentation LinkSelf<T>(this IUrlHelper helper, Expression<Action<T>> expression)
             where T : Controller
         {
-            return new AtomLinkModel() { Href = helper.ActionWithValues(expression), Rel = "self" };
+            return new LinkRepresentation() { Href = helper.ActionWithValues(expression), Rel = "self" };
         }
 
-        public static AtomLinkModel LinkParent<T>(this IUrlHelper helper, Expression<Action<T>> expression)
+        public static LinkRepresentation LinkParent<T>(this IUrlHelper helper, Expression<Action<T>> expression)
             where T : Controller
         {
-            return new AtomLinkModel() { Href = helper.ActionWithValues(expression), Rel = "parent" };
+            return new LinkRepresentation() { Href = helper.ActionWithValues(expression), Rel = "parent" };
         }
 
-        public static AtomLinkModel LinkAccountResource(this IUrlHelper helper, int accountId)
+        public static LinkRepresentation LinkAccountResource(this IUrlHelper helper, int accountId)
         {
-            return new AtomLinkModel() { Href = helper.ActionWithValues<AccountsController>(x => x.GetItem(accountId)), Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-resource" };
+            return new LinkRepresentation() { Href = helper.ActionWithValues<AccountsController>(x => x.GetItem(accountId)), Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-resource" };
         }
 
-        public static AtomLinkModel LinkAccountCollection(this IUrlHelper helper)
+        public static LinkRepresentation LinkAccountCollection(this IUrlHelper helper)
         {
-            return new AtomLinkModel()
+            return new LinkRepresentation()
             {
                 Href = helper.ActionWithValues<AccountsController>(x => x.GetCollection()),
                 Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-collection"
             };
         }
 
-        public static AtomLinkModel LinkAccountDetailedCollection(this IUrlHelper helper)
+        public static LinkRepresentation LinkAccountDetailedCollection(this IUrlHelper helper)
         {
-            return new AtomLinkModel()
+            return new LinkRepresentation()
             {
                 Href = helper.ActionWithValues<AccountsController>(x => x.GetDetailedCollection()),
                 Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-detailed-collection"
             };
         }
 
-        public static AtomLinkModel LinkSubscriptorsCollection(this IUrlHelper helper, int accountId)
+        public static LinkRepresentation LinkSubscriptorsCollection(this IUrlHelper helper, int accountId)
         {
-            return new AtomLinkModel()
+            return new LinkRepresentation()
             {
                 Href = helper.ActionWithValues<SubscriptorsController>(x => x.GetCollection(accountId)),
                 Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/subscriptors-collection"
             };
         }
 
-        public static AtomLinkModel LinkSubscriptorsDetailedCollection(this IUrlHelper helper, int accountId)
+        public static LinkRepresentation LinkSubscriptorsDetailedCollection(this IUrlHelper helper, int accountId)
         {
-            return new AtomLinkModel()
+            return new LinkRepresentation()
             {
                 Href = helper.ActionWithValues<SubscriptorsController>(x => x.GetDetailedCollection(accountId)),
                 Rel = "http://andresmoschini.github.io/hypermedia-api-poc/rels/account-detailed-collection"
