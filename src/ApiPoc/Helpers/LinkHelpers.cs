@@ -20,12 +20,24 @@ namespace ApiPoc.Helpers
             var parameters = method.Method.GetParameters();
             var values = Enumerable.Range(0, arguments.Count).ToDictionary(
                 x => parameters[x].Name,
-                x => Expression.Lambda(arguments[x]).Compile().DynamicInvoke());
+                x => {
+                    var argument = arguments[x];
+                    var unaryExpression = argument as UnaryExpression;
+                    if (unaryExpression != null && unaryExpression.Operand.Type.IsSubclassOf(typeof(TemplateParameter)))
+                    {
+                        var templateParameter = Expression.Lambda(unaryExpression.Operand).Compile().DynamicInvoke() as TemplateParameter;
+                        return string.Format("{{{0}}}", templateParameter.CustomText ?? parameters[x].Name);
+                    }
+                    else
+                    {
+                        return Expression.Lambda(argument).Compile().DynamicInvoke();
+                    }
+                });
             var actionMember = method.Method;
             var controllerType = actionMember.DeclaringType.GetTypeInfo();
             var actionName = actionMember.Name;
             var controllerName = controllerType.Name.EndsWith("Controller") ? controllerType.Name.Substring(0, controllerType.Name.Length - "Controller".Length) : controllerType.Name;
-            return helper.Action(actionName, controllerName, values);
+            return helper.Action(actionName, controllerName, values).Replace("%7B", "{").Replace("%7D", "}");
         }
 
         private static string ToRelString(this Rel relation)
@@ -63,6 +75,29 @@ namespace ApiPoc.Helpers
             return helper.Link<HomeController>(x => x.GetRoot(), Rel.Home);
         }
 
+    }
+
+
+    public class TemplateParameter
+    {
+        public string CustomText { get; private set; }
+        public static TemplateParameter<T> Create<T>()
+        {
+            return new TemplateParameter<T>();
+        }
+
+        public static TemplateParameter<T> Create<T>(string customText)
+        {
+            return new TemplateParameter<T>() { CustomText = customText };
+        }
+    }
+
+    public class TemplateParameter<T> : TemplateParameter
+    {
+        public static implicit operator T(TemplateParameter<T> parameter)
+        {
+            return default(T);
+        }
     }
 
 }

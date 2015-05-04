@@ -9,8 +9,7 @@
         "Microsoft.AspNet.Server.WebListener": "1.0.0-beta3"
     },
     "frameworks": {
-        "aspnet50": { },
-        "aspnetcore50": { }
+        "aspnet50": { }
     },
     "exclude": [
         "wwwroot",
