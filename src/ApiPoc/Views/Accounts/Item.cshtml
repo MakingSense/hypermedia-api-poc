@@ -10,6 +10,18 @@
 <body>
     <div id="account-@Model.Id">
         <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Account " + Model.Id)</h1>
+        <dl>
+            <dt class="id">Id</dt>
+            <dd class="id">@Model.Id</dd>
+            <dt class="last-name">Last name</dt>
+            <dd class="last-name">@Model.LastName</dd>
+            <dt class="first-name">First name</dt>
+            <dd class="first-name">@Model.FirstName</dd>
+            <dt class="birthday">Birthday</dt>
+            <dd class="birthday">@Model.Birthday</dd>
+            <dt class="email">Email</dt>
+            <dd class="email">@Model.Email</dd>
+        </dl>
         <footer>
             @Html.Links(Model.GetLinkBag().GetUnusedLinks())
         </footer>
