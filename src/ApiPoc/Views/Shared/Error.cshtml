@@ -8,9 +8,9 @@
     <title>Error @Model.Code</title>
 </head>
 <body>
-    <div id="home">
-        <h1>Error @Model.Code</h1>
-        <p>@Model.Message</p>
+    <div id="error">
+        <h1>Error <span class="error-code">@Model.Code</span></h1>
+        <p class="error-message">@Model.Message</p>
         <footer>
             @Html.Links(Model.GetLinkBag().GetUnusedLinks())
         </footer>
