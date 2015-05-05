@@ -1,3 +1,4 @@
+using ApiPoc.Helpers;
 using ApiPoc.PersistenceModel;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
@@ -37,6 +38,8 @@ namespace ApiPoc
                 //{
                 //    formater.WriterSettings.Indent = true;
                 //}
+
+                options.Filters.Add(new CustomExceptionFilterAttribute());
             });
             services.AddSingleton<IDatabase, FakeDatabase>();
         }
