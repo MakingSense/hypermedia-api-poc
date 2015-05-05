@@ -23,7 +23,8 @@ namespace ApiPoc.Helpers
                 x => {
                     var argument = arguments[x];
                     var unaryExpression = argument as UnaryExpression;
-                    if (unaryExpression != null && unaryExpression.Operand.Type.IsSubclassOf(typeof(TemplateParameter)))
+                    
+                    if (unaryExpression != null && unaryExpression.Operand.Type.GetTypeInfo().IsSubclassOf(typeof(TemplateParameter)))
                     {
                         var templateParameter = Expression.Lambda(unaryExpression.Operand).Compile().DynamicInvoke() as TemplateParameter;
                         return string.Format("{{{0}}}", templateParameter.CustomText ?? parameters[x].Name);
