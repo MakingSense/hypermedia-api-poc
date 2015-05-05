@@ -2,7 +2,7 @@
 
 namespace ApiPoc.Representations
 {
-    public abstract class BaseRepresentation
+    public class SimpleRepresentation
     {
         private LinkBag linkBag;
 

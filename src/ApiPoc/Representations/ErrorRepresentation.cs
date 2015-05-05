@@ -3,7 +3,7 @@ using System;
 
 namespace ApiPoc.Representations
 {
-    public class ErrorRepresentation : BaseRepresentation
+    public class ErrorRepresentation : SimpleRepresentation
     {
         public int Code { get; set; }
 

@@ -2,7 +2,7 @@
 
 namespace ApiPoc.Representations
 {
-    public class AccountRepresentation : BaseRepresentation
+    public class AccountRepresentation : SimpleRepresentation
     {
         public int Id { get; set; }
 

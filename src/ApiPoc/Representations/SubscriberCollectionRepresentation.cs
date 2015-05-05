@@ -1,6 +1,6 @@
 ﻿namespace ApiPoc.Representations
 {
-    public class SubscriberCollectionRepresentation : BaseRepresentation
+    public class SubscriberCollectionRepresentation : SimpleRepresentation
     {
         public SubscriberRepresentation[] Items { get; set; } = new SubscriberRepresentation[] { };
     }

@@ -1,6 +1,6 @@
 ﻿namespace ApiPoc.Representations
 {
-    public class AccountCollectionRepresentation : BaseRepresentation
+    public class AccountCollectionRepresentation : SimpleRepresentation
     {
         public AccountRepresentation[] Items { get; set; } = new AccountRepresentation[] { };
     }
