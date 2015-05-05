@@ -23,7 +23,7 @@ namespace ApiPoc.Controllers
             if (account == null)
             {
                 var currentAccount = Database.GetCurrentAccount();
-                return Negotiated(new ErrorRepresentation()
+                return new NegotiatedResult(new ErrorRepresentation()
                 {
                     Code = StatusCodes.Status404NotFound,
                     Message = $"Account {accountId} not found.",
@@ -37,7 +37,7 @@ namespace ApiPoc.Controllers
                 });
             }
 
-            return Negotiated(new SubscriberCollectionRepresentation()
+            return new NegotiatedResult(new SubscriberCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -65,7 +65,7 @@ namespace ApiPoc.Controllers
             if (account == null)
             {
                 var currentAccount = Database.GetCurrentAccount();
-                return Negotiated(new ErrorRepresentation()
+                return new NegotiatedResult(new ErrorRepresentation()
                 {
                     Code = StatusCodes.Status404NotFound,
                     Message = $"Account {accountId} not found.",
@@ -79,7 +79,7 @@ namespace ApiPoc.Controllers
                 });
             }
 
-            return Negotiated(new SubscriberCollectionRepresentation()
+            return new NegotiatedResult(new SubscriberCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -109,7 +109,7 @@ namespace ApiPoc.Controllers
             if (account == null)
             {
                 var currentAccount = Database.GetCurrentAccount();
-                return Negotiated(new ErrorRepresentation()
+                return new NegotiatedResult(new ErrorRepresentation()
                 {
                     Code = StatusCodes.Status404NotFound,
                     Message = $"Account {accountId} not found.",
@@ -126,7 +126,7 @@ namespace ApiPoc.Controllers
             var subscriber = account.Subscribers.FirstOrDefault(x => x.Id == subscriberId);
             if (subscriber == null)
             {
-                return Negotiated(new ErrorRepresentation()
+                return new NegotiatedResult(new ErrorRepresentation()
                 {
                     Code = StatusCodes.Status404NotFound,
                     Message = $"Subscriber {subscriberId} does not exist for account {accountId}.",
@@ -138,7 +138,7 @@ namespace ApiPoc.Controllers
                 });
             }
 
-            return Negotiated(new SubscriberRepresentation()
+            return new NegotiatedResult(new SubscriberRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),

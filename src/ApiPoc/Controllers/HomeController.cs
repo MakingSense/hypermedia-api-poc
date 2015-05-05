@@ -15,9 +15,10 @@ namespace ApiPoc.Controllers
         [HttpGet("/")]
         public IActionResult Index()
         {
+            throw new System.Exception("hi");
             var currentAccount = Database.GetCurrentAccount();
 
-            return Negotiated(new HomeRepresentation()
+            return new NegotiatedResult(new HomeRepresentation()
             {
                 Links = new[] {
                     Url.LinkSelf(Rel.Home),

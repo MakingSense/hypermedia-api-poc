@@ -21,7 +21,7 @@ namespace ApiPoc.Controllers
             var accounts = Database.GetAccounts();
             var currentAccount = Database.GetCurrentAccount();
 
-            return Negotiated(new AccountCollectionRepresentation()
+            return new NegotiatedResult(new AccountCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(Rel.Parent),
@@ -50,7 +50,7 @@ namespace ApiPoc.Controllers
             if (account == null)
             {
                 var currentAccount = Database.GetCurrentAccount();
-                return Negotiated(new ErrorRepresentation()
+                return new NegotiatedResult(new ErrorRepresentation()
                 {
                     Code = StatusCodes.Status404NotFound,
                     Message = $"Account {accountId} not found.",
@@ -63,7 +63,7 @@ namespace ApiPoc.Controllers
                 });
             }
 
-            return Negotiated(new AccountRepresentation()
+            return new NegotiatedResult(new AccountRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
