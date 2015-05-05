@@ -11,8 +11,8 @@ namespace ApiPoc.Representations
         Home = 4,
         AccountItem = 8,
         AccountCollection = 16,
-        SubscriptorItem = 32,
-        SubscriptorCollection = 64,
-        SubscriptorDetailCollection = 128,
+        SubscriberItem = 32,
+        SubscriberCollection = 64,
+        SubscriberDetailCollection = 128,
     }
 }

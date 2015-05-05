@@ -1,15 +1,15 @@
 ﻿@using ApiPoc.Representations
 @using ApiPoc.Helpers
-@model ApiPoc.Representations.SubscriptorCollectionRepresentation
+@model ApiPoc.Representations.SubscriberCollectionRepresentation
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Subscriptors</title>
+    <title>Subscribers</title>
 </head>
 <body>
-    <div id="subscriptors">
-        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscriptors")</h1>
+    <div id="subscribers">
+        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers")</h1>
         <ul id="items">
             @foreach(var item in Model.Items)
             {

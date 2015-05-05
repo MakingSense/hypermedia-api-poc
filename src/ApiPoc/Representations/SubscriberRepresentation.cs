@@ -2,7 +2,7 @@
 
 namespace ApiPoc.Representations
 {
-    public class SubscriptorRepresentation : BaseRepresentation
+    public class SubscriberRepresentation : BaseRepresentation
     {
         public int Id { get; set; }
 
