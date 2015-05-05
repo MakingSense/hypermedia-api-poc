@@ -19,22 +19,9 @@ namespace ApiPoc.Controllers
         public IActionResult Index(int accountId)
         {
             var account = Database.GetAccountById(accountId);
-
             if (account == null)
             {
-                var currentAccount = Database.GetCurrentAccount();
-                return new NegotiatedResult(new ErrorRepresentation()
-                {
-                    Code = StatusCodes.Status404NotFound,
-                    Message = $"Account {accountId} not found.",
-                    Links = new[]
-                    {
-                        Url.LinkHome(),
-                        Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
-                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account"),
-                        Url.Link<SubscribersController>(x => x.Index(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers")
-                    }
-                });
+                return AccountNotFoundError(accountId);
             }
 
             return new NegotiatedResult(new SubscriberCollectionRepresentation()
@@ -61,22 +48,9 @@ namespace ApiPoc.Controllers
         public IActionResult DetailedIndex(int accountId)
         {
             var account = Database.GetAccountById(accountId);
-
             if (account == null)
             {
-                var currentAccount = Database.GetCurrentAccount();
-                return new NegotiatedResult(new ErrorRepresentation()
-                {
-                    Code = StatusCodes.Status404NotFound,
-                    Message = $"Account {accountId} not found.",
-                    Links = new[]
-                    {
-                        Url.LinkHome(),
-                        Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
-                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account"),
-                        Url.Link<SubscribersController>(x => x.DetailedIndex(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers (detailed)")
-                    }
-                });
+                return AccountNotFoundError(accountId);
             }
 
             return new NegotiatedResult(new SubscriberCollectionRepresentation()
@@ -108,34 +82,13 @@ namespace ApiPoc.Controllers
             var account = Database.GetAccountById(accountId);
             if (account == null)
             {
-                var currentAccount = Database.GetCurrentAccount();
-                return new NegotiatedResult(new ErrorRepresentation()
-                {
-                    Code = StatusCodes.Status404NotFound,
-                    Message = $"Account {accountId} not found.",
-                    Links = new[]
-                    {
-                        Url.LinkHome(),
-                        Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
-                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account"),
-                        Url.Link<SubscribersController>(x => x.Index(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers")
-                    }
-                });
+                return AccountNotFoundError(accountId);
             }
 
             var subscriber = account.Subscribers.FirstOrDefault(x => x.Id == subscriberId);
             if (subscriber == null)
             {
-                return new NegotiatedResult(new ErrorRepresentation()
-                {
-                    Code = StatusCodes.Status404NotFound,
-                    Message = $"Subscriber {subscriberId} does not exist for account {accountId}.",
-                    Links = new[]
-                    {
-                        Url.LinkHome(),
-                        Url.Link<SubscribersController>(x => x.Index(accountId), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
-                    }
-                });
+                return SubscriberNotFoundError(accountId, subscriberId);
             }
 
             return new NegotiatedResult(new SubscriberRepresentation()
@@ -150,6 +103,37 @@ namespace ApiPoc.Controllers
                 LastName = subscriber.LastName,
                 Email = subscriber.Email,
                 Birthday = subscriber.Birthday
+            });
+        }
+
+        private IActionResult SubscriberNotFoundError(int accountId, int subscriberId)
+        {
+            return new NegotiatedResult(new ErrorRepresentation()
+            {
+                Code = StatusCodes.Status404NotFound,
+                Message = $"Subscriber {subscriberId} does not exist for account {accountId}.",
+                Links = new[]
+                {
+                    Url.LinkHome(),
+                    Url.Link<SubscribersController>(x => x.Index(accountId), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
+                }
+            });
+        }
+
+        private IActionResult AccountNotFoundError(int accountId)
+        {
+            var currentAccount = Database.GetCurrentAccount();
+            return new NegotiatedResult(new ErrorRepresentation()
+            {
+                Code = StatusCodes.Status404NotFound,
+                Message = $"Account {accountId} not found.",
+                Links = new[]
+                {
+                    Url.LinkHome(),
+                    Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
+                    Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account"),
+                    Url.Link<SubscribersController>(x => x.Index(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers")
+                }
             });
         }
     }
