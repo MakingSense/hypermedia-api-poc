@@ -54,7 +54,7 @@ namespace ApiPoc.Controllers
                         Id = SAMPLE_ID,
                         FirstName = "Juan",
                         LastName = "Perez",
-                        Birday = DateTime.Parse("1980-01-01"),
+                        Birthday = DateTime.Parse("1980-01-01"),
                         Email = "juan@perez.com"
                     }
                 }
@@ -75,7 +75,7 @@ namespace ApiPoc.Controllers
                 FirstName = "Andrés",
                 LastName = "Moschini",
                 Email = "private@andresmoschini.com",
-                Birday = DateTime.Parse("1978-12-02")
+                Birthday = DateTime.Parse("1978-12-02")
             });
         }
     }

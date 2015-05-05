@@ -50,7 +50,7 @@ namespace ApiPoc.Controllers
                 FirstName = "Andrés",
                 LastName = "Moschini",
                 Email = "private@andresmoschini.com",
-                Birday = DateTime.Parse("1978-12-02")
+                Birthday = DateTime.Parse("1978-12-02")
             });
         }
     }

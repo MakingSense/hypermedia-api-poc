@@ -12,6 +12,6 @@ namespace ApiPoc.Representations
 
         public string Email { get; set; }
 
-        public DateTime? Birday { get; set; }
+        public DateTime? Birthday { get; set; }
     }
 }
