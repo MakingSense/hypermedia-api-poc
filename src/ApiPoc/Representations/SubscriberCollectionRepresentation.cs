@@ -2,6 +2,6 @@
 {
     public class SubscriberCollectionRepresentation : BaseRepresentation
     {
-        public SubscriberRepresentation[] Items { get; set; }
+        public SubscriberRepresentation[] Items { get; set; } = new SubscriberRepresentation[] { };
     }
 }

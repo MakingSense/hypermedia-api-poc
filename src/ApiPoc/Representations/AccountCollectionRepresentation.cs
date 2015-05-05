@@ -2,6 +2,6 @@
 {
     public class AccountCollectionRepresentation : BaseRepresentation
     {
-        public AccountRepresentation[] Items { get; set; }
+        public AccountRepresentation[] Items { get; set; } = new AccountRepresentation[] { };
     }
 }

@@ -1,81 +1,155 @@
 ﻿using ApiPoc.Helpers;
+using ApiPoc.PersistenceModel;
 using ApiPoc.Representations;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.WebUtilities;
 using System;
+using System.Linq;
 
 namespace ApiPoc.Controllers
 {
     public class SubscribersController : BaseController
     {
-        private const int SAMPLE_ID = 155;
+        public SubscribersController(IDatabase database)
+            : base(database)
+        {
+        }
 
         [HttpGet("/accounts/{accountId}/subscribers")]
         public IActionResult Index(int accountId)
         {
+            var account = Database.GetAccountById(accountId);
+
+            if (account == null)
+            {
+                var currentAccount = Database.GetCurrentAccount();
+                return Negotiated(new ErrorRepresentation()
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Message = $"Account {accountId} not found.",
+                    Links = new[]
+                    {
+                        Url.LinkHome(),
+                        Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
+                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account"),
+                        Url.Link<SubscribersController>(x => x.Index(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers")
+                    }
+                });
+            }
+
             return Negotiated(new SubscriberCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.SubscriberCollection),
-                    Url.Link<AccountsController>(x => x.Item(accountId), Rel.Parent | Rel.AccountCollection, "Account details"),
-                    Url.Link<SubscribersController>(x => x.DetailedIndex(accountId), Rel.SubscriberCollection, "Subscribers list (detailed)"),
+                    Url.Link<AccountsController>(x => x.Item(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
+                    Url.Link<SubscribersController>(x => x.DetailedIndex(account.Id), Rel.SubscriberCollection, "Subscribers list (detailed)"),
                 },
-                Items = new[]
-                {
+                Items = account.Subscribers.Select(subscriber => 
                     new SubscriberRepresentation() {
-                        Id = SAMPLE_ID,
+                        Id = subscriber.Id,
                         Links = new[] {
-                            Url.Link<SubscribersController>(x => x.Item(accountId, SAMPLE_ID), Rel.Self | Rel.SubscriberItem, "Subscriber details")
+                            Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.Self | Rel.SubscriberItem, "Subscriber details")
                         },
-                        FirstName = "Juan",
-                        LastName = "Perez"
-                    }
-                }
+                        FirstName = subscriber.FirstName,
+                        LastName = subscriber.LastName
+                    }).ToArray()
             });
         }
 
         [HttpGet("/accounts/{accountId}/subscribers/detail")]
         public IActionResult DetailedIndex(int accountId)
         {
+            var account = Database.GetAccountById(accountId);
+
+            if (account == null)
+            {
+                var currentAccount = Database.GetCurrentAccount();
+                return Negotiated(new ErrorRepresentation()
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Message = $"Account {accountId} not found.",
+                    Links = new[]
+                    {
+                        Url.LinkHome(),
+                        Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
+                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account"),
+                        Url.Link<SubscribersController>(x => x.DetailedIndex(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers (detailed)")
+                    }
+                });
+            }
+
             return Negotiated(new SubscriberCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.SubscriberDetailCollection),
-                    Url.Link<AccountsController>(x => x.Item(accountId), Rel.Parent | Rel.AccountCollection, "Account details"),
-                    Url.Link<SubscribersController>(x => x.Index(accountId), Rel.SubscriberCollection, "Subscribers list (simple)"),
+                    Url.Link<AccountsController>(x => x.Item(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.SubscriberCollection, "Subscribers list (simple)"),
                 },
-                Items = new[]
-                {
-                    new SubscriberRepresentation() {
+                Items = account.Subscribers.Select(subscriber =>
+                    new SubscriberRepresentation()
+                    {
+                        Id = subscriber.Id,
                         Links = new[] {
-                            Url.Link<SubscribersController>(x => x.Item(accountId, SAMPLE_ID), Rel.Self | Rel.SubscriberItem, "Subscriber details")
+                            Url.Link<SubscribersController>(x => x.Item(accountId, subscriber.Id), Rel.Self | Rel.SubscriberItem, "Subscriber details")
                         },
-                        Id = SAMPLE_ID,
-                        FirstName = "Juan",
-                        LastName = "Perez",
-                        Birthday = DateTime.Parse("1980-01-01"),
-                        Email = "juan@perez.com"
-                    }
-                }
+                        FirstName = subscriber.FirstName,
+                        LastName = subscriber.LastName,
+                        Birthday = subscriber.Birthday,
+                        Email = subscriber.Email
+                    }).ToArray()
             });
         }
 
         [HttpGet("/accounts/{accountId}/subscribers/{subscriberId}")]
         public IActionResult Item(int accountId, int subscriberId)
         {
+            var account = Database.GetAccountById(accountId);
+            if (account == null)
+            {
+                var currentAccount = Database.GetCurrentAccount();
+                return Negotiated(new ErrorRepresentation()
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Message = $"Account {accountId} not found.",
+                    Links = new[]
+                    {
+                        Url.LinkHome(),
+                        Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
+                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account"),
+                        Url.Link<SubscribersController>(x => x.Index(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers")
+                    }
+                });
+            }
+
+            var subscriber = account.Subscribers.FirstOrDefault(x => x.Id == subscriberId);
+            if (subscriber == null)
+            {
+                return Negotiated(new ErrorRepresentation()
+                {
+                    Code = StatusCodes.Status404NotFound,
+                    Message = $"Subscriber {subscriberId} does not exist for account {accountId}.",
+                    Links = new[]
+                    {
+                        Url.LinkHome(),
+                        Url.Link<SubscribersController>(x => x.Index(accountId), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
+                    }
+                });
+            }
+
             return Negotiated(new SubscriberRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.SubscriberItem),
-                    Url.Link<SubscribersController>(x => x.Index(accountId), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
                 },
-                Id = subscriberId,
-                FirstName = "Andrés",
-                LastName = "Moschini",
-                Email = "private@andresmoschini.com",
-                Birthday = DateTime.Parse("1978-12-02")
+                Id = subscriber.Id,
+                FirstName = subscriber.FirstName,
+                LastName = subscriber.LastName,
+                Email = subscriber.Email,
+                Birthday = subscriber.Birthday
             });
         }
     }

@@ -1,4 +1,5 @@
 ﻿using ApiPoc.Helpers;
+using ApiPoc.PersistenceModel;
 using ApiPoc.Representations;
 using Microsoft.AspNet.Mvc;
 
@@ -6,17 +7,22 @@ namespace ApiPoc.Controllers
 {
     public class HomeController : BaseController
     {
-        private const int CURRENT_ACCOUNT_ID = 128;
+        public HomeController(IDatabase database)
+            : base(database)
+        {
+        }
 
         [HttpGet("/")]
         public IActionResult Index()
         {
+            var currentAccount = Database.GetCurrentAccount();
+
             return Negotiated(new HomeRepresentation()
             {
                 Links = new[] {
                     Url.LinkSelf(Rel.Home),
-                    Url.Link<AccountsController>(x => x.Item(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details"),
-                    Url.Link<SubscribersController>(x => x.Index(CURRENT_ACCOUNT_ID), Rel.SubscriberCollection, "My Subscribers"),
+                    Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account details"),
+                    Url.Link<SubscribersController>(x => x.Index(currentAccount.Id), Rel.SubscriberCollection, "My Subscribers"),
 
                     // Hide because standard user does not need this list
                     // Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Account List"),

@@ -1,3 +1,4 @@
+using ApiPoc.PersistenceModel;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc;
@@ -37,6 +38,7 @@ namespace ApiPoc
                 //    formater.WriterSettings.Indent = true;
                 //}
             });
+            services.AddSingleton<IDatabase, FakeDatabase>();
         }
     }
 }
