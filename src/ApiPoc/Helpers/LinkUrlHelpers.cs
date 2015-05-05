@@ -11,7 +11,7 @@ namespace ApiPoc.Helpers
 {
     public static class LinkUrlHelpers
     {
-        // Quick and dirty pattch to have type safety
+        // Quick and dirty patch to have type safety
         private static string ActionWithValues<T>(this IUrlHelper helper, Expression<Action<T>> expression)
             where T : Controller
         {
@@ -20,10 +20,11 @@ namespace ApiPoc.Helpers
             var parameters = method.Method.GetParameters();
             var values = Enumerable.Range(0, arguments.Count).ToDictionary(
                 x => parameters[x].Name,
-                x => {
+                x =>
+                {
                     var argument = arguments[x];
                     var unaryExpression = argument as UnaryExpression;
-                    
+
                     if (unaryExpression != null && unaryExpression.Operand.Type.GetTypeInfo().IsSubclassOf(typeof(TemplateParameter)))
                     {
                         var templateParameter = Expression.Lambda(unaryExpression.Operand).Compile().DynamicInvoke() as TemplateParameter;
@@ -55,7 +56,7 @@ namespace ApiPoc.Helpers
             return new LinkRepresentation()
             {
                 Href = helper.ActionWithValues<T>(expression),
-                Rel = relation.ToRelString(), 
+                Rel = relation.ToRelString(),
                 Description = description ?? relation.ToString()
             };
         }
@@ -76,9 +77,7 @@ namespace ApiPoc.Helpers
             relation |= Rel.Home;
             return helper.Link<HomeController>(x => x.Index(), relation, description ?? "Home");
         }
-
     }
-
 
     public class TemplateParameter
     {
@@ -101,5 +100,4 @@ namespace ApiPoc.Helpers
             return default(T);
         }
     }
-
 }

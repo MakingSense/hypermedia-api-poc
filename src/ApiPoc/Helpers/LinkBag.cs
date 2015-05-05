@@ -1,20 +1,15 @@
-﻿using ApiPoc.Controllers;
-using ApiPoc.Representations;
-using Microsoft.AspNet.Mvc;
+﻿using ApiPoc.Representations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Text.RegularExpressions;
 
 namespace ApiPoc.Helpers
 {
     public class LinkBag
     {
-        public LinkRepresentation[] Links { get; private set; }
-        ILookup<string, LinkRepresentation> linksByRel;
-        HashSet<LinkRepresentation> alreadyUsed;
+        private HashSet<LinkRepresentation> alreadyUsed;
+
+        private ILookup<string, LinkRepresentation> linksByRel;
 
         public LinkBag(LinkRepresentation[] links)
         {
@@ -24,6 +19,8 @@ namespace ApiPoc.Helpers
                 .ToLookup(x => x.rel, x => x.link);
             alreadyUsed = new HashSet<LinkRepresentation>();
         }
+
+        public LinkRepresentation[] Links { get; private set; }
 
         public LinkRepresentation[] GetByRel(Rel rel)
         {

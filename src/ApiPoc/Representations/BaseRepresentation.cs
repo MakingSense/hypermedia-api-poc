@@ -1,8 +1,4 @@
 ﻿using ApiPoc.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Serialization;
 
 namespace ApiPoc.Representations
 {
@@ -11,6 +7,7 @@ namespace ApiPoc.Representations
         private LinkBag linkBag;
 
         private LinkRepresentation[] links;
+
         public LinkRepresentation[] Links
         {
             get { return links; }
@@ -29,6 +26,5 @@ namespace ApiPoc.Representations
             }
             return linkBag;
         }
-
     }
 }

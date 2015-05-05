@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Builder;
-using Microsoft.AspNet.Http;
-using Microsoft.Framework.DependencyInjection;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Framework.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using System.Linq;
 
 namespace ApiPoc
 {
@@ -15,6 +11,12 @@ namespace ApiPoc
     {
         public Startup(IHostingEnvironment env)
         {
+        }
+
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            app.UseStaticFiles();
+            app.UseMvc();
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -28,20 +30,13 @@ namespace ApiPoc
                     formater.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 }
 
-                //// TODO: It is not paying attention to System.Xml.Serialization attributes 
+                //// TODO: It is not paying attention to System.Xml.Serialization attributes
                 //options.AddXmlDataContractSerializerFormatter();
-                //foreach (var formater in options.OutputFormatters.Select(x => x.Instance).OfType<XmlDataContractSerializerOutputFormatter>())
+                //foreach (var formatter in options.OutputFormatters.Select(x => x.Instance).OfType<XmlDataContractSerializerOutputFormatter>())
                 //{
                 //    formater.WriterSettings.Indent = true;
                 //}
-
             });
-        }
-
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            app.UseStaticFiles();
-            app.UseMvc();
         }
     }
 }

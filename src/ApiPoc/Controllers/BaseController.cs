@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNet.Mvc;
-using Microsoft.Net.Http.Headers;
-using System;
-using System.Linq;
 
 namespace ApiPoc.Controllers
 {

@@ -1,6 +1,5 @@
 ﻿using ApiPoc.Representations;
 using Microsoft.AspNet.Mvc.Rendering;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,13 +32,13 @@ namespace ApiPoc.Helpers
             {
                 bUl.AddCssClass(customClass);
             }
-            bUl.InnerHtml = string.Join("\n", links.Select(link => {
+            bUl.InnerHtml = string.Join("\n", links.Select(link =>
+            {
                 var bLi = new TagBuilder("li");
                 bLi.InnerHtml = Link(html, link).ToString();
                 return bLi.ToString(TagRenderMode.Normal);
             }));
             return bUl.ToHtmlString(TagRenderMode.Normal);
         }
-
     }
 }

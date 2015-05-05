@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using Microsoft.AspNet.Mvc;
-using System.Xml.Serialization;
-using ApiPoc.Helpers;
+﻿using ApiPoc.Helpers;
 using ApiPoc.Representations;
+using Microsoft.AspNet.Mvc;
+using System;
 
 namespace ApiPoc.Controllers
 {
