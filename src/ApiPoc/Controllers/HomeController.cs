@@ -18,7 +18,8 @@ namespace ApiPoc.Controllers
             return Negotiated(new HomeRepresentation() {
                 Links = new[] {
                     Url.LinkSelf(Rel.Home),
-                    Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Account List"),
+                    // Hide because standard user does not need this list
+                    // Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Account List"),
                     Url.Link<AccountsController>(x => x.Item(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details")
                 }
             });
