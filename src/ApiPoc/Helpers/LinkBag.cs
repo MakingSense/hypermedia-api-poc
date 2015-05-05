@@ -54,6 +54,7 @@ namespace ApiPoc.Helpers
 
         public LinkRepresentation[] GetUnusedLinks()
         {
+            //TODO: take into account safe links? classify them?
             return Links.Where(x => !alreadyUsed.Contains(x)).ToArray();
         }
 

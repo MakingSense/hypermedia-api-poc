@@ -28,6 +28,7 @@
                         <dd class="email">@item.Email</dd>
                         <dt class="links">Links</dt>
                         <dd class="links">
+                            <!-- Show delete link in a different way, differentiate safe links? -->
                             @Html.Links(item.GetLinkBag().GetUnusedLinks())
                         </dd>
                     </dl>
