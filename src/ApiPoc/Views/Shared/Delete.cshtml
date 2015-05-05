@@ -1,0 +1,18 @@
+﻿@using ApiPoc.Representations
+@using ApiPoc.Helpers
+@model ApiPoc.Representations.SimpleRepresentation
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Delete successful</title>
+</head>
+<body>
+    <div id="delete">
+        <h1>Delete successful</h1>
+        <footer>
+            @Html.Links(Model.GetLinkBag().GetUnusedLinks())
+        </footer>
+    </div>
+</body>
+</html>

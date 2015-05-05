@@ -106,6 +106,34 @@ namespace ApiPoc.Controllers
             });
         }
 
+        [HttpDelete("/accounts/{accountId}/subscribers/{subscriberId}")]
+        public IActionResult Delete(int accountId, int subscriberId)
+        {
+            //TODO: add optimistic concurrency check
+
+            var account = Database.GetAccountById(accountId);
+            if (account == null)
+            {
+                return AccountNotFoundError(accountId);
+            }
+
+            var subscriber = account.Subscribers.FirstOrDefault(x => x.Id == subscriberId);
+            if (subscriber == null)
+            {
+                return SubscriberNotFoundError(accountId, subscriberId);
+            }
+
+            account.Subscribers.Remove(subscriber);
+
+            return new NegotiatedResult(new SimpleRepresentation()
+            {
+                Links = new[] {
+                    Url.LinkHome(),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
+                }
+            });
+        }
+
         private IActionResult SubscriberNotFoundError(int accountId, int subscriberId)
         {
             return new NegotiatedResult(new ErrorRepresentation()
