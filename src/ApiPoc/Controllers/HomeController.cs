@@ -16,6 +16,7 @@ namespace ApiPoc.Controllers
                 Links = new[] {
                     Url.LinkSelf(Rel.Home),
                     Url.Link<AccountsController>(x => x.Item(CURRENT_ACCOUNT_ID), Rel.AccountItem, "My account details"),
+                    Url.Link<SubscriptorsController>(x => x.Index(CURRENT_ACCOUNT_ID), Rel.SubscriptorCollection, "My Subscriptors"),
 
                     // Hide because standard user does not need this list
                     // Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Account List"),

@@ -12,7 +12,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts/{accountId}/subscriptors")]
         public IActionResult Index(int accountId)
         {
-            return new ObjectResult(new SubscriptorCollectionRepresentation()
+            return Negotiated(new SubscriptorCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -37,7 +37,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts/{accountId}/subscriptors/detail")]
         public IActionResult DetailedIndex(int accountId)
         {
-            return new ObjectResult(new SubscriptorCollectionRepresentation()
+            return Negotiated(new SubscriptorCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -64,7 +64,7 @@ namespace ApiPoc.Controllers
         [HttpGet("/accounts/{accountId}/subscriptors/{subscriptorId}")]
         public IActionResult Item(int accountId, int subscriptorId)
         {
-            return new ObjectResult(new AccountRepresentation()
+            return Negotiated(new SubscriptorRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
