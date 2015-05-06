@@ -19,7 +19,7 @@ namespace ApiPoc.PersistenceModel
                 LastName = "Moschini",
                 Birthday = DateTime.Parse("1978-12-02"),
                 Email = "private@andresmoschini.com",
-                Subscribers = new List<Subscriber>()
+                AllSubscribers = new List<Subscriber>()
                     {
                         new Subscriber()
                         {

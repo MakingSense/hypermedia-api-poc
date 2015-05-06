@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ApiPoc.PersistenceModel
 {
@@ -15,6 +16,11 @@ namespace ApiPoc.PersistenceModel
 
         public DateTime? Birthday { get; set; }
 
-        public List<Subscriber> Subscribers { get; set; } = new List<Subscriber>();
+        public List<Subscriber> AllSubscribers { get; set; } = new List<Subscriber>();
+
+        public IEnumerable<Subscriber> Subscribers
+        {
+            get { return AllSubscribers.Where(x => x.Unsubscribed == false); }
+        } 
     }
 }

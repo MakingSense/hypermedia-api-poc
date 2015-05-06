@@ -37,7 +37,7 @@ namespace ApiPoc.Controllers
                         Id = subscriber.Id,
                         Links = new[] {
                             Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.Self | Rel.SubscriberItem, "Subscriber details"),
-                            Url.Link<SubscribersController>(x => x.Delete(accountId, subscriber.Id), Rel.Delete, "Delete subscriber")
+                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Delete, "Unsubscribe")
                         },
                         FirstName = subscriber.FirstName,
                         LastName = subscriber.LastName
@@ -68,7 +68,7 @@ namespace ApiPoc.Controllers
                         Id = subscriber.Id,
                         Links = new[] {
                             Url.Link<SubscribersController>(x => x.Item(accountId, subscriber.Id), Rel.Self | Rel.SubscriberItem, "Subscriber details"),
-                            Url.Link<SubscribersController>(x => x.Delete(accountId, subscriber.Id), Rel.Delete, "Delete subscriber")
+                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Delete, "Unsubscribe")
                         },
                         FirstName = subscriber.FirstName,
                         LastName = subscriber.LastName,
@@ -99,7 +99,7 @@ namespace ApiPoc.Controllers
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.SubscriberItem),
                     Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
-                    Url.Link<SubscribersController>(x => x.Delete(accountId, subscriberId), Rel.Delete, "Delete subscriber")
+                    Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriberId), Rel.Delete, "Unsubscribe")
                 },
                 Id = subscriber.Id,
                 FirstName = subscriber.FirstName,
@@ -110,7 +110,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpDelete("/accounts/{accountId}/subscribers/{subscriberId}")]
-        public NegotiatedResult Delete(int accountId, int subscriberId)
+        public NegotiatedResult Unsubscribe(int accountId, int subscriberId)
         {
             //TODO: add optimistic concurrency check
 
@@ -126,7 +126,7 @@ namespace ApiPoc.Controllers
                 return SubscriberNotFoundError(accountId, subscriberId);
             }
 
-            account.Subscribers.Remove(subscriber);
+            subscriber.Unsubscribed = true;
 
             return DoneResult(new SimpleRepresentation()
             {

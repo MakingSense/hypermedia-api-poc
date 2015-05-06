@@ -13,5 +13,7 @@ namespace ApiPoc.PersistenceModel
         public string Email { get; set; }
 
         public DateTime? Birthday { get; set; }
+
+        public bool Unsubscribed { get; set; }
     }
 }
