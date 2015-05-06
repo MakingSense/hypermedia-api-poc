@@ -5,7 +5,7 @@ namespace ApiPoc.Representations
 {
     public class ErrorRepresentation : SimpleRepresentation
     {
-        public int Code { get; set; }
+        public int StatusCode { get; set; } = StatusCodes.Status500InternalServerError;
 
         public string Message { get; set; }
 

@@ -16,7 +16,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts/{accountId}/subscribers")]
-        public IActionResult Index(int accountId)
+        public NegotiatedResult Index(int accountId)
         {
             var account = Database.GetAccountById(accountId);
             if (account == null)
@@ -24,7 +24,7 @@ namespace ApiPoc.Controllers
                 return AccountNotFoundError(accountId);
             }
 
-            return new NegotiatedResult(new SubscriberCollectionRepresentation()
+            return NegotiatedResult(new SubscriberCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -46,7 +46,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts/{accountId}/subscribers/detail")]
-        public IActionResult DetailedIndex(int accountId)
+        public NegotiatedResult DetailedIndex(int accountId)
         {
             var account = Database.GetAccountById(accountId);
             if (account == null)
@@ -54,7 +54,7 @@ namespace ApiPoc.Controllers
                 return AccountNotFoundError(accountId);
             }
 
-            return new NegotiatedResult(new SubscriberCollectionRepresentation()
+            return NegotiatedResult(new SubscriberCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -79,7 +79,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts/{accountId}/subscribers/{subscriberId}")]
-        public IActionResult Item(int accountId, int subscriberId)
+        public NegotiatedResult Item(int accountId, int subscriberId)
         {
             var account = Database.GetAccountById(accountId);
             if (account == null)
@@ -93,7 +93,7 @@ namespace ApiPoc.Controllers
                 return SubscriberNotFoundError(accountId, subscriberId);
             }
 
-            return new NegotiatedResult(new SubscriberRepresentation()
+            return NegotiatedResult(new SubscriberRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -110,7 +110,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpDelete("/accounts/{accountId}/subscribers/{subscriberId}")]
-        public IActionResult Delete(int accountId, int subscriberId)
+        public NegotiatedResult Delete(int accountId, int subscriberId)
         {
             //TODO: add optimistic concurrency check
 
@@ -128,7 +128,7 @@ namespace ApiPoc.Controllers
 
             account.Subscribers.Remove(subscriber);
 
-            return new NegotiatedResult(new SimpleRepresentation()
+            return NegotiatedResult(new SimpleRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -137,11 +137,11 @@ namespace ApiPoc.Controllers
             });
         }
 
-        private IActionResult SubscriberNotFoundError(int accountId, int subscriberId)
+        private ErrorResult SubscriberNotFoundError(int accountId, int subscriberId)
         {
-            return new NegotiatedResult(new ErrorRepresentation()
+            return ErrorResult(new ErrorRepresentation()
             {
-                Code = StatusCodes.Status404NotFound,
+                StatusCode = StatusCodes.Status404NotFound,
                 Message = $"Subscriber {subscriberId} does not exist for account {accountId}.",
                 Links = new[]
                 {
@@ -151,12 +151,12 @@ namespace ApiPoc.Controllers
             });
         }
 
-        private IActionResult AccountNotFoundError(int accountId)
+        private ErrorResult AccountNotFoundError(int accountId)
         {
             var currentAccount = Database.GetCurrentAccount();
-            return new NegotiatedResult(new ErrorRepresentation()
+            return ErrorResult(new ErrorRepresentation()
             {
-                Code = StatusCodes.Status404NotFound,
+                StatusCode = StatusCodes.Status404NotFound,
                 Message = $"Account {accountId} not found.",
                 Links = new[]
                 {

@@ -14,5 +14,15 @@ namespace ApiPoc.Controllers
         {
             Database = database;
         }
+
+        public NegotiatedResult NegotiatedResult(IRepresentation value)
+        {
+            return new NegotiatedResult(value);
+        }
+        
+        public ErrorResult ErrorResult(ErrorRepresentation value)
+        {
+            return new ErrorResult(value);
+        }
     }
 }

@@ -13,11 +13,11 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/")]
-        public IActionResult Index()
+        public NegotiatedResult Index()
         {
             var currentAccount = Database.GetCurrentAccount();
 
-            return new NegotiatedResult(new SimpleRepresentation()
+            return NegotiatedResult(new SimpleRepresentation()
             {
                 Links = new[] {
                     Url.LinkSelf(Rel.Home),

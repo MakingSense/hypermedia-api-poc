@@ -10,19 +10,15 @@ namespace ApiPoc.Helpers
 {
     public class NegotiatedResult : IActionResult
     {
-        public object Value { get; private set; }
-        public bool IsError { get; private set; }
-        public int? StatusCode { get; set; }
+        public IRepresentation Value { get; private set; }
 
-        public NegotiatedResult(object value)
+        public int? CustomStatusCode { get; set; }
+
+        public string CustomHtmlView { get; set; }
+
+        public NegotiatedResult(IRepresentation value)
         {
             Value = value;
-            var error = Value as ErrorRepresentation;
-            if (error != null)
-            {
-                IsError = true;
-                StatusCode = error.Code;
-            }
         }
 
         public Task ExecuteResultAsync(ActionContext context)
@@ -33,8 +29,8 @@ namespace ApiPoc.Helpers
             {
                 innerActionResult = new ViewResult()
                 {
-                    StatusCode = StatusCode,
-                    ViewName = IsError ? "Error" : null,
+                    StatusCode = CustomStatusCode,
+                    ViewName = CustomHtmlView,
                     ViewData = new ViewDataDictionary(
                         new EmptyModelMetadataProvider(),
                         context.ModelState ?? new ModelStateDictionary())
@@ -47,7 +43,7 @@ namespace ApiPoc.Helpers
             {
                 innerActionResult = new ObjectResult(Value)
                 {
-                    StatusCode = StatusCode
+                    StatusCode = CustomStatusCode
                 };
             }
             return innerActionResult.ExecuteResultAsync(context);

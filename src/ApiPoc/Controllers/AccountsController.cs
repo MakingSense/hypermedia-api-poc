@@ -16,12 +16,12 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts")]
-        public IActionResult Index()
+        public NegotiatedResult Index()
         {
             var accounts = Database.GetAccounts();
             var currentAccount = Database.GetCurrentAccount();
 
-            return new NegotiatedResult(new AccountCollectionRepresentation()
+            return NegotiatedResult(new AccountCollectionRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(Rel.Parent),
@@ -43,16 +43,16 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts/{accountId}")]
-        public IActionResult Item(int accountId)
+        public NegotiatedResult Item(int accountId)
         {
             var account = Database.GetAccountById(accountId);
 
             if (account == null)
             {
                 var currentAccount = Database.GetCurrentAccount();
-                return new NegotiatedResult(new ErrorRepresentation()
+                return ErrorResult(new ErrorRepresentation()
                 {
-                    Code = StatusCodes.Status404NotFound,
+                    StatusCode = StatusCodes.Status404NotFound,
                     Message = $"Account {accountId} not found.",
                     Links = new[]
                     {
@@ -63,7 +63,7 @@ namespace ApiPoc.Controllers
                 });
             }
 
-            return new NegotiatedResult(new AccountRepresentation()
+            return NegotiatedResult(new AccountRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),

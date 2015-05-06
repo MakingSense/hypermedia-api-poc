@@ -5,11 +5,11 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Error @Model.Code</title>
+    <title>Error @Model.StatusCode</title>
 </head>
 <body>
     <div id="error">
-        <h1>Error <span class="error-code">@Model.Code</span></h1>
+        <h1>Error <span class="error-code">@Model.StatusCode</span></h1>
         <p class="error-message">@Model.Message</p>
         <footer>
             @Html.Links(Model.GetLinkBag().GetUnusedLinks())
