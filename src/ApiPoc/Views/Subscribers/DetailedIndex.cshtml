@@ -29,14 +29,14 @@
                         <dt class="links">Links</dt>
                         <dd class="links">
                             <!-- Show delete link in a different way, differentiate safe links? -->
-                            @Html.Links(item.GetLinkBag().GetUnusedLinks())
+                            @Html.Links(item.GetLinkBag().GetUnusedSafeLinks())
                         </dd>
                     </dl>
                 </li>
             }
         </ul>
         <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedLinks())
+            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
         </footer>
     </div>
 </body>

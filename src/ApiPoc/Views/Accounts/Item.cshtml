@@ -23,7 +23,7 @@
             <dd class="email">@Model.Email</dd>
         </dl>
         <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedLinks())
+            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
         </footer>
     </div>
 </body>

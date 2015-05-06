@@ -24,7 +24,7 @@
         </dl>
         <footer>
             <!-- Show delete link in a different way, differentiate safe links? -->
-            @Html.Links(Model.GetLinkBag().GetUnusedLinks())
+            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
         </footer>
     </div>
 </body>

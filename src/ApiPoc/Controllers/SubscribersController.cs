@@ -37,7 +37,7 @@ namespace ApiPoc.Controllers
                         Id = subscriber.Id,
                         Links = new[] {
                             Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.Self | Rel.SubscriberItem, "Subscriber details"),
-                            //TODO: add delete link
+                            Url.Link<SubscribersController>(x => x.Delete(accountId, subscriber.Id), Rel.Delete, "Delete subscriber")
                         },
                         FirstName = subscriber.FirstName,
                         LastName = subscriber.LastName
@@ -68,7 +68,7 @@ namespace ApiPoc.Controllers
                         Id = subscriber.Id,
                         Links = new[] {
                             Url.Link<SubscribersController>(x => x.Item(accountId, subscriber.Id), Rel.Self | Rel.SubscriberItem, "Subscriber details"),
-                            //TODO: add delete link
+                            Url.Link<SubscribersController>(x => x.Delete(accountId, subscriber.Id), Rel.Delete, "Delete subscriber")
                         },
                         FirstName = subscriber.FirstName,
                         LastName = subscriber.LastName,
@@ -99,7 +99,7 @@ namespace ApiPoc.Controllers
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.SubscriberItem),
                     Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
-                    //TODO: add delete link
+                    Url.Link<SubscribersController>(x => x.Delete(accountId, subscriberId), Rel.Delete, "Delete subscriber")
                 },
                 Id = subscriber.Id,
                 FirstName = subscriber.FirstName,

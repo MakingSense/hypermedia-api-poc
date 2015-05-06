@@ -12,7 +12,7 @@
         <h1>Error <span class="error-code">@Model.StatusCode</span></h1>
         <p class="error-message">@Model.Message</p>
         <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedLinks())
+            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
         </footer>
     </div>
 </body>

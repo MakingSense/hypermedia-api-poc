@@ -11,7 +11,7 @@
     <div id="delete">
         <h1>Done!</h1>
         <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedLinks())
+            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
         </footer>
     </div>
 </body>

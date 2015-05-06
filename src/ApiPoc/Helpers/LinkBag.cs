@@ -52,10 +52,24 @@ namespace ApiPoc.Helpers
             return result;
         }
 
-        public LinkRepresentation[] GetUnusedLinks()
+        public LinkRepresentation[] GetUnusedLinks(bool? safe = null)
         {
-            //TODO: take into account safe links? classify them?
-            return Links.Where(x => !alreadyUsed.Contains(x)).ToArray();
+            var links = Links.Where(x => !alreadyUsed.Contains(x));
+            if (safe.HasValue)
+            {
+                links = links.Where(x => x.Safe == safe);
+            }
+            return links.ToArray();
+        }
+
+        public LinkRepresentation[] GetUnusedSafeLinks()
+        {
+            return GetUnusedLinks(true);
+        }
+
+        public LinkRepresentation[] GetUnusedUnsafeLinks()
+        {
+            return GetUnusedLinks(false);
         }
 
         public void Reset()
