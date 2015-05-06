@@ -1,43 +1,35 @@
-﻿@using ApiPoc.Representations
-@using ApiPoc.Helpers
-@model ApiPoc.Representations.SubscriberCollectionRepresentation
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Subscribers</title>
-</head>
-<body>
-    <p id="subscribers">
-        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers List with details")</h1>
-        <ul id="items">
-            @foreach(var item in Model.Items)
-            {
-                var itemLinkBag = new LinkBag(item.Links);
-                <li>
-                    <dl>
-                        <dt class="id">Id</dt>
-                        <dd class="id">@item.Id</dd>
-                        <dt class="last-name">Last name</dt>
-                        <dd class="last-name">@item.LastName</dd>
-                        <dt class="first-name">First name</dt>
-                        <dd class="first-name">@item.FirstName</dd>
-                        <dt class="birthday">Birthday</dt>
-                        <dd class="birthday">@item.Birthday</dd>
-                        <dt class="email">Email</dt>
-                        <dd class="email">@item.Email</dd>
-                        <dt class="links">Links</dt>
-                        <dd class="links">
-                            <!-- Show delete link in a different way, differentiate safe links? -->
-                            @Html.Links(item.GetLinkBag().GetUnusedSafeLinks())
-                        </dd>
-                    </dl>
-                </li>
-            }
-        </ul>
-        <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-        </footer>
-    </div>
-</body>
-</html>
+﻿@model ApiPoc.Representations.SubscriberCollectionRepresentation
+@{
+    ViewBag.Title = "Subscribers (detailed list)";
+}
+<div id="subscribers">
+    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers List with details")</h2>
+    <ul id="items">
+        @foreach(var item in Model.Items)
+        {
+            var itemLinkBag = new LinkBag(item.Links);
+            <li>
+                <dl>
+                    <dt class="id">Id</dt>
+                    <dd class="id">@item.Id</dd>
+                    <dt class="last-name">Last name</dt>
+                    <dd class="last-name">@item.LastName</dd>
+                    <dt class="first-name">First name</dt>
+                    <dd class="first-name">@item.FirstName</dd>
+                    <dt class="birthday">Birthday</dt>
+                    <dd class="birthday">@item.Birthday</dd>
+                    <dt class="email">Email</dt>
+                    <dd class="email">@item.Email</dd>
+                    <dt class="links">Links</dt>
+                    <dd class="links">
+                        <!-- Show delete link in a different way, differentiate safe links? -->
+                        @Html.Links(item.GetLinkBag().GetUnusedSafeLinks())
+                    </dd>
+                </dl>
+            </li>
+        }
+    </ul>
+    <footer>
+        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    </footer>
+</div>

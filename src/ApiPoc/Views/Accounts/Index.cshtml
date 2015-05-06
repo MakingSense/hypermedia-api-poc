@@ -1,27 +1,19 @@
-﻿@using ApiPoc.Representations
-@using ApiPoc.Helpers
-@model ApiPoc.Representations.AccountCollectionRepresentation
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Accounts</title>
-</head>
-<body>
-    <div id="accounts">
-        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Accounts")</h1>
-        <ul id="items">
-            @foreach(var item in Model.Items)
-            {
-                var itemLinkBag = new LinkBag(item.Links);
-                <li>
-                    <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
-                </li>
-            }
-        </ul>
-        <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-        </footer>
-    </div>
-</body>
-</html>
+﻿@model ApiPoc.Representations.AccountCollectionRepresentation
+@{
+    ViewBag.Title = "Accounts";
+}
+<div id="accounts">
+    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Accounts")</h2>
+    <ul id="items">
+        @foreach(var item in Model.Items)
+        {
+            var itemLinkBag = new LinkBag(item.Links);
+            <li>
+                <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
+            </li>
+        }
+    </ul>
+    <footer>
+        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    </footer>
+</div>

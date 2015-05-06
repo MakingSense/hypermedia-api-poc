@@ -1,18 +1,10 @@
-﻿@using ApiPoc.Representations
-@using ApiPoc.Helpers
-@model ApiPoc.Representations.SimpleRepresentation
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Home</title>
-</head>
-<body>
-    <div id="home">
-        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Home")</h1>
-        <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-        </footer>
-    </div>
-</body>
-</html>
+﻿@model ApiPoc.Representations.SimpleRepresentation
+@{
+    ViewBag.Title = "Home";
+}
+<div id="home">
+    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Home")</h2>
+    <footer>
+        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    </footer>
+</div>

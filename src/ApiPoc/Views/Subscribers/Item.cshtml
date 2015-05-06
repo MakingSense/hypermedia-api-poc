@@ -1,31 +1,23 @@
-﻿@using ApiPoc.Representations
-@using ApiPoc.Helpers
-@model ApiPoc.Representations.SubscriberRepresentation
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Subscriber detail</title>
-</head>
-<body>
-    <div id="subscriber-@Model.Id">
-        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscriber " + Model.Id)</h1>
-        <dl>
-            <dt class="id">Id</dt>
-            <dd class="id">@Model.Id</dd>
-            <dt class="last-name">Last name</dt>
-            <dd class="last-name">@Model.LastName</dd>
-            <dt class="first-name">First name</dt>
-            <dd class="first-name">@Model.FirstName</dd>
-            <dt class="birthday">Birthday</dt>
-            <dd class="birthday">@Model.Birthday</dd>
-            <dt class="email">Email</dt>
-            <dd class="email">@Model.Email</dd>
-        </dl>
-        <footer>
-            <!-- Show delete link in a different way, differentiate safe links? -->
-            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-        </footer>
-    </div>
-</body>
-</html>
+﻿@model ApiPoc.Representations.SubscriberRepresentation
+@{
+    ViewBag.Title = "Subscriber detail";
+}
+<div id="subscriber-@Model.Id">
+    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscriber " + Model.Id)</h2>
+    <dl>
+        <dt class="id">Id</dt>
+        <dd class="id">@Model.Id</dd>
+        <dt class="last-name">Last name</dt>
+        <dd class="last-name">@Model.LastName</dd>
+        <dt class="first-name">First name</dt>
+        <dd class="first-name">@Model.FirstName</dd>
+        <dt class="birthday">Birthday</dt>
+        <dd class="birthday">@Model.Birthday</dd>
+        <dt class="email">Email</dt>
+        <dd class="email">@Model.Email</dd>
+    </dl>
+    <footer>
+        <!-- Show delete link in a different way, differentiate safe links? -->
+        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    </footer>
+</div>

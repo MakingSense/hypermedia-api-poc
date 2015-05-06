@@ -1,28 +1,20 @@
-﻿@using ApiPoc.Representations
-@using ApiPoc.Helpers
-@model ApiPoc.Representations.SubscriberCollectionRepresentation
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Subscribers</title>
-</head>
-<body>
-    <div id="subscribers">
-        <h1>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers")</h1>
-        <ul id="items">
-            @foreach(var item in Model.Items)
-            {
-                var itemLinkBag = new LinkBag(item.Links);
-                <li>
-                    <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
-                    <!-- Show delete link in a different way, differentiate safe links? -->
-                </li>
-            }
-        </ul>
-        <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-        </footer>
-    </div>
-</body>
-</html>
+﻿@model ApiPoc.Representations.SubscriberCollectionRepresentation
+@{
+    ViewBag.Title = "Subscribers";
+}
+<div id="subscribers">
+    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers")</h2>
+    <ul id="items">
+        @foreach(var item in Model.Items)
+        {
+            var itemLinkBag = new LinkBag(item.Links);
+            <li>
+                <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
+                <!-- Show delete link in a different way, differentiate safe links? -->
+            </li>
+        }
+    </ul>
+    <footer>
+        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    </footer>
+</div>

@@ -1,19 +1,11 @@
-﻿@using ApiPoc.Representations
-@using ApiPoc.Helpers
-@model ApiPoc.Representations.ErrorRepresentation
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Error @Model.StatusCode</title>
-</head>
-<body>
-    <div id="error">
-        <h1>Error <span class="error-code">@Model.StatusCode</span></h1>
-        <p class="error-message">@Model.Message</p>
-        <footer>
-            @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-        </footer>
-    </div>
-</body>
-</html>
+﻿@model ApiPoc.Representations.ErrorRepresentation
+@{
+    ViewBag.Title = "Error " + Model.StatusCode;
+}
+<div id="error">
+    <h2>Error <span class="error-code">@Model.StatusCode</span></h2>
+    <p class="error-message">@Model.Message</p>
+    <footer>
+        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    </footer>
+</div>
