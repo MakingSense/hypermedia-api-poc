@@ -16,6 +16,7 @@
         <dt class="email">Email</dt>
         <dd class="email">@Model.Email</dd>
     </dl>
+    @Html.Links(Model.GetLinkBag().GetByRel(Rel.Delete), "actions")
     <footer>
         <!-- Show delete link in a different way, differentiate safe links? -->
         @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
