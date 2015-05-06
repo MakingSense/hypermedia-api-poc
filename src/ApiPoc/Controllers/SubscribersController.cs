@@ -132,7 +132,7 @@ namespace ApiPoc.Controllers
             {
                 Links = new[] {
                     Url.LinkHome(),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list"),
                 }
             });
         }

@@ -7,7 +7,6 @@
     <ul id="items">
         @foreach(var item in Model.Items)
         {
-            var itemLinkBag = new LinkBag(item.Links);
             <li>
                 <dl>
                     <dt class="id">Id</dt>
@@ -20,9 +19,12 @@
                     <dd class="birthday">@item.Birthday</dd>
                     <dt class="email">Email</dt>
                     <dd class="email">@item.Email</dd>
+                    <dt class="actions">Actions</dt>
+                    <dd class="actions">
+                        @Html.Links(item.GetLinkBag().GetByRel(Rel.Delete), "actions")
+                    </dd>
                     <dt class="links">Links</dt>
                     <dd class="links">
-                        <!-- Show delete link in a different way, differentiate safe links? -->
                         @Html.Links(item.GetLinkBag().GetUnusedSafeLinks())
                     </dd>
                 </dl>
