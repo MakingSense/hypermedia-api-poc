@@ -128,7 +128,7 @@ namespace ApiPoc.Controllers
 
             account.Subscribers.Remove(subscriber);
 
-            return NegotiatedResult(new SimpleRepresentation()
+            return DoneResult(new SimpleRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),

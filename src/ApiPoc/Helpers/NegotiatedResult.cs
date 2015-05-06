@@ -1,6 +1,7 @@
 ﻿using ApiPoc.Representations;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.ModelBinding;
+using Microsoft.AspNet.WebUtilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,27 +25,34 @@ namespace ApiPoc.Helpers
         public Task ExecuteResultAsync(ActionContext context)
         {
             IActionResult innerActionResult;
-            var acceptHeader = context.HttpContext.Request.Headers["Accept"];
-            if (acceptHeader != null && acceptHeader.Contains("text/html"))
+            if (CustomStatusCode == StatusCodes.Status204NoContent)
             {
-                innerActionResult = new ViewResult()
-                {
-                    StatusCode = CustomStatusCode,
-                    ViewName = CustomHtmlView,
-                    ViewData = new ViewDataDictionary(
-                        new EmptyModelMetadataProvider(),
-                        context.ModelState ?? new ModelStateDictionary())
-                    {
-                        Model = Value
-                    }
-                };
+                innerActionResult = new NoContentResult();
             }
             else
             {
-                innerActionResult = new ObjectResult(Value)
+                var acceptHeader = context.HttpContext.Request.Headers["Accept"];
+                if (acceptHeader != null && acceptHeader.Contains("text/html"))
                 {
-                    StatusCode = CustomStatusCode
-                };
+                    innerActionResult = new ViewResult()
+                    {
+                        StatusCode = CustomStatusCode,
+                        ViewName = CustomHtmlView,
+                        ViewData = new ViewDataDictionary(
+                            new EmptyModelMetadataProvider(),
+                            context.ModelState ?? new ModelStateDictionary())
+                        {
+                            Model = Value
+                        }
+                    };
+                }
+                else
+                {
+                    innerActionResult = new ObjectResult(Value)
+                    {
+                        StatusCode = CustomStatusCode
+                    };
+                }
             }
             return innerActionResult.ExecuteResultAsync(context);
         }
