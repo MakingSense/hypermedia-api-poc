@@ -3,6 +3,7 @@ using ApiPoc.PersistenceModel;
 using ApiPoc.Representations;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.WebUtilities;
+using Microsoft.Framework.OptionsModel;
 using System;
 using System.Linq;
 
@@ -10,59 +11,55 @@ namespace ApiPoc.Controllers
 {
     public class SubscribersController : BaseController
     {
-        public SubscribersController(IDatabase database)
-            : base(database)
+        public SubscribersController(IDatabase database, IOptions<AppSettings> settings)
+            : base(database, settings)
         {
         }
 
         [HttpGet("/accounts/{accountId}/subscribers")]
-        public NegotiatedResult Index(int accountId)
+        public NegotiatedResult Index(int accountId, int? page = null)
         {
+            page = page ?? 1;
             var account = Database.GetAccountById(accountId);
             if (account == null)
             {
                 return AccountNotFoundError(accountId);
             }
 
-            return NegotiatedResult(new SubscriberCollection()
-            {
-                Links = new[] {
-                    Url.LinkHome(),
-                    Url.LinkSelf(Rel.SubscriberCollection),
-                    Url.Link<AccountsController>(x => x.Item(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
-                    Url.Link<SubscribersController>(x => x.DetailedIndex(account.Id), Rel.SubscriberCollection, "Subscribers list (detailed)"),
-                },
-                Items = account.Subscribers.Select(subscriber => 
-                    new SubscriberCollectionItem() {
-                        Id = subscriber.Id,
-                        Links = new[] {
-                            Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.Alternate | Rel.SubscriberDetail, "Subscriber details"),
-                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Unsubscribe, "Unsubscribe")
-                        },
-                        FirstName = subscriber.FirstName,
-                        LastName = subscriber.LastName
-                    }).ToArray()
-            });
+            var allItems = account.Subscribers.Select(subscriber =>
+                new SubscriberCollectionItem()
+                {
+                    Id = subscriber.Id,
+                    Links = new[] {
+                        Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.Alternate | Rel.SubscriberDetail, "Subscriber details"),
+                        Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Unsubscribe, "Unsubscribe")
+                    },
+                    FirstName = subscriber.FirstName,
+                    LastName = subscriber.LastName
+                });
+
+            return NegotiatedResult(new SubscriberCollection(
+                allItems, 
+                Settings.Options.PageSize, 
+                page.Value, 
+                (p, rel, description) => Url.Link<SubscribersController>(x => x.Index(accountId, p), rel | Rel.SubscriberCollection, description),
+                Url.LinkHome(),
+                Url.LinkSelf(Rel.SubscriberCollection),
+                Url.Link<AccountsController>(x => x.Item(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
+                Url.Link<SubscribersController>(x => x.DetailedIndex(account.Id, null), Rel.SubscriberCollection, "Subscribers list (detailed)")));
         }
 
         [HttpGet("/accounts/{accountId}/subscribers/detail")]
-        public NegotiatedResult DetailedIndex(int accountId)
+        public NegotiatedResult DetailedIndex(int accountId, int? page = null)
         {
+            page = page ?? 1;
             var account = Database.GetAccountById(accountId);
             if (account == null)
             {
                 return AccountNotFoundError(accountId);
             }
 
-            return NegotiatedResult(new SubscriberDetailedCollection()
-            {
-                Links = new[] {
-                    Url.LinkHome(),
-                    Url.LinkSelf(Rel.SubscriberDetailedCollection),
-                    Url.Link<AccountsController>(x => x.Item(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.SubscriberCollection, "Subscribers list (simple)"),
-                },
-                Items = account.Subscribers.Select(subscriber =>
+            var allItems = account.Subscribers.Select(subscriber =>
                     new SubscriberDetail()
                     {
                         Id = subscriber.Id,
@@ -74,8 +71,17 @@ namespace ApiPoc.Controllers
                         LastName = subscriber.LastName,
                         Birthday = subscriber.Birthday,
                         Email = subscriber.Email
-                    }).ToArray()
-            });
+                    });
+
+            return NegotiatedResult(new SubscriberDetailedCollection(
+                allItems,
+                Settings.Options.PageSize,
+                page.Value,
+                (p, rel, description) => Url.Link<SubscribersController>(x => x.Index(accountId, p), rel | Rel.SubscriberDetailedCollection, description),
+                Url.LinkHome(),
+                Url.LinkSelf(Rel.SubscriberDetailedCollection),
+                Url.Link<AccountsController>(x => x.Item(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
+                Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.SubscriberCollection, "Subscribers list (simple)")));
         }
 
         [HttpGet("/accounts/{accountId}/subscribers/{subscriberId}")]
@@ -98,7 +104,7 @@ namespace ApiPoc.Controllers
                 Links = new[] {
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.SubscriberDetail),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
                     Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriberId), Rel.Unsubscribe, "Unsubscribe")
                 },
                 Id = subscriber.Id,
@@ -135,7 +141,7 @@ namespace ApiPoc.Controllers
                 Links = new[] {
                     Url.LinkHome(),
                     Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.SubscriberDetail | Rel.Suggested, "Subscriber"),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list")
+                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection, "Subscribers list")
                 }
             });
         }
@@ -164,7 +170,7 @@ namespace ApiPoc.Controllers
                     Links = new[]
                     {
                         Url.LinkHome(),
-                        Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list")
+                        Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list")
                     }
                 });
             }
@@ -177,7 +183,7 @@ namespace ApiPoc.Controllers
                     Links = new[]
                     {
                         Url.LinkHome(),
-                        Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list"),
+                        Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list"),
                     }
                 });
             }
@@ -192,7 +198,7 @@ namespace ApiPoc.Controllers
                 Links = new[]
                 {
                     Url.LinkHome(),
-                    Url.Link<SubscribersController>(x => x.Index(accountId), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
+                    Url.Link<SubscribersController>(x => x.Index(accountId, null), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
                 }
             });
         }
@@ -209,7 +215,7 @@ namespace ApiPoc.Controllers
                     Url.LinkHome(),
                     Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
                     Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountDetail, "My account"),
-                    Url.Link<SubscribersController>(x => x.Index(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers")
+                    Url.Link<SubscribersController>(x => x.Index(currentAccount.Id, null), Rel.SubscriberCollection, "My account subscribers")
                 }
             });
         }

@@ -3,6 +3,7 @@ using ApiPoc.PersistenceModel;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc;
+using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
@@ -11,8 +12,13 @@ namespace ApiPoc
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; set; }
+
         public Startup(IHostingEnvironment env)
         {
+            Configuration = new Configuration()
+                .AddJsonFile("config.json")
+                .AddEnvironmentVariables();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -23,6 +29,8 @@ namespace ApiPoc
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<AppSettings>(Configuration.GetSubKey("AppSettings"));
+
             services.AddMvc().Configure<MvcOptions>(options =>
             {
                 foreach (var formater in options.OutputFormatters.Select(x => x.Instance).OfType<JsonOutputFormatter>())

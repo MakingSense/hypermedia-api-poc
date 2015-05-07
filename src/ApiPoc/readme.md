@@ -22,6 +22,24 @@ All collection models in our system share some common structure:
 * Should contains a list of elements 
     * HTML: `ul.items`
     * JSON: `$.items`
+* May contains pagination information:
+    * _FirstPage_ reference
+    * _LastPage_ reference
+    * _PreviousPage_ reference
+    * _NextPage_ reference
+    * _SpecificPage_ reference
+    * Current page
+        * HTML: `span.current-page`
+        * JSON: `$.currentPage`
+    * Page size
+        * HTML: `span.page-size`
+        * JSON: `$.pageSize`
+    * Total items count 
+        * HTML: `span.items-count`
+        * JSON: `$.itemsCount`
+    * Total pages count 
+        * HTML: `span.pages-count`
+        * JSON: `$.pagesCount`
 
 #### Home
 
@@ -194,6 +212,45 @@ A reference to suggested resource after an error occurred or an operation has be
 
 * HTML: `a.rel~="suggested"`
 * JSON: `$.links[?(/^(.*\s)*suggested(\s.*)*$/.test(@.rel))]`
+
+#### FirstPage
+
+A reference to the first page of current collection.
+
+* HTML: `a.rel~="first-page"`
+* JSON: `$.links[?(/^(.*\s)*first-page(\s.*)*$/.test(@.rel))]`
+
+#### LastPage
+
+A reference to the last page of current collection.
+
+* HTML: `a.rel~="last-page"`
+* JSON: `$.links[?(/^(.*\s)*last-page(\s.*)*$/.test(@.rel))]`
+
+#### PreviousPage
+
+A reference to the previous page of current collection.
+
+* HTML: `a.rel~="previous-page"`
+* JSON: `$.links[?(/^(.*\s)*first-page(\s.*)*$/.test(@.rel))]`
+
+#### NextPage
+
+A reference to the next page of current collection.
+
+* HTML: `a.rel~="next-page"`
+* JSON: `$.links[?(/^(.*\s)*last-page(\s.*)*$/.test(@.rel))]`
+
+#### SpecificPage
+
+A URI Template to build links to an arbitrary page.
+
+<!-- TODO: resolve it with a form * HTML: `a.rel~="specific-page"` -->
+* JSON: `$.links[?(/^(.*\s)*specific-page(\s.*)*$/.test(@.rel))]`
+
+Template Parameters:
+
+* `{page}`
 
 ### Outbound Domain Links
 

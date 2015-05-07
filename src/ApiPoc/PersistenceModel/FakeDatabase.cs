@@ -19,17 +19,14 @@ namespace ApiPoc.PersistenceModel
                 LastName = "Moschini",
                 Birthday = DateTime.Parse("1978-12-02"),
                 Email = "private@andresmoschini.com",
-                AllSubscribers = new List<Subscriber>()
-                    {
-                        new Subscriber()
-                        {
-                            Id = 155,
-                            FirstName = "Juan",
-                            LastName = "Perez",
-                            Birthday = DateTime.Parse("1980-01-01"),
-                            Email = "juan@perez.com"
-                        }
-                    }
+                AllSubscribers = Enumerable.Range(1, 1134).Select(x => new Subscriber()
+                {
+                    Id = x,
+                    FirstName = "Juan" + x,
+                    LastName = "Perez" + x,
+                    Birthday = DateTime.Parse("1980-01-01"),
+                    Email = "juan" + x + "@perez.com"
+                }).ToList()
             };
 
             _accounts = new List<Account>()

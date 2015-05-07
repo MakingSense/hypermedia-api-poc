@@ -3,6 +3,7 @@ using ApiPoc.PersistenceModel;
 using ApiPoc.Representations;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.WebUtilities;
+using Microsoft.Framework.OptionsModel;
 using System;
 using System.Linq;
 
@@ -10,8 +11,8 @@ namespace ApiPoc.Controllers
 {
     public class AccountsController: BaseController
     {
-        public AccountsController(IDatabase database)
-            : base(database)
+        public AccountsController(IDatabase database, IOptions<AppSettings> settings)
+            : base(database, settings)
         {
         }
 
@@ -68,7 +69,7 @@ namespace ApiPoc.Controllers
                 Links = new[] {
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.AccountDetail),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.SubscriberCollection, "Subscribers list"),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.SubscriberCollection, "Subscribers list"),
 
                     // Hide because standard user does not need this list
                     // Url.Link<AccountsController>(x => x.Index(), Rel.Parent | Rel.AccountItem, "Accounts list"),
