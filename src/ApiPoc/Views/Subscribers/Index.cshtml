@@ -8,7 +8,7 @@
         @foreach(var item in Model.Items)
         {
             <li class="subscriber-item">
-                <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
+                <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Alternate))
                 <!-- Show delete link in a different way, differentiate safe links? -->
             </li>
         }
