@@ -2,7 +2,7 @@
 
 namespace ApiPoc.Representations
 {
-    public class SubscriberRepresentation : SimpleRepresentation
+    public class SubscriberDetail : SimpleRepresentation
     {
         public int Id { get; set; }
 

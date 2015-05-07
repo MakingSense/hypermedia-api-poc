@@ -1,13 +1,13 @@
-﻿@model ApiPoc.Representations.SubscriberCollectionRepresentation
+﻿@model ApiPoc.Representations.SubscriberDetailedCollection
 @{
     ViewBag.Title = "Subscribers (detailed list)";
 }
-<div id="subscribers">
+<div class="subscribers-detailed">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers List with details")</h2>
-    <ul id="items">
+    <ul class="items">
         @foreach(var item in Model.Items)
         {
-            <li>
+            <li class="subscriber-detail">
                 <dl>
                     <dt class="id">Id</dt>
                     <dd class="id">@item.Id</dd>
@@ -19,19 +19,11 @@
                     <dd class="birthday">@item.Birthday</dd>
                     <dt class="email">Email</dt>
                     <dd class="email">@item.Email</dd>
-                    <dt class="actions">Actions</dt>
-                    <dd class="actions">
-                        @Html.Links(item.GetLinkBag().GetByRel(Rel.Delete), "actions")
-                    </dd>
-                    <dt class="links">Links</dt>
-                    <dd class="links">
-                        @Html.Links(item.GetLinkBag().GetUnusedSafeLinks())
-                    </dd>
                 </dl>
+                @Html.Links(item.GetLinkBag().GetByRel(Rel.Unsubscribe), "actions")
+                @Html.Links(item.GetLinkBag().GetUnusedSafeLinks())
             </li>
         }
     </ul>
-    <footer>
-        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-    </footer>
+    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
 </div>

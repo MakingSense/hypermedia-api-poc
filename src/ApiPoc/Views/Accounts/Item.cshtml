@@ -1,11 +1,11 @@
-﻿@model ApiPoc.Representations.AccountRepresentation
+﻿@model ApiPoc.Representations.AccountDetail
 @{
     ViewBag.Title = "Account detail";
 }
-<div id="account-@Model.Id">
+<div class="account-detail">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Account " + Model.Id)</h2>
     <dl>
-        <dt class="id">Id</dt>
+        <dt ddclass="id">Id</dt>
         <dd class="id">@Model.Id</dd>
         <dt class="last-name">Last name</dt>
         <dd class="last-name">@Model.LastName</dd>
@@ -16,7 +16,5 @@
         <dt class="email">Email</dt>
         <dd class="email">@Model.Email</dd>
     </dl>
-    <footer>
-        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-    </footer>
+    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
 </div>

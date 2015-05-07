@@ -2,10 +2,8 @@
 @{
     ViewBag.Title = "Error " + Model.StatusCode;
 }
-<div id="error">
-    <h2>Error <span class="error-code">@Model.StatusCode</span></h2>
-    <p class="error-message">@Model.Message</p>
-    <footer>
-        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-    </footer>
+<div class="error">
+    <h2>Error <span class="status-code">@Model.StatusCode</span></h2>
+    <p class="message">@Model.Message</p>
+    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
 </div>

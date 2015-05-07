@@ -1,6 +1,6 @@
 ﻿namespace ApiPoc.Representations
 {
-    public class LinkRepresentation
+    public class Link
     {
         public string Href { get; set; }
 

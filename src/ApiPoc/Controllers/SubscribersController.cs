@@ -24,7 +24,7 @@ namespace ApiPoc.Controllers
                 return AccountNotFoundError(accountId);
             }
 
-            return NegotiatedResult(new SubscriberCollectionRepresentation()
+            return NegotiatedResult(new SubscriberCollection()
             {
                 Links = new[] {
                     Url.LinkHome(),
@@ -33,11 +33,11 @@ namespace ApiPoc.Controllers
                     Url.Link<SubscribersController>(x => x.DetailedIndex(account.Id), Rel.SubscriberCollection, "Subscribers list (detailed)"),
                 },
                 Items = account.Subscribers.Select(subscriber => 
-                    new SubscriberRepresentation() {
+                    new SubscriberCollectionItem() {
                         Id = subscriber.Id,
                         Links = new[] {
-                            Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.Self | Rel.SubscriberItem, "Subscriber details"),
-                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Delete, "Unsubscribe")
+                            Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.Alternate | Rel.SubscriberDetail, "Subscriber details"),
+                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Unsubscribe, "Unsubscribe")
                         },
                         FirstName = subscriber.FirstName,
                         LastName = subscriber.LastName
@@ -54,21 +54,21 @@ namespace ApiPoc.Controllers
                 return AccountNotFoundError(accountId);
             }
 
-            return NegotiatedResult(new SubscriberCollectionRepresentation()
+            return NegotiatedResult(new SubscriberDetailedCollection()
             {
                 Links = new[] {
                     Url.LinkHome(),
-                    Url.LinkSelf(Rel.SubscriberDetailCollection),
+                    Url.LinkSelf(Rel.SubscriberDetailedCollection),
                     Url.Link<AccountsController>(x => x.Item(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
                     Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.SubscriberCollection, "Subscribers list (simple)"),
                 },
                 Items = account.Subscribers.Select(subscriber =>
-                    new SubscriberRepresentation()
+                    new SubscriberDetail()
                     {
                         Id = subscriber.Id,
                         Links = new[] {
-                            Url.Link<SubscribersController>(x => x.Item(accountId, subscriber.Id), Rel.Self | Rel.SubscriberItem, "Subscriber details"),
-                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Delete, "Unsubscribe")
+                            Url.Link<SubscribersController>(x => x.Item(accountId, subscriber.Id), Rel.Self | Rel.SubscriberDetail, "Subscriber details"),
+                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Unsubscribe, "Unsubscribe")
                         },
                         FirstName = subscriber.FirstName,
                         LastName = subscriber.LastName,
@@ -93,13 +93,13 @@ namespace ApiPoc.Controllers
                 return SubscriberNotFoundError(accountId, subscriberId);
             }
 
-            return NegotiatedResult(new SubscriberRepresentation()
+            return NegotiatedResult(new SubscriberDetail()
             {
                 Links = new[] {
                     Url.LinkHome(),
-                    Url.LinkSelf(Rel.SubscriberItem),
+                    Url.LinkSelf(Rel.SubscriberDetail),
                     Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
-                    Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriberId), Rel.Delete, "Unsubscribe")
+                    Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriberId), Rel.Unsubscribe, "Unsubscribe")
                 },
                 Id = subscriber.Id,
                 FirstName = subscriber.FirstName,
@@ -109,8 +109,8 @@ namespace ApiPoc.Controllers
             });
         }
 
-        [HttpDelete("/accounts/{accountId}/subscribers/{subscriberId}")]
-        public NegotiatedResult Unsubscribe(int accountId, int subscriberId)
+        [HttpPut("/accounts/{accountId}/subscribers/{subscriberId}")]
+        public NegotiatedResult Modify(int accountId, int subscriberId, SubscriberDetail updated)
         {
             //TODO: add optimistic concurrency check
 
@@ -126,15 +126,61 @@ namespace ApiPoc.Controllers
                 return SubscriberNotFoundError(accountId, subscriberId);
             }
 
-            subscriber.Unsubscribed = true;
+            subscriber.Birthday = updated.Birthday;
+            subscriber.FirstName = updated.FirstName;
+            subscriber.LastName = updated.LastName;
 
-            return DoneResult(new SimpleRepresentation()
+            return DoneResult(new OkRepresentation()
             {
                 Links = new[] {
                     Url.LinkHome(),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list"),
+                    Url.Link<SubscribersController>(x => x.Item(account.Id, subscriber.Id), Rel.SubscriberDetail | Rel.Suggested, "Subscriber"),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection, "Subscribers list")
                 }
             });
+        }
+
+        [HttpDelete("/accounts/{accountId}/subscribers/{subscriberId}")]
+        public NegotiatedResult Unsubscribe(int accountId, int subscriberId)
+        {
+            //TODO: add optimistic concurrency check
+
+            var account = Database.GetAccountById(accountId);
+            if (account == null)
+            {
+                return AccountNotFoundError(accountId);
+            }
+
+            var subscriber = account.AllSubscribers.FirstOrDefault(x => x.Id == subscriberId);
+            if (subscriber == null)
+            {
+                return SubscriberNotFoundError(accountId, subscriberId);
+            }
+
+            if (subscriber.Unsubscribed)
+            {
+                return NotModifiedResult(new OkRepresentation()
+                {
+                    Links = new[]
+                    {
+                        Url.LinkHome(),
+                        Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list")
+                    }
+                });
+            }
+            else
+            {
+                subscriber.Unsubscribed = true;
+
+                return DoneResult(new OkRepresentation()
+                {
+                    Links = new[]
+                    {
+                        Url.LinkHome(),
+                        Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list"),
+                    }
+                });
+            }
         }
 
         private ErrorResult SubscriberNotFoundError(int accountId, int subscriberId)
@@ -162,7 +208,7 @@ namespace ApiPoc.Controllers
                 {
                     Url.LinkHome(),
                     Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
-                    Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account"),
+                    Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountDetail, "My account"),
                     Url.Link<SubscribersController>(x => x.Index(currentAccount.Id), Rel.SubscriberCollection, "My account subscribers")
                 }
             });

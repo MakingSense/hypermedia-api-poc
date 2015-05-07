@@ -4,7 +4,7 @@ namespace ApiPoc.Representations
 {
     public interface IRepresentation
     {
-        LinkRepresentation[] Links { get; }
+        Link[] Links { get; }
 
         LinkBag GetLinkBag();
     }

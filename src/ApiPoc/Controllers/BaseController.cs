@@ -26,22 +26,23 @@ namespace ApiPoc.Controllers
             return new ErrorResult(value);
         }
 
-        public NegotiatedResult DoneResult(SimpleRepresentation value)
+        public OperationResult DoneResult(OkRepresentation value)
         {
-            return new NegotiatedResult(value)
+            return new OperationResult(value);
+        }
+
+        public OperationResult NotModifiedResult(OkRepresentation value)
+        {
+            return new OperationResult(value)
             {
-                CustomHtmlView = "Done"
+                CustomStatusCode = StatusCodes.Status304NotModified
             };
         }
 
         [Obsolete("Only for demo purposes, empty results should be avoided, see http://blog.ploeh.dk/2013/04/30/rest-lesson-learned-avoid-204-responses/")]
-        public NegotiatedResult DoneResult()
+        public OperationResult DoneResult()
         {
-            return new NegotiatedResult(new SimpleRepresentation())
-            {
-                CustomHtmlView = "Done",
-                CustomStatusCode = StatusCodes.Status204NoContent
-            };
+            return new OperationResult();
         }
     }
 }

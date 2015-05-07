@@ -62,7 +62,7 @@
     }
 
     export function prepare() {
-        foreachElement('a[rel~="delete"]', (anchor: HTMLAnchorElement) => {
+        foreachElement('a[rel~="unsubscribe"]', (anchor: HTMLAnchorElement) => {
             anchor.onclick = (ev) => {
                 ev.preventDefault();
                 DELETE(anchor.href);

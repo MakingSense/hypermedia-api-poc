@@ -58,7 +58,7 @@ var ApiPoc;
         }
     }
     function prepare() {
-        foreachElement('a[rel~="delete"]', function (anchor) {
+        foreachElement('a[rel~="unsubscribe"]', function (anchor) {
             anchor.onclick = function (ev) {
                 ev.preventDefault();
                 DELETE(anchor.href);

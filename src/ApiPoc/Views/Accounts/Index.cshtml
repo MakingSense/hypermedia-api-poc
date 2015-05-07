@@ -1,18 +1,16 @@
-﻿@model ApiPoc.Representations.AccountCollectionRepresentation
+﻿@model ApiPoc.Representations.AccountCollection
 @{
     ViewBag.Title = "Accounts";
 }
-<div id="accounts">
+<div class="accounts">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Accounts")</h2>
-    <ul id="items">
+    <ul class="items">
         @foreach(var item in Model.Items)
         {
-            <li>
+            <li class="account-item">
                 <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
             </li>
         }
     </ul>
-    <footer>
-        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-    </footer>
+    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
 </div>

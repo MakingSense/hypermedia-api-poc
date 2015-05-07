@@ -21,18 +21,18 @@ namespace ApiPoc.Controllers
             var accounts = Database.GetAccounts();
             var currentAccount = Database.GetCurrentAccount();
 
-            return NegotiatedResult(new AccountCollectionRepresentation()
+            return NegotiatedResult(new AccountCollection()
             {
                 Links = new[] {
                     Url.LinkHome(Rel.Parent),
                     Url.LinkSelf(Rel.AccountCollection),
-                    Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account details")
+                    Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountDetail, "My account details")
                 },
                 Items = new[]
                 {
-                    new AccountRepresentation() {
+                    new AccountCollectionItem() {
                         Links = new[] {
-                            Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.Self | Rel.AccountItem, "Account details")
+                            Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.Alternate | Rel.AccountDetail, "Account details")
                         },
                         Id = currentAccount.Id,
                         FirstName = currentAccount.FirstName,
@@ -58,16 +58,16 @@ namespace ApiPoc.Controllers
                     {
                         Url.LinkHome(),
                         Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
-                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountItem, "My account")
+                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountDetail, "My account")
                     }
                 });
             }
 
-            return NegotiatedResult(new AccountRepresentation()
+            return NegotiatedResult(new AccountDetail()
             {
                 Links = new[] {
                     Url.LinkHome(),
-                    Url.LinkSelf(Rel.AccountItem),
+                    Url.LinkSelf(Rel.AccountDetail),
                     Url.Link<SubscribersController>(x => x.Index(account.Id), Rel.SubscriberCollection, "Subscribers list"),
 
                     // Hide because standard user does not need this list

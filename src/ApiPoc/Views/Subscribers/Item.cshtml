@@ -1,8 +1,8 @@
-﻿@model ApiPoc.Representations.SubscriberRepresentation
+﻿@model ApiPoc.Representations.SubscriberDetail
 @{
     ViewBag.Title = "Subscriber detail";
 }
-<div id="subscriber-@Model.Id">
+<div class="subscriber-detail">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscriber " + Model.Id)</h2>
     <dl>
         <dt class="id">Id</dt>
@@ -16,9 +16,6 @@
         <dt class="email">Email</dt>
         <dd class="email">@Model.Email</dd>
     </dl>
-    @Html.Links(Model.GetLinkBag().GetByRel(Rel.Delete), "actions")
-    <footer>
-        <!-- Show delete link in a different way, differentiate safe links? -->
-        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-    </footer>
+    @Html.Links(Model.GetLinkBag().GetByRel(Rel.Unsubscribe), "actions")
+    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
 </div>

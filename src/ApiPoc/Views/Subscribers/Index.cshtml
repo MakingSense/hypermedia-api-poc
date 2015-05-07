@@ -1,19 +1,17 @@
-﻿@model ApiPoc.Representations.SubscriberCollectionRepresentation
+﻿@model ApiPoc.Representations.SubscriberCollection
 @{
     ViewBag.Title = "Subscribers";
 }
-<div id="subscribers">
+<div class="subscribers">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers")</h2>
-    <ul id="items">
+    <ul class="items">
         @foreach(var item in Model.Items)
         {
-            <li>
+            <li class="subscriber-item">
                 <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Self))
                 <!-- Show delete link in a different way, differentiate safe links? -->
             </li>
         }
     </ul>
-    <footer>
-        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-    </footer>
+    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
 </div>

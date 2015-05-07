@@ -7,7 +7,7 @@ namespace ApiPoc.Helpers
 {
     public static class LinkRenderingHelpers
     {
-        public static HtmlString Link(this IHtmlHelper html, LinkRepresentation link, string customText = null, string customClass = null)
+        public static HtmlString Link(this IHtmlHelper html, Link link, string customText = null, string customClass = null)
         {
             if (link == null)
             {
@@ -24,7 +24,7 @@ namespace ApiPoc.Helpers
             return bAnchor.ToHtmlString(TagRenderMode.Normal);
         }
 
-        public static HtmlString Links(this IHtmlHelper html, IEnumerable<LinkRepresentation> links, string customClass = null)
+        public static HtmlString Links(this IHtmlHelper html, IEnumerable<Link> links, string customClass = null)
         {
             var bUl = new TagBuilder("ul");
             bUl.AddCssClass("links");

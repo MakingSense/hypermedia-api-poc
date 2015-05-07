@@ -6,9 +6,9 @@ namespace ApiPoc.Representations
     {
         private LinkBag linkBag;
 
-        private LinkRepresentation[] links;
+        private Link[] links;
 
-        public LinkRepresentation[] Links
+        public Link[] Links
         {
             get { return links; }
             set

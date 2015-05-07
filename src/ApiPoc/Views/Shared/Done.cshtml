@@ -1,10 +1,9 @@
-﻿@model ApiPoc.Representations.SimpleRepresentation
+﻿@model ApiPoc.Representations.OkRepresentation
 @{
     ViewBag.Title = "Done!";
 }
-<div id="done">
+<div class="done">
     <h2>Done!</h2>
-    <footer>
-        @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
-    </footer>
+    <p class="message">@Model.Message</p>
+    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
 </div>

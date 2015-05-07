@@ -50,31 +50,31 @@ namespace ApiPoc.Helpers
                 : string.Join("-", Regex.Split(relation.ToString().Replace(",", ""), "(?<=[a-z])(?=[A-Z])")).ToLower();
         }
 
-        public static LinkRepresentation Link<T>(this IUrlHelper helper, Expression<Action<T>> expression, Rel relation, string description = null)
+        public static Link Link<T>(this IUrlHelper helper, Expression<Action<T>> expression, Rel relation, string description = null)
             where T : Controller
         {
-            return new LinkRepresentation()
+            return new Link()
             {
                 Href = helper.ActionWithValues<T>(expression),
                 Rel = relation.ToRelString(),
                 Description = description ?? relation.ToString(),
-                Safe = (relation & Rel.Unsafe) == 0
+                Safe = (relation & Rel._Unsafe) == 0
             };
         }
 
-        public static LinkRepresentation LinkSelf(this IUrlHelper helper, Rel relation = Rel.None, string description = null)
+        public static Link LinkSelf(this IUrlHelper helper, Rel relation = Rel._None, string description = null)
         {
             relation |= Rel.Self;
-            return new LinkRepresentation()
+            return new Link()
             {
                 Href = helper.Action(),
                 Rel = relation.ToRelString(),
                 Description = description ?? "Self",
-                Safe = (relation & Rel.Unsafe) == 0
+                Safe = (relation & Rel._Unsafe) == 0
             };
         }
 
-        public static LinkRepresentation LinkHome(this IUrlHelper helper, Rel relation = Rel.None, string description = null)
+        public static Link LinkHome(this IUrlHelper helper, Rel relation = Rel._None, string description = null)
         {
             relation |= Rel.Home;
             return helper.Link<HomeController>(x => x.Index(), relation, description ?? "Home");

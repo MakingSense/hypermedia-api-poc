@@ -7,29 +7,29 @@ namespace ApiPoc.Helpers
 {
     public class LinkBag
     {
-        private HashSet<LinkRepresentation> alreadyUsed;
+        private HashSet<Link> alreadyUsed;
 
-        private ILookup<string, LinkRepresentation> linksByRel;
+        private ILookup<string, Link> linksByRel;
 
-        public LinkBag(LinkRepresentation[] links)
+        public LinkBag(Link[] links)
         {
-            Links = links ?? new LinkRepresentation[] { };
+            Links = links ?? new Link[] { };
             linksByRel = Links
                 .SelectMany(link => link.Rel.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(rel => new { rel, link }))
                 .ToLookup(x => x.rel, x => x.link);
-            alreadyUsed = new HashSet<LinkRepresentation>();
+            alreadyUsed = new HashSet<Link>();
         }
 
-        public LinkRepresentation[] Links { get; private set; }
+        public Link[] Links { get; private set; }
 
-        public LinkRepresentation[] GetByRel(Rel rel)
+        public Link[] GetByRel(Rel rel)
         {
             return GetByRel(rel.ToRelString());
         }
 
-        public LinkRepresentation[] GetByRel(string rel)
+        public Link[] GetByRel(string rel)
         {
-            var result = (linksByRel[rel] ?? Enumerable.Empty<LinkRepresentation>()).ToArray();
+            var result = (linksByRel[rel] ?? Enumerable.Empty<Link>()).ToArray();
             foreach (var item in result)
             {
                 alreadyUsed.Add(item);
@@ -37,14 +37,14 @@ namespace ApiPoc.Helpers
             return result;
         }
 
-        public LinkRepresentation GetFirstByRel(Rel rel)
+        public Link GetFirstByRel(Rel rel)
         {
             return GetFirstByRel(rel.ToRelString());
         }
 
-        public LinkRepresentation GetFirstByRel(string rel)
+        public Link GetFirstByRel(string rel)
         {
-            var result = (linksByRel[rel] ?? Enumerable.Empty<LinkRepresentation>()).FirstOrDefault();
+            var result = (linksByRel[rel] ?? Enumerable.Empty<Link>()).FirstOrDefault();
             if (result != null)
             {
                 alreadyUsed.Add(result);
@@ -52,7 +52,7 @@ namespace ApiPoc.Helpers
             return result;
         }
 
-        public LinkRepresentation[] GetUnusedLinks(bool? safe = null)
+        public Link[] GetUnusedLinks(bool? safe = null)
         {
             var links = Links.Where(x => !alreadyUsed.Contains(x));
             if (safe.HasValue)
@@ -62,12 +62,12 @@ namespace ApiPoc.Helpers
             return links.ToArray();
         }
 
-        public LinkRepresentation[] GetUnusedSafeLinks()
+        public Link[] GetUnusedSafeLinks()
         {
             return GetUnusedLinks(true);
         }
 
-        public LinkRepresentation[] GetUnusedUnsafeLinks()
+        public Link[] GetUnusedUnsafeLinks()
         {
             return GetUnusedLinks(false);
         }
