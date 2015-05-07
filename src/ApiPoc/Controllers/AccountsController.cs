@@ -27,13 +27,13 @@ namespace ApiPoc.Controllers
                 Links = new[] {
                     Url.LinkHome(Rel.Parent),
                     Url.LinkSelf(Rel.AccountCollection),
-                    Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountDetail, "My account details")
+                    Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.AccountDetail, "My account details")
                 },
                 Items = new[]
                 {
                     new AccountCollectionItem() {
                         Links = new[] {
-                            Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.Alternate | Rel.AccountDetail, "Account details")
+                            Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.Alternate | Rel.AccountDetail, "Account details")
                         },
                         Id = currentAccount.Id,
                         FirstName = currentAccount.FirstName,
@@ -44,7 +44,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts/{accountId}")]
-        public NegotiatedResult Item(int accountId)
+        public NegotiatedResult Detail(int accountId)
         {
             var account = Database.GetAccountById(accountId);
 
@@ -59,7 +59,7 @@ namespace ApiPoc.Controllers
                     {
                         Url.LinkHome(),
                         Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
-                        Url.Link<AccountsController>(x => x.Item(currentAccount.Id), Rel.AccountDetail, "My account")
+                        Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.AccountDetail, "My account")
                     }
                 });
             }
