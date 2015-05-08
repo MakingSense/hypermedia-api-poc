@@ -57,11 +57,12 @@
     }
 
     function readForm(form: HTMLFormElement): IDictionary<string> {
-        var obj = <IDictionary<string>>{};
+        var obj = <IDictionary<string>> null;
         var length = form.elements.length;
         for (var i = 0; i < length; i++) {
             var element = <HTMLInputElement>form.elements[i];
             if (!element.classList.contains("ignore-on-send")) {
+                obj = obj || {};
                 obj[element.name] = element.value;
             }
         }
@@ -101,41 +102,39 @@
         }
     }
 
-    export function prepare() {
-        foreachElement<HTMLAnchorElement>('a[rel~="unsubscribe"]', anchor => {
-            anchor.onclick = (ev) => {
-                ev.preventDefault();
-                var request = new Request();
-                request.method = "DELETE";
-                request.url = anchor.href;
-                execute(request);
-            };
-        });
-        foreachElement<HTMLAnchorElement>('a[rel~="edit-subscriber"]', anchor => {
-            var form = <HTMLFormElement>(anchor.nextElementSibling);
-            var generateBtn = <HTMLInputElement>form.elements.namedItem("generate-request");
-            var queryTextArea = <HTMLInputElement>form.elements.namedItem("generated-request");
-            var submitBtn = <HTMLInputElement>form.elements.namedItem("submit-request");
-            var request = new Request();
-            anchor.onclick = (ev) => {
-                ev.preventDefault();
-                toggle(form);
-                hide(queryTextArea);
-                hide(submitBtn);
-            };
-            generateBtn.onclick = (ev) => {
-                var obj = readForm(form);
-                request.method = "PUT";
-                request.url = anchor.href; //TODO: extract host
+    function prepareForm(form: HTMLFormElement) {
+        var anchor = <HTMLAnchorElement>(form.previousElementSibling);
+        var generateBtn = <HTMLInputElement>form.elements.namedItem("generate-request");
+        var queryTextArea = <HTMLInputElement>form.elements.namedItem("generated-request");
+        var submitBtn = <HTMLInputElement>form.elements.namedItem("submit-request");
+        var request = new Request();
+        anchor.onclick = (ev) => {
+            ev.preventDefault();
+            toggle(form);
+            hide(queryTextArea);
+            hide(submitBtn);
+        };
+        generateBtn.onclick = (ev) => {
+            var obj = readForm(form);
+            request.method = form.dataset["method"];
+            request.url = anchor.href; //TODO: extract host
+            if (obj) {
                 request.body = JSON.stringify(obj, null, 2);
                 request.headers["Content-Length"] = request.body.length.toString();
-                queryTextArea.value = request.toString();
-                show(queryTextArea);
-                show(submitBtn);
-            };
-            submitBtn.onclick = (ev) => {
-                execute(request);
-            };
+            }
+            queryTextArea.value = request.toString();
+            show(queryTextArea);
+            show(submitBtn);
+        };
+        submitBtn.onclick = (ev) => {
+            execute(request);
+        };
+
+    }
+
+    export function prepare() {
+        foreachElement<HTMLFormElement>('form', form => {
+            prepareForm(form);
         });
     }
 }

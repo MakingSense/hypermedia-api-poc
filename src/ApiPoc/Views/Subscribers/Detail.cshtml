@@ -22,12 +22,24 @@
         <h3>Operations</h3>
         <div class="unsubscribe">
             <h4>Unsubscribe</h4>
-            <p>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Unsubscribe), "Unsubscribe")</p>
+            @Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Unsubscribe), "Unsubscribe")
+            <!-- TODO: generate it with a helper -->
+            <form style="display:none" data-method="DELETE" action="@Model.GetLinkBag().GetFirstByRel(Rel.Unsubscribe).Href">
+                <input name="generate-request" class="generate-query ignore-on-send" type="button" value="Generate request" />
+                <div>
+                    <textarea name="generated-request" class="ignore-on-send" style="display:none" cols="80" rows="10" readonly="readonly"></textarea>
+                </div>
+                <input name="submit-request" class="submit-query ignore-on-send" type="button" value="Submit request" />
+                <div>
+                    <textarea name="server-response" class="ignore-on-send" style="display:none" cols="80" rows="10" readonly="readonly"></textarea>
+                </div>
+            </form>
         </div>
         <div class="edit-subscriber">
             <h4>Edit subscriber</h4>
             @Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.EditSubscriber), "Edit subscriber")
-            <form style="display:none">
+            <!-- TODO: generate it with a helper -->
+            <form style="display:none" data-method="PUT" action="@Model.GetLinkBag().GetFirstByRel(Rel.EditSubscriber).Href">
                 <div>
                     <label for="firstName" class="first-name">First Name</label>
                     <input name="firstName" class="first-name" type="text" value="@Model.FirstName" />

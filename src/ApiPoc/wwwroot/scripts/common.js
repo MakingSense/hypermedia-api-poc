@@ -45,11 +45,12 @@ var ApiPoc;
         }
     }
     function readForm(form) {
-        var obj = {};
+        var obj = null;
         var length = form.elements.length;
         for (var i = 0; i < length; i++) {
             var element = form.elements[i];
             if (!element.classList.contains("ignore-on-send")) {
+                obj = obj || {};
                 obj[element.name] = element.value;
             }
         }
@@ -86,41 +87,37 @@ var ApiPoc;
             action(elements.item(i));
         }
     }
-    function prepare() {
-        foreachElement('a[rel~="unsubscribe"]', function (anchor) {
-            anchor.onclick = function (ev) {
-                ev.preventDefault();
-                var request = new Request();
-                request.method = "DELETE";
-                request.url = anchor.href;
-                execute(request);
-            };
-        });
-        foreachElement('a[rel~="edit-subscriber"]', function (anchor) {
-            var form = (anchor.nextElementSibling);
-            var generateBtn = form.elements.namedItem("generate-request");
-            var queryTextArea = form.elements.namedItem("generated-request");
-            var submitBtn = form.elements.namedItem("submit-request");
-            var request = new Request();
-            anchor.onclick = function (ev) {
-                ev.preventDefault();
-                toggle(form);
-                hide(queryTextArea);
-                hide(submitBtn);
-            };
-            generateBtn.onclick = function (ev) {
-                var obj = readForm(form);
-                request.method = "PUT";
-                request.url = anchor.href; //TODO: extract host
+    function prepareForm(form) {
+        var anchor = (form.previousElementSibling);
+        var generateBtn = form.elements.namedItem("generate-request");
+        var queryTextArea = form.elements.namedItem("generated-request");
+        var submitBtn = form.elements.namedItem("submit-request");
+        var request = new Request();
+        anchor.onclick = function (ev) {
+            ev.preventDefault();
+            toggle(form);
+            hide(queryTextArea);
+            hide(submitBtn);
+        };
+        generateBtn.onclick = function (ev) {
+            var obj = readForm(form);
+            request.method = form.dataset["method"];
+            request.url = anchor.href; //TODO: extract host
+            if (obj) {
                 request.body = JSON.stringify(obj, null, 2);
                 request.headers["Content-Length"] = request.body.length.toString();
-                queryTextArea.value = request.toString();
-                show(queryTextArea);
-                show(submitBtn);
-            };
-            submitBtn.onclick = function (ev) {
-                execute(request);
-            };
+            }
+            queryTextArea.value = request.toString();
+            show(queryTextArea);
+            show(submitBtn);
+        };
+        submitBtn.onclick = function (ev) {
+            execute(request);
+        };
+    }
+    function prepare() {
+        foreachElement('form', function (form) {
+            prepareForm(form);
         });
     }
     ApiPoc.prepare = prepare;
