@@ -57,7 +57,7 @@ namespace ApiPoc.Helpers
             var links = Links.Where(x => !alreadyUsed.Contains(x));
             if (safe.HasValue)
             {
-                links = links.Where(x => x.Safe == safe);
+                links = links.Where(x => (x.RawRel & Rel._Unsafe) == 0);
             }
             return links.ToArray();
         }

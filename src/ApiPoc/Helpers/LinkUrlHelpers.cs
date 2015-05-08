@@ -58,7 +58,7 @@ namespace ApiPoc.Helpers
                 Href = helper.ActionWithValues<T>(expression),
                 Rel = relation.ToRelString(),
                 Description = description ?? relation.ToString(),
-                Safe = (relation & Rel._Unsafe) == 0
+                RawRel = relation
             };
         }
 
@@ -70,7 +70,7 @@ namespace ApiPoc.Helpers
                 Href = helper.Action(),
                 Rel = relation.ToRelString(),
                 Description = description ?? "Self",
-                Safe = (relation & Rel._Unsafe) == 0
+                RawRel = relation
             };
         }
 

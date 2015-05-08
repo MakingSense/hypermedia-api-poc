@@ -1,12 +1,62 @@
 ﻿using ApiPoc.Representations;
+using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace ApiPoc.Helpers
 {
+    public class PocForm : MvcForm
+    {
+        private ViewContext _viewContext;
+
+        public PocForm(ViewContext viewContext) 
+            : base(viewContext)
+        {
+            _viewContext = viewContext;
+        }
+
+        protected override void GenerateEndForm()
+        {
+            this._viewContext.Writer.Write(@"
+<input name=""generate-request"" class=""generate -query ignore-on-send"" type=""button"" value=""Generate request"" />
+<div>
+    <textarea name=""generated-request"" class=""ignore-on-send"" style=""display:none"" cols=""80"" rows=""10"" readonly=""readonly""></textarea>
+</div>
+<input name=""submit-request"" class=""submit-query ignore-on-send"" type=""button"" value=""Submit request"" />
+<div>
+    <textarea name=""server-response"" class=""ignore-on-send"" style=""display:none"" cols=""80"" rows=""10"" readonly=""readonly""></textarea>
+</div>
+");
+            base.GenerateEndForm();
+        }
+    }
+
     public static class LinkRenderingHelpers
     {
+        public static void EmptyForm(this IHtmlHelper html, Link link, string customText = null, string customClass = null)
+        {
+            using (html.BeginForm(link, customText, customClass)) { }
+        }
+
+        public static PocForm BeginForm(this IHtmlHelper html, Link link, string customText = null, string customClass = null)
+        {
+            html.ViewContext.Writer.Write(html.Link(link, customText, customClass));
+            var bForm = new TagBuilder("form");
+            if (customClass != null)
+            {
+                bForm.AddCssClass(customClass);
+            }
+            bForm.Attributes.Add("action", link.Href);
+            bForm.Attributes.Add("data-method",
+                (link.RawRel & Rel._Delete) == Rel._Delete ? "DELETE"
+                : (link.RawRel & Rel._Put) == Rel._Put ? "PUT" 
+                : "POST");
+            bForm.Attributes.Add("style", "display: none");
+            html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
+            return new PocForm(html.ViewContext);
+        }
+
         public static HtmlString Link(this IHtmlHelper html, Link link, string customText = null, string customClass = null)
         {
             if (link == null)

@@ -8,7 +8,7 @@
 
         public string Description { get; set; }
 
-        public bool Safe { get; set; }
+        internal Rel RawRel { get; set; }
 
         public override int GetHashCode()
         {
@@ -18,7 +18,6 @@
                 hash = hash * 23 + (Href == null ? 587 : Href.GetHashCode());
                 hash = hash * 23 + (Rel == null ? 587 : Rel.GetHashCode());
                 hash = hash * 23 + (Description == null ? 587 : Description.GetHashCode());
-                hash = hash * 23 + Safe.GetHashCode();
                 return hash;
             }
         }
