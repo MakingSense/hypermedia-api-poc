@@ -32,12 +32,21 @@ namespace ApiPoc.Representations
             var links = new List<Link>();
             if (PagesCount > 1)
             {
-                if (CurrentPage > 1)
+                if (CurrentPage == 2)
+                {
+                    links.Add(linkGenerator(null, Rel.FirstPage | Rel.PreviousPage, "First/Previous Page"));
+                }
+                else if (CurrentPage > 2)
                 {
                     links.Add(linkGenerator(null, Rel.FirstPage, "First Page"));
                     links.Add(linkGenerator(CurrentPage - 1, Rel.PreviousPage, "Previous Page"));
                 }
-                if (CurrentPage < PagesCount)
+
+                if (CurrentPage == PagesCount - 1)
+                {
+                    links.Add(linkGenerator(PagesCount, Rel.LastPage | Rel.NextPage, "Last/Next Page"));
+                }
+                else if (CurrentPage < PagesCount)
                 {
                     links.Add(linkGenerator(CurrentPage + 1, Rel.NextPage, "Next Page"));
                     links.Add(linkGenerator(PagesCount, Rel.LastPage, "Last Page"));
