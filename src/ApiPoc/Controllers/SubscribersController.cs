@@ -117,7 +117,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpPut("/accounts/{accountId}/subscribers/{subscriberId}")]
-        public NegotiatedResult Modify(int accountId, int subscriberId, SubscriberDetail updated)
+        public NegotiatedResult Modify(int accountId, int subscriberId, [FromBody]SubscriberDetail updated)
         {
             //TODO: add optimistic concurrency check
 
