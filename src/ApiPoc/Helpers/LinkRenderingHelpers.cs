@@ -50,6 +50,9 @@ namespace ApiPoc.Helpers
             {
                 bForm.AddCssClass(customClass);
             }
+            
+            //TODO: Add if-match or other attributes to support optimistic concurrency
+
             bForm.Attributes.Add("action", link.Href);
             bForm.Attributes.Add("data-method",
                 (link.RawRel & Rel._Delete) == Rel._Delete ? "DELETE"
