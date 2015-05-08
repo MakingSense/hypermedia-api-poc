@@ -9,7 +9,7 @@ var ApiPoc;
         function Request() {
             this.host = window.location.host;
             this.headers = {
-                "Contect-Type": "application/json; charset=UTF-8",
+                "Content-Type": "application/json; charset=UTF-8",
                 "Accept": "text/html"
             };
         }
@@ -78,7 +78,7 @@ var ApiPoc;
         for (var k in request.headers) {
             xmlHttpRequest.setRequestHeader(k, request.headers[k]);
         }
-        xmlHttpRequest.send();
+        xmlHttpRequest.send(request.body);
     }
     function foreachElement(selectors, action) {
         var elements = document.querySelectorAll(selectors);
@@ -93,6 +93,7 @@ var ApiPoc;
         var queryTextArea = form.elements.namedItem("generated-request");
         var submitBtn = form.elements.namedItem("submit-request");
         var request = new Request();
+        hide(form);
         anchor.onclick = function (ev) {
             ev.preventDefault();
             toggle(form);
@@ -102,7 +103,7 @@ var ApiPoc;
         generateBtn.onclick = function (ev) {
             var obj = readForm(form);
             request.method = form.dataset["method"];
-            request.url = anchor.href; //TODO: extract host
+            request.url = form.action; //TODO: extract host
             if (obj) {
                 request.body = JSON.stringify(obj, null, 2);
                 request.headers["Content-Length"] = request.body.length.toString();
