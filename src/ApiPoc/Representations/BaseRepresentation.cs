@@ -31,8 +31,12 @@ namespace ApiPoc.Representations
 
         public virtual string GetEtag()
         {
-            //Etag disabled
+            // Etag disabled
             return null;
+
+            // Maybe it is convenient to generate a value hash using reflection
+            // fre0n proposes an implementation: http://stackoverflow.com/questions/5569545/how-to-generate-a-unique-hash-code-for-an-object-based-on-its-contents#answer-5569869
+            // but I am not sure if it works for arrays.
         }
     }
 }
