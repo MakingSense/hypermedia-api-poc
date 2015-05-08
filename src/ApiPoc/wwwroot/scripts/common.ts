@@ -14,10 +14,7 @@
         method: string
         url: string
         host: string = window.location.host
-        headers: IDictionary<string> = {
-            "Content-Type": "application/json; charset=UTF-8",
-            "Accept": "text/html"
-        }
+        headers: IDictionary<string> = { }
         body: string
 
         toString() {
@@ -61,12 +58,25 @@
         var length = form.elements.length;
         for (var i = 0; i < length; i++) {
             var element = <HTMLInputElement>form.elements[i];
-            if (!element.classList.contains("ignore-on-send")) {
+            if (!element.classList.contains("ignore-on-send") && !element.classList.contains("uri-template")) {
                 obj = obj || {};
                 obj[element.name] = element.value;
             }
         }
         return obj;
+    }
+
+    function readUri(form: HTMLFormElement): string {
+        var obj = <IDictionary<string>> null;
+        var length = form.elements.length;
+        for (var i = 0; i < length; i++) {
+            var element = <HTMLInputElement>form.elements[i];
+            if (element.classList.contains("uri-template")) {
+                obj[element.name] = element.value;
+            }
+        }
+        //TODO: Apply obj to override uri-template parameters
+        return form.action;
     }
 
     function searchLinkByRel(links: LinkRepresentation[], rel: string): LinkRepresentation {
@@ -118,17 +128,28 @@
         generateBtn.onclick = (ev) => {
             var obj = readForm(form);
             request.method = form.dataset["method"];
-            request.url = form.action; //TODO: extract host
-            if (obj) {
-                request.body = JSON.stringify(obj, null, 2);
-                request.headers["Content-Length"] = request.body.length.toString();
+            request.url = readUri(form);
+            if (request.method == "GET") {
+                submitBtn.value = "Go"
+                queryTextArea.value = request.url;
+            } else {
+                request.headers["Content-Type"] = "application/json; charset=UTF-8";
+                request.headers["Accept"] = "text/html";
+                if (obj) {
+                    request.body = JSON.stringify(obj, null, 2);
+                    request.headers["Content-Length"] = request.body.length.toString();
+                }
+                queryTextArea.value = request.toString();
             }
-            queryTextArea.value = request.toString();
             show(queryTextArea);
             show(submitBtn);
         };
         submitBtn.onclick = (ev) => {
-            execute(request);
+            if (request.method == "GET") {
+                window.location.href = request.url;
+            } else {
+                execute(request);
+            }
         };
     }
 

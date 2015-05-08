@@ -21,9 +21,9 @@
                     <dd class="email">@item.Email</dd>
                 </dl>
                 @Html.Links(item.GetLinkBag().GetByRel(Rel.Unsubscribe), "actions")
-                @Html.Links(item.GetLinkBag().GetUnusedSafeLinks())
+                @Html.Links(item.GetLinkBag().GetUnusedPlainLinks())
             </li>
         }
     </ul>
-    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
 </div>

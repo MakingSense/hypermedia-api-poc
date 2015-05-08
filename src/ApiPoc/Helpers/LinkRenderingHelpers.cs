@@ -6,11 +6,11 @@ using System.Linq;
 
 namespace ApiPoc.Helpers
 {
-    public class PocForm : MvcForm
+    public class ActionForm : MvcForm
     {
         private ViewContext _viewContext;
 
-        public PocForm(ViewContext viewContext) 
+        public ActionForm(ViewContext viewContext) 
             : base(viewContext)
         {
             _viewContext = viewContext;
@@ -34,12 +34,15 @@ namespace ApiPoc.Helpers
 
     public static class LinkRenderingHelpers
     {
-        public static void EmptyForm(this IHtmlHelper html, Link link, string customText = null, string customClass = null)
+        public static HtmlString EmptyForm(this IHtmlHelper html, Link link, string customText = null, string customClass = null)
         {
-            using (html.BeginForm(link, customText, customClass)) { }
+            using (html.BeginForm(link, customText, customClass))
+            {
+                return HtmlString.Empty;
+            }
         }
 
-        public static PocForm BeginForm(this IHtmlHelper html, Link link, string customText = null, string customClass = null)
+        public static ActionForm BeginForm(this IHtmlHelper html, Link link, string customText = null, string customClass = null)
         {
             html.ViewContext.Writer.Write(html.Link(link, customText, customClass));
             var bForm = new TagBuilder("form");
@@ -50,11 +53,16 @@ namespace ApiPoc.Helpers
             bForm.Attributes.Add("action", link.Href);
             bForm.Attributes.Add("data-method",
                 (link.RawRel & Rel._Delete) == Rel._Delete ? "DELETE"
-                : (link.RawRel & Rel._Put) == Rel._Put ? "PUT" 
-                : "POST");
+                : (link.RawRel & Rel._Put) == Rel._Put ? "PUT"
+                : (link.RawRel & Rel._Post) == Rel._Post ? "POST"
+                : "GET");
             bForm.Attributes.Add("style", "display: none");
             html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
-            return new PocForm(html.ViewContext);
+
+            //TODO: render an input for each template item
+            //html.ViewContext.Writer.Write(...
+
+            return new ActionForm(html.ViewContext);
         }
 
         public static HtmlString Link(this IHtmlHelper html, Link link, string customText = null, string customClass = null)

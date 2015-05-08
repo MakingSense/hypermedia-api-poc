@@ -9,9 +9,12 @@
         {
             <li class="subscriber-item">
                 <span class="id">@item.Id</span> - <span class="last-name">@item.LastName</span>, <span class="first-name">@item.FirstName</span> @Html.Link(item.GetLinkBag().GetFirstByRel(Rel.Alternate))
-                <!-- Show delete link in a different way, differentiate safe links? -->
             </li>
         }
     </ul>
-    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    <div>
+        @Html.EmptyForm(Model.GetLinkBag().GetFirstByRel(Rel.SpecificPage))
+    </div>
+    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
+
 </div>

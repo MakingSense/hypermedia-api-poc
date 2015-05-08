@@ -52,17 +52,17 @@ namespace ApiPoc.Helpers
             return result;
         }
 
-        public Link[] GetUnusedLinks(bool? safe = null)
+        public Link[] GetUnusedLinks(bool? plain = null)
         {
             var links = Links.Where(x => !alreadyUsed.Contains(x));
-            if (safe.HasValue)
+            if (plain.HasValue)
             {
-                links = links.Where(x => (x.RawRel & Rel._Unsafe) == 0);
+                links = links.Where(x => (x.RawRel & Rel._Unsafe) == 0 && (x.RawRel & Rel._Template) == 0);
             }
             return links.ToArray();
         }
 
-        public Link[] GetUnusedSafeLinks()
+        public Link[] GetUnusedPlainLinks()
         {
             return GetUnusedLinks(true);
         }

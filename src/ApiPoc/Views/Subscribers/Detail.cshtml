@@ -16,13 +16,13 @@
         <dt class="email">Email</dt>
         <dd class="email">@Model.Email</dd>
     </dl>
-    @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
 
     <div class="operations">
         <h3>Operations</h3>
         <div class="unsubscribe">
             <h4>Unsubscribe</h4>
-            @using (Html.BeginForm(Model.GetLinkBag().GetFirstByRel(Rel.Unsubscribe), "Unsubscribe")) { }
+            @Html.EmptyForm(Model.GetLinkBag().GetFirstByRel(Rel.Unsubscribe), "Unsubscribe")
         </div>
         <div class="edit-subscriber">
             <h4>Edit subscriber</h4>
