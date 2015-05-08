@@ -25,7 +25,18 @@ namespace ApiPoc.Helpers
         public Task ExecuteResultAsync(ActionContext context)
         {
             IActionResult innerActionResult;
-            if (CustomStatusCode == StatusCodes.Status204NoContent)
+
+            var currentEtag = Value.GetEtag();
+            string requestedEtag = context.HttpContext.Request.Headers["If-None-Match"];
+            if (currentEtag != null)
+            {
+                context.HttpContext.Response.Headers["ETag"] = currentEtag;
+            }
+            if (requestedEtag != null && requestedEtag == currentEtag)
+            {
+                innerActionResult = new HttpStatusCodeResult(StatusCodes.Status304NotModified);
+            }
+            else if (CustomStatusCode == StatusCodes.Status204NoContent)
             {
                 innerActionResult = new NoContentResult();
             }

@@ -15,5 +15,10 @@ namespace ApiPoc.Representations
             : base(allItems, pageSize, page, linkGenerator, moreLinks)
         {
         }
+
+        public override string GetEtag()
+        {
+            return $"W/\"{ GetCollectionHash().ToString() }\"";
+        }
     }
 }

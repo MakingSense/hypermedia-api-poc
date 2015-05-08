@@ -5,7 +5,7 @@ using ApiPoc.Helpers;
 
 namespace ApiPoc.Representations
 {
-    public class CollectionRepresentation<T> : SimpleRepresentation
+    public abstract class CollectionRepresentation<T> : BaseRepresentation
     {
         public T[] Items { get; set; } = new T[] { };
 
@@ -52,6 +52,18 @@ namespace ApiPoc.Representations
             links.AddRange(moreLinks);
 
             Links = links.ToArray();
+        }
+
+        protected int GetCollectionHash()
+        {
+            var hash = GetLinkBag().GetHashCode();
+            unchecked // Overflow is fine, just wrap
+            {
+                hash = hash * 23 + (PageSize == null ? 587 : PageSize.GetHashCode());
+                hash = hash * 23 + (CurrentPage == null ? 587 : CurrentPage.GetHashCode());
+                hash = hash * 23 + (ItemsCount == null ? 587 : ItemsCount.GetHashCode());
+            }
+            return hash;        
         }
     }
 }

@@ -7,5 +7,7 @@ namespace ApiPoc.Representations
         Link[] Links { get; }
 
         LinkBag GetLinkBag();
+
+        string GetEtag();
     }
 }
