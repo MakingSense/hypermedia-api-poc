@@ -16,6 +16,41 @@
         <dt class="email">Email</dt>
         <dd class="email">@Model.Email</dd>
     </dl>
-    @Html.Links(Model.GetLinkBag().GetByRel(Rel.Unsubscribe), "actions")
     @Html.Links(Model.GetLinkBag().GetUnusedSafeLinks())
+
+    <div class="operations">
+        <h3>Operations</h3>
+        <div class="unsubscribe">
+            <h4>Unsubscribe</h4>
+            <p>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Unsubscribe), "Unsubscribe")</p>
+        </div>
+        <div class="edit-subscriber">
+            <h4>Edit subscriber</h4>
+            @Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.EditSubscriber), "Edit subscriber")
+            <form style="display:none">
+                <div>
+                    <label for="firstName" class="first-name">First Name</label>
+                    <input name="firstName" class="first-name" type="text" value="@Model.FirstName" />
+                </div>
+                <div>
+                    <label for="lastName" class="last-name">Last Name</label>
+                    <input name="lastName" class="last-name" type="text" value="@Model.LastName" />
+                </div>
+                <div>
+                    <label for="birthday" class="birthday">Birthday</label>
+                    <input name="birthday" class="birthday" type="date" value="@string.Format("{0:yyyy-MM-dd}", Model.Birthday)" />
+                </div>
+                <input name="generate-request" class="generate-query ignore-on-send" type="button" value="Generate request" />
+                <div>
+                    <textarea name="generated-request" class="ignore-on-send" style="display:none" cols="80" rows="10" readonly="readonly"></textarea>
+                </div>
+                <input name="submit-request" class="submit-query ignore-on-send" type="button" value="Submit request" />
+                <div>
+                    <textarea name="server-response" class="ignore-on-send" style="display:none" cols="80" rows="10" readonly="readonly"></textarea>
+                </div>
+            </form>
+        </div>
+        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+    </div>
+
 </div>

@@ -31,8 +31,7 @@ namespace ApiPoc.Controllers
                 {
                     Id = subscriber.Id,
                     Links = new[] {
-                        Url.Link<SubscribersController>(x => x.Detail(account.Id, subscriber.Id), Rel.Alternate | Rel.SubscriberDetail, "Subscriber details"),
-                        Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Unsubscribe, "Unsubscribe")
+                        Url.Link<SubscribersController>(x => x.Detail(account.Id, subscriber.Id), Rel.Alternate | Rel.SubscriberDetail, "Subscriber details")
                     },
                     FirstName = subscriber.FirstName,
                     LastName = subscriber.LastName
@@ -65,7 +64,8 @@ namespace ApiPoc.Controllers
                         Id = subscriber.Id,
                         Links = new[] {
                             Url.Link<SubscribersController>(x => x.Detail(accountId, subscriber.Id), Rel.Self | Rel.SubscriberDetail, "Subscriber details"),
-                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Unsubscribe, "Unsubscribe")
+                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Unsubscribe, "Unsubscribe"),
+                            Url.Link<SubscribersController>(x => x.Modify(accountId, subscriber.Id, null), Rel.EditSubscriber, "Edit"),
                         },
                         FirstName = subscriber.FirstName,
                         LastName = subscriber.LastName,
@@ -105,7 +105,8 @@ namespace ApiPoc.Controllers
                     Url.LinkHome(),
                     Url.LinkSelf(Rel.SubscriberDetail),
                     Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
-                    Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriberId), Rel.Unsubscribe, "Unsubscribe")
+                    Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriberId), Rel.Unsubscribe, "Unsubscribe"),
+                    Url.Link<SubscribersController>(x => x.Modify(accountId, subscriber.Id, null), Rel.EditSubscriber, "Edit"),
                 },
                 Id = subscriber.Id,
                 FirstName = subscriber.FirstName,

@@ -5,6 +5,56 @@ var ApiPoc;
         }
         return LinkRepresentation;
     })();
+    var Request = (function () {
+        function Request() {
+            this.host = window.location.host;
+            this.headers = {
+                "Contect-Type": "application/json; charset=UTF-8",
+                "Accept": "text/html"
+            };
+        }
+        Request.prototype.toString = function () {
+            var result = this.method + " " + this.url + " HTTP/1.1" + "\n" +
+                "Host: " + this.host + "\n";
+            for (var k in this.headers) {
+                result += k + ": " + this.headers[k] + "\n";
+            }
+            if (this.body) {
+                result += "\n" + this.body + "\n";
+            }
+            return result;
+        };
+        return Request;
+    })();
+    function hide(element) {
+        if (element.style.display && element.style.display != 'none') {
+            element["$$oldblock"] = element.style.display;
+        }
+        element.style.display = "none";
+    }
+    function show(element) {
+        element.style.display = element["$$oldblock"] || 'block';
+    }
+    function toggle(element) {
+        var display = element.style.display;
+        if (display == "none" || display == "") {
+            show(element);
+        }
+        else {
+            hide(element);
+        }
+    }
+    function readForm(form) {
+        var obj = {};
+        var length = form.elements.length;
+        for (var i = 0; i < length; i++) {
+            var element = form.elements[i];
+            if (!element.classList.contains("ignore-on-send")) {
+                obj[element.name] = element.value;
+            }
+        }
+        return obj;
+    }
     function searchLinkByRel(links, rel) {
         for (var _i = 0; _i < links.length; _i++) {
             var link = links[_i];
@@ -15,40 +65,19 @@ var ApiPoc;
         }
         return null;
     }
-    function ajax(method, url, onSuccess, onError) {
-        if (onSuccess === void 0) { onSuccess = null; }
-        if (onError === void 0) { onError = null; }
-        var request = new XMLHttpRequest();
-        request.onload = function (a) {
-            try {
-                var parsedResult = JSON.parse(request.responseText);
-                if (onSuccess && request.status >= 200 && request.status < 400) {
-                    onSuccess(request.status, parsedResult, request.responseText);
-                }
-                else if (onError) {
-                    onError(request.status, parsedResult, request.responseText);
-                }
-            }
-            catch (e) {
-                onError(request.status, { message: "Parsing error", exception: e }, request.responseText);
-            }
+    function execute(request) {
+        var xmlHttpRequest = new XMLHttpRequest();
+        xmlHttpRequest.onload = function (a) {
+            alert("Request has been executed. Content will be updated with request response");
+            document.open();
+            document.write(xmlHttpRequest.responseText);
+            document.close();
         };
-        request.open(method, url, true);
-        request.setRequestHeader("accept", "text/json");
-        request.send();
-    }
-    function DELETE(url) {
-        ajax("DELETE", url, function (status, data, responseText) {
-            alert("Success!");
-            if (data && data.links) {
-                var redirectLink = searchLinkByRel(data.links, "suggested");
-                if (redirectLink) {
-                    window.location.replace(redirectLink.href);
-                }
-            }
-        }, function (status, data, responseText) {
-            alert("Error: " + data.message);
-        });
+        xmlHttpRequest.open(request.method, request.url, true);
+        for (var k in request.headers) {
+            xmlHttpRequest.setRequestHeader(k, request.headers[k]);
+        }
+        xmlHttpRequest.send();
     }
     function foreachElement(selectors, action) {
         var elements = document.querySelectorAll(selectors);
@@ -61,7 +90,36 @@ var ApiPoc;
         foreachElement('a[rel~="unsubscribe"]', function (anchor) {
             anchor.onclick = function (ev) {
                 ev.preventDefault();
-                DELETE(anchor.href);
+                var request = new Request();
+                request.method = "DELETE";
+                request.url = anchor.href;
+                execute(request);
+            };
+        });
+        foreachElement('a[rel~="edit-subscriber"]', function (anchor) {
+            var form = (anchor.nextElementSibling);
+            var generateBtn = form.elements.namedItem("generate-request");
+            var queryTextArea = form.elements.namedItem("generated-request");
+            var submitBtn = form.elements.namedItem("submit-request");
+            var request = new Request();
+            anchor.onclick = function (ev) {
+                ev.preventDefault();
+                toggle(form);
+                hide(queryTextArea);
+                hide(submitBtn);
+            };
+            generateBtn.onclick = function (ev) {
+                var obj = readForm(form);
+                request.method = "PUT";
+                request.url = anchor.href; //TODO: extract host
+                request.body = JSON.stringify(obj, null, 2);
+                request.headers["Content-Length"] = request.body.length.toString();
+                queryTextArea.value = request.toString();
+                show(queryTextArea);
+                show(submitBtn);
+            };
+            submitBtn.onclick = function (ev) {
+                execute(request);
             };
         });
     }
