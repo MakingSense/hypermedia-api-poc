@@ -21,10 +21,5 @@ namespace ApiPoc.Representations
                 return hash;
             }
         }
-
-        public override string GetEtag()
-        {
-            return $"W/\"{ GetHashCode().ToString() }\"";
-        }
     }
 }

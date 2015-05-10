@@ -76,19 +76,5 @@ namespace ApiPoc.Helpers
         {
             alreadyUsed.Clear();
         }
-
-        public override int GetHashCode()
-        {
-            unchecked // Overflow is fine, just wrap
-            {
-                //It does not take into account link order
-                int result = 1;
-                foreach (var link in Links)
-                {
-                    result = result * link.GetHashCode();
-                }
-                return result;
-            }
-        }
     }
 }

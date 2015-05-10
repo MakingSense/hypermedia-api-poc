@@ -6,9 +6,5 @@ namespace ApiPoc.Representations
 {
     public class SimpleRepresentation : BaseRepresentation
     {
-        public override string GetEtag()
-        {
-            return $"W/\"{ GetLinkBag().GetHashCode().ToString() }\"";
-        }
     }
 }
