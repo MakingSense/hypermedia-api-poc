@@ -65,7 +65,8 @@ namespace ApiPoc.Helpers
 
             if (link.RawRel.Is(Rel._Template))
             {
-                //TODO: use fielset
+                html.ViewContext.Writer.Write("<fieldset><legend>URI parameters</legend>");
+
                 var templateKeys = new Regex("{([^{}]*)")
                     .Matches(link.Href).Cast<Match>()
                     .Where(x => x.Length > 1)
@@ -89,7 +90,8 @@ namespace ApiPoc.Helpers
                     html.ViewContext.Writer.Write(bDiv.ToString(TagRenderMode.Normal));
                 }
 
-                html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
+                html.ViewContext.Writer.Write("</fieldset>");
+                
             }
 
             return new ActionForm(html.ViewContext);

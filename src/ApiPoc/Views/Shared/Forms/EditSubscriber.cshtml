@@ -5,16 +5,19 @@
 
 @using (Html.BeginForm(Model.Link, "Edit subscriber"))
 {
-    <div>
-        <label for="firstName" class="first-name">First Name</label>
-        <input name="firstName" class="first-name" type="text" value="@(parent?.FirstName)" />
-    </div>
-    <div>
-        <label for="lastName" class="last-name">Last Name</label>
-        <input name="lastName" class="last-name" type="text" value="@(parent?.LastName)" />
-    </div>
-    <div>
-        <label for="birthday" class="birthday">Birthday</label>
-        <input name="birthday" class="birthday" type="date" value="@(string.Format("{0:yyyy-MM-dd}", parent?.Birthday ?? DateTime.Now))" />
-    </div>
+    <fieldset>
+        <legend>Body parameters</legend>
+        <div>
+            <label for="firstName" class="first-name">First Name</label>
+            <input name="firstName" class="first-name" type="text" value="@(parent?.FirstName)" />
+        </div>
+        <div>
+            <label for="lastName" class="last-name">Last Name</label>
+            <input name="lastName" class="last-name" type="text" value="@(parent?.LastName)" />
+        </div>
+        <div>
+            <label for="birthday" class="birthday">Birthday</label>
+            <input name="birthday" class="birthday" type="date" value="@(string.Format("{0:yyyy-MM-dd}", parent?.Birthday ?? DateTime.Now))" />
+        </div>
+    </fieldset>
 }
