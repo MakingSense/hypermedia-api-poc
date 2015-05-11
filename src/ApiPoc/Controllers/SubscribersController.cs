@@ -17,9 +17,9 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts/{accountId}/subscribers")]
+        [LinkDescription(Rel.SubscriberCollection, "Subscribers list")]
         public NegotiatedResult Index(int accountId, int? page = null)
         {
-            page = page ?? 1;
             var account = Database.GetAccountById(accountId);
             if (account == null)
             {
@@ -31,7 +31,7 @@ namespace ApiPoc.Controllers
                 {
                     Id = subscriber.Id,
                     Links = new[] {
-                        Url.Link<SubscribersController>(x => x.Detail(account.Id, subscriber.Id), Rel.Alternate | Rel.SubscriberDetail, "Subscriber details")
+                        Url.Link<SubscribersController>(x => x.Detail(account.Id, subscriber.Id), Rel.Alternate)
                     },
                     FirstName = subscriber.FirstName,
                     LastName = subscriber.LastName
@@ -39,19 +39,19 @@ namespace ApiPoc.Controllers
 
             return NegotiatedResult(new SubscriberCollection(
                 allItems, 
-                Settings.Options.PageSize, 
-                page.Value, 
-                (p, rel, description) => Url.Link<SubscribersController>(x => x.Index(accountId, p), rel | Rel.SubscriberCollection, description),
+                Settings.Options.PageSize,
+                page ?? 1, 
+                (p, rel, description) => Url.Link<SubscribersController>(x => x.Index(accountId, p), rel, description),
                 Url.LinkHome(),
-                Url.LinkSelf(Rel.SubscriberCollection),
-                Url.Link<AccountsController>(x => x.Detail(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
-                Url.Link<SubscribersController>(x => x.DetailedIndex(account.Id, null), Rel.SubscriberCollection, "Subscribers list (detailed)")));
+                Url.LinkSelf<SubscribersController>(x => x.Index(accountId, page)),
+                Url.Link<AccountsController>(x => x.Detail(account.Id), Rel.Parent, "Parent account details"),
+                Url.Link<SubscribersController>(x => x.DetailedIndex(account.Id, null), Rel.Alternate)));
         }
 
         [HttpGet("/accounts/{accountId}/subscribers/detail")]
+        [LinkDescription(Rel.SubscriberDetailedCollection, "Subscribers list (detailed)")]
         public NegotiatedResult DetailedIndex(int accountId, int? page = null)
         {
-            page = page ?? 1;
             var account = Database.GetAccountById(accountId);
             if (account == null)
             {
@@ -63,9 +63,9 @@ namespace ApiPoc.Controllers
                     {
                         Id = subscriber.Id,
                         Links = new[] {
-                            Url.Link<SubscribersController>(x => x.Detail(accountId, subscriber.Id), Rel.Self | Rel.SubscriberDetail, "Subscriber details"),
-                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id), Rel.Unsubscribe, "Unsubscribe"),
-                            Url.Link<SubscribersController>(x => x.Modify(accountId, subscriber.Id, null), Rel.EditSubscriber, "Edit"),
+                            Url.LinkSelf<SubscribersController>(x => x.Detail(accountId, subscriber.Id)),
+                            Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriber.Id)),
+                            Url.Link<SubscribersController>(x => x.Modify(accountId, subscriber.Id, null)),
                         },
                         FirstName = subscriber.FirstName,
                         LastName = subscriber.LastName,
@@ -76,15 +76,16 @@ namespace ApiPoc.Controllers
             return NegotiatedResult(new SubscriberDetailedCollection(
                 allItems,
                 Settings.Options.PageSize,
-                page.Value,
-                (p, rel, description) => Url.Link<SubscribersController>(x => x.Index(accountId, p), rel | Rel.SubscriberDetailedCollection, description),
+                page ?? 1,
+                (p, rel, description) => Url.Link<SubscribersController>(x => x.Index(accountId, p), rel, description),
                 Url.LinkHome(),
-                Url.LinkSelf(Rel.SubscriberDetailedCollection),
-                Url.Link<AccountsController>(x => x.Detail(account.Id), Rel.Parent | Rel.AccountCollection, "Account details"),
-                Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.SubscriberCollection, "Subscribers list (simple)")));
+                Url.LinkSelf<SubscribersController>(x => x.DetailedIndex(accountId, page)),
+                Url.Link<AccountsController>(x => x.Detail(account.Id), Rel.Parent, "Parent account details"),
+                Url.Link<SubscribersController>(x => x.Index(account.Id, null), description: "Subscribers list (simple)")));
         }
 
         [HttpGet("/accounts/{accountId}/subscribers/{subscriberId}")]
+        [LinkDescription(Rel.SubscriberDetail, "Subscriber detail")]
         public NegotiatedResult Detail(int accountId, int subscriberId)
         {
             var account = Database.GetAccountById(accountId);
@@ -103,10 +104,10 @@ namespace ApiPoc.Controllers
             {
                 Links = new[] {
                     Url.LinkHome(),
-                    Url.LinkSelf(Rel.SubscriberDetail),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
-                    Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriberId), Rel.Unsubscribe, "Unsubscribe"),
-                    Url.Link<SubscribersController>(x => x.Modify(accountId, subscriber.Id, null), Rel.EditSubscriber, "Edit"),
+                    Url.LinkSelf<SubscribersController>(x => x.Detail(accountId, subscriberId)),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent),
+                    Url.Link<SubscribersController>(x => x.Unsubscribe(accountId, subscriberId)),
+                    Url.Link<SubscribersController>(x => x.Modify(accountId, subscriber.Id, null)),
                 },
                 Id = subscriber.Id,
                 FirstName = subscriber.FirstName,
@@ -117,6 +118,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpPut("/accounts/{accountId}/subscribers/{subscriberId}")]
+        [LinkDescription(Rel.EditSubscriber, "Modify subscriber")]
         public NegotiatedResult Modify(int accountId, int subscriberId, [FromBody]SubscriberDetail updated)
         {
             //TODO: add optimistic concurrency check
@@ -142,13 +144,14 @@ namespace ApiPoc.Controllers
                 Links = new[] 
                 {
                     Url.LinkHome(),
-                    Url.Link<SubscribersController>(x => x.Detail(account.Id, subscriber.Id), Rel.SubscriberDetail | Rel.Suggested, "Subscriber"),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection, "Subscribers list")
+                    Url.Link<SubscribersController>(x => x.Detail(account.Id, subscriber.Id)),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent)
                 }
             });
         }
 
         [HttpDelete("/accounts/{accountId}/subscribers/{subscriberId}")]
+        [LinkDescription(Rel.Unsubscribe, "Unsubscribe")]
         public NegotiatedResult Unsubscribe(int accountId, int subscriberId)
         {
             //TODO: add optimistic concurrency check
@@ -173,7 +176,7 @@ namespace ApiPoc.Controllers
                     Links = new[]
                     {
                         Url.LinkHome(),
-                        Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list")
+                        Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.Suggested)
                     }
                 });
             }
@@ -186,7 +189,7 @@ namespace ApiPoc.Controllers
                     Links = new[]
                     {
                         Url.LinkHome(),
-                        Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection | Rel.Suggested, "Subscribers list"),
+                        Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.Suggested),
                     }
                 });
             }
@@ -199,7 +202,7 @@ namespace ApiPoc.Controllers
                 Links = new[]
                 {
                     Url.LinkHome(),
-                    Url.Link<SubscribersController>(x => x.Index(accountId, null), Rel.Parent | Rel.SubscriberCollection, "Subscribers list"),
+                    Url.Link<SubscribersController>(x => x.Index(accountId, null), Rel.Parent),
                 }
             });
         }
@@ -212,9 +215,9 @@ namespace ApiPoc.Controllers
                 Links = new[]
                 {
                     Url.LinkHome(),
-                    Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
-                    Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.AccountDetail, "My account"),
-                    Url.Link<SubscribersController>(x => x.Index(currentAccount.Id, null), Rel.SubscriberCollection, "My account subscribers")
+                    Url.Link<AccountsController>(x => x.Index()),
+                    Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), description: "My account details"),
+                    Url.Link<SubscribersController>(x => x.Index(currentAccount.Id, null), description: "My account subscribers")
                 }
             });
         }

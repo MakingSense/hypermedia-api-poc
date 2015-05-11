@@ -43,22 +43,32 @@ namespace ApiPoc.Helpers
             var controllerName = controllerType.Name.EndsWith("Controller") ? controllerType.Name.Substring(0, controllerType.Name.Length - "Controller".Length) : controllerType.Name;
             var href = helper.Action(actionName, controllerName, values).Replace("%7B", "{").Replace("%7D", "}");
 
+            var linkDescriptionAttributes = actionMember.GetCustomAttributes(typeof(LinkDescriptionAttribute), true).Cast<LinkDescriptionAttribute>();
+            foreach (var attr in linkDescriptionAttributes)
+            {
+                rel |= attr.Rel;
+            }
+            var descriptions = linkDescriptionAttributes.Select(x => x.Description).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            var description = descriptions.Length > 0 ? string.Join("; ", descriptions) : null;
+
+
             return new Link()
             {
                 Href = href,
-                Rel = rel
+                Rel = rel,
+                Description = description
             };
         }
 
         public static string ToRelString(this Rel relation)
         {
             //UglyPatch
-            return relation == 0
+            return relation == Rel._None
                 ? null
                 : string.Join("-", Regex.Split(relation.ToString().Replace(",", ""), "(?<=[a-z])(?=[A-Z])")).ToLower();
         }
 
-        public static Link Link<T>(this IUrlHelper helper, Expression<Action<T>> expression, Rel relation, string description = null)
+        public static Link Link<T>(this IUrlHelper helper, Expression<Action<T>> expression, Rel relation = Rel._None, string description = null)
             where T : Controller
         {
             var link = helper.ActionWithValues<T>(expression);
@@ -70,21 +80,15 @@ namespace ApiPoc.Helpers
             return link;
         }
 
-        public static Link LinkSelf(this IUrlHelper helper, Rel relation = Rel._None, string description = null)
+        public static Link LinkSelf<T>(this IUrlHelper helper, Expression<Action<T>> expression, Rel relation = Rel._None, string description = null)
+            where T : Controller
         {
-            relation |= Rel.Self;
-            return new Link()
-            {
-                Href = helper.Action(),
-                Description = description ?? "Self",
-                Rel = relation
-            };
+            return Link(helper, expression, relation | Rel.Self, description);
         }
 
         public static Link LinkHome(this IUrlHelper helper, Rel relation = Rel._None, string description = null)
         {
-            relation |= Rel.Home;
-            return helper.Link<HomeController>(x => x.Index(), relation, description ?? "Home");
+            return helper.Link<HomeController>(x => x.Index(), relation);
         }
     }
 

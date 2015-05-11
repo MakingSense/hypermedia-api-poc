@@ -16,7 +16,7 @@ namespace ApiPoc.Helpers
             Links = links ?? new Link[] { };
             linksByRel = Links
                 //TODO: optimize it
-                .SelectMany(link => link.Rel.ToRelString().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(rel => new { rel, link }))
+                .SelectMany(link => (link.Rel.ToRelString() ?? string.Empty).Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(rel => new { rel, link }))
                 .ToLookup(x => x.rel, x => x.link);
             alreadyUsed = new HashSet<Link>();
         }

@@ -17,6 +17,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts")]
+        [LinkDescription(Rel.AccountCollection, "Available accounts")]
         public NegotiatedResult Index()
         {
             var accounts = Database.GetAccounts();
@@ -26,14 +27,14 @@ namespace ApiPoc.Controllers
             {
                 Links = new[] {
                     Url.LinkHome(Rel.Parent),
-                    Url.LinkSelf(Rel.AccountCollection),
-                    Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.AccountDetail, "My account details")
+                    Url.LinkSelf<AccountsController>(x => x.Index()),
+                    Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), description: "My account details")
                 },
                 Items = new[]
                 {
                     new AccountCollectionItem() {
                         Links = new[] {
-                            Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.Alternate | Rel.AccountDetail, "Account details")
+                            Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.Alternate)
                         },
                         Id = currentAccount.Id,
                         FirstName = currentAccount.FirstName,
@@ -44,6 +45,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/accounts/{accountId}")]
+        [LinkDescription(Rel.AccountDetail, "Account detail")]
         public NegotiatedResult Detail(int accountId)
         {
             var account = Database.GetAccountById(accountId);
@@ -56,8 +58,8 @@ namespace ApiPoc.Controllers
                     Links = new[]
                     {
                         Url.LinkHome(),
-                        Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Available accounts"),
-                        Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.AccountDetail, "My account")
+                        Url.Link<AccountsController>(x => x.Index()),
+                        Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), description: "My account details")
                     }
                 });
             }
@@ -66,12 +68,12 @@ namespace ApiPoc.Controllers
             {
                 Links = new[] {
                     Url.LinkHome(),
-                    Url.LinkSelf(Rel.AccountDetail),
-                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.SubscriberCollection, "Subscribers list"),
+                    Url.LinkSelf<AccountsController>(x => x.Detail(accountId)),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id, null)),
 
-                    Url.Link<SubscribersController>(x => x.Detail(account.Id, TemplateParameter.Create<int>()), Rel.SubscriberDetail, "Subscriber detail"),
-                    Url.Link<SubscribersController>(x => x.Unsubscribe(account.Id, TemplateParameter.Create<int>()), Rel.Unsubscribe, "Unsubcribe subscriber"),
-                    Url.Link<SubscribersController>(x => x.Modify(account.Id, TemplateParameter.Create<int>(), null), Rel.EditSubscriber, "Modify subscriber"),
+                    Url.Link<SubscribersController>(x => x.Detail(account.Id, TemplateParameter.Create<int>())),
+                    Url.Link<SubscribersController>(x => x.Unsubscribe(account.Id, TemplateParameter.Create<int>())),
+                    Url.Link<SubscribersController>(x => x.Modify(account.Id, TemplateParameter.Create<int>(), null)),
                     
                     // Hide because standard user does not need this list
                     // Url.Link<AccountsController>(x => x.Index(), Rel.Parent | Rel.AccountItem, "Accounts list"),

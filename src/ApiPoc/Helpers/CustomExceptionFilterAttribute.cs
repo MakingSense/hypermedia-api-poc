@@ -21,7 +21,7 @@ namespace ApiPoc.Helpers
             context.Result = new NegotiatedResult(new Error($"Unexpected exception: {exception.Message}")
             {
                 Exception = exception,
-                Links = new[] { urlHelper.LinkHome(Rel.Home) },
+                Links = new[] { urlHelper.LinkHome() },
                 CustomStatusCode = StatusCodes.Status500InternalServerError
             });
         }

@@ -26,6 +26,7 @@ namespace ApiPoc.Controllers
         }
 
         [HttpGet("/")]
+        [LinkDescription(Rel.Home, "Home")]
         public NegotiatedResult Index()
         {
             var currentAccount = Database.GetCurrentAccount();
@@ -33,12 +34,12 @@ namespace ApiPoc.Controllers
             return NegotiatedResult(new Home()
             {
                 Links = new[] {
-                    Url.LinkSelf(Rel.Home),
-                    Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), Rel.AccountDetail, "My account details"),
-                    Url.Link<SubscribersController>(x => x.Index(currentAccount.Id, null), Rel.SubscriberCollection, "My Subscribers"),
-                    Url.Link<SubscribersController>(x => x.Detail(TemplateParameter.Create<int>(), TemplateParameter.Create<int>()), Rel.SubscriberDetail, "Subscriber detail"),
-                    Url.Link<SubscribersController>(x => x.Unsubscribe(TemplateParameter.Create<int>(), TemplateParameter.Create<int>()), Rel.Unsubscribe, "Unsubcribe subscriber"),
-                    Url.Link<SubscribersController>(x => x.Modify(TemplateParameter.Create<int>(), TemplateParameter.Create<int>(), null), Rel.EditSubscriber, "Modify subscriber"),
+                    Url.LinkHome(Rel.Self),
+                    Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), description: "My account details"),
+                    Url.Link<SubscribersController>(x => x.Index(currentAccount.Id, null), description: "My Subscribers"),
+                    Url.Link<SubscribersController>(x => x.Detail(TemplateParameter.Create<int>(), TemplateParameter.Create<int>())),
+                    Url.Link<SubscribersController>(x => x.Unsubscribe(TemplateParameter.Create<int>(), TemplateParameter.Create<int>())),
+                    Url.Link<SubscribersController>(x => x.Modify(TemplateParameter.Create<int>(), TemplateParameter.Create<int>(), null)),
 
                     // Hide because standard user does not need this list
                     // Url.Link<AccountsController>(x => x.Index(), Rel.AccountCollection, "Account List"),
