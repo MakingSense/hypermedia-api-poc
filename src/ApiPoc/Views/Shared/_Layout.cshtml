@@ -6,5 +6,34 @@
 <body>
     @RenderBody()
     <script src="~/scripts/common.js"></script>
+    @{
+        string jsonText;
+        if (Model != null)
+        {
+            var tw = new System.IO.StringWriter();
+            ApiPoc.Startup.JsonOutputFormatter.WriteObject(tw, Model);
+            jsonText = tw.GetStringBuilder().ToString();
+        }
+        else
+        {
+            jsonText = string.Empty;
+        }
+    }
+    <hr />
+    <h2>JSON simulated result</h2>
+    <textarea cols="80" rows="20" readonly="readonly">
+@foreach (var header in Context.Response.Headers)
+{
+    var value = header.Value.First();
+    if (header.Key == "Content-Type")
+    {
+        value = "application/json; charset=utf-8";
+    }
+@header.Key<text>: </text>@value<text></text>
+}
+Content-Length: @jsonText.Length
+
+@jsonText
+    </textarea>
 </body>
 </html>

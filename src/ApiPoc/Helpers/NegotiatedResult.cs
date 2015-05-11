@@ -43,6 +43,8 @@ namespace ApiPoc.Helpers
                 CustomHtmlView = viewName
             }).ToString();
 
+            context.HttpContext.Response.Headers["Status Code"] = statusCode.ToString();
+
             string requestedEtag = context.HttpContext.Request.Headers["If-None-Match"];
             if (currentEtag != null)
             {

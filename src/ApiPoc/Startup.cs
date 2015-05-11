@@ -12,6 +12,9 @@ namespace ApiPoc
 {
     public class Startup
     {
+        //Another quick and dirty thing
+        public static JsonOutputFormatter JsonOutputFormatter { get; private set; }
+
         public IConfiguration Configuration { get; set; }
 
         public Startup(IHostingEnvironment env)
@@ -38,6 +41,7 @@ namespace ApiPoc
                     formater.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                     formater.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                     formater.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    JsonOutputFormatter = formater;
                 }
 
                 //// TODO: It is not paying attention to System.Xml.Serialization attributes
