@@ -85,7 +85,7 @@ namespace ApiPoc.Helpers
                     bInput.Attributes.Add("name", templateKey);
                     bInput.AddCssClass("uri-template");
 
-                    bDiv.InnerHtml += bInput.ToString(TagRenderMode.SelfClosing);
+                    bDiv.InnerHtml += " " + bInput.ToString(TagRenderMode.SelfClosing);
                     html.ViewContext.Writer.Write(bDiv.ToString(TagRenderMode.Normal));
                 }
 

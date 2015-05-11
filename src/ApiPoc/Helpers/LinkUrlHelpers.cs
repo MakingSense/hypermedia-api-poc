@@ -53,6 +53,7 @@ namespace ApiPoc.Helpers
         public static Link Link<T>(this IUrlHelper helper, Expression<Action<T>> expression, Rel relation, string description = null)
             where T : Controller
         {
+            //TODO: obtain rels based on Action metadata
             return new Link()
             {
                 Href = helper.ActionWithValues<T>(expression),
