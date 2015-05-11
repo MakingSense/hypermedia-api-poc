@@ -2,6 +2,7 @@
 using ApiPoc.PersistenceModel;
 using ApiPoc.Representations;
 using Microsoft.AspNet.Mvc;
+using Microsoft.AspNet.WebUtilities;
 using Microsoft.Framework.OptionsModel;
 
 namespace ApiPoc.Controllers
@@ -11,6 +12,17 @@ namespace ApiPoc.Controllers
         public HomeController(IDatabase database, IOptions<AppSettings> settings)
             : base(database, settings)
         {
+        }
+
+        public NegotiatedResult NotFound()
+        {
+            return NegotiatedResult(new Error($"Resource not found.", StatusCodes.Status404NotFound)
+            {
+                Links = new[]
+                {
+                    Url.LinkHome()
+                }
+            });
         }
 
         [HttpGet("/")]

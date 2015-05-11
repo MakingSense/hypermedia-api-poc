@@ -30,7 +30,13 @@ namespace ApiPoc
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseStaticFiles();
-            app.UseMvc();
+
+            //Another ugly patch 
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute("CatchAll", "{p?}/{q?}/{r?}/{s?}/{7?}", defaults: new { controller = "Home", action = "NotFound" });
+            });
+            
         }
 
         public void ConfigureServices(IServiceCollection services)
