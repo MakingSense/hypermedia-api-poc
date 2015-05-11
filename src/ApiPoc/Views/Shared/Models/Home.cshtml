@@ -1,7 +1,4 @@
-﻿@model ApiPoc.Representations.SimpleRepresentation
-@{
-    ViewBag.Title = "Home";
-}
+﻿@model ApiPoc.Representations.Home
 <div id="home">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Home")</h2>
     @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())

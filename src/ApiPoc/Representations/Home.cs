@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ApiPoc.Representations
 {
-    public class SimpleRepresentation : BaseRepresentation
+    public class Home : BaseRepresentation
     {
     }
 }

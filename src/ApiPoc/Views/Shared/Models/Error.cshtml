@@ -1,0 +1,9 @@
+﻿@model ApiPoc.Representations.Error
+    @{ 
+        Console.WriteLine("DEBUG!");
+    }
+<div class="error">
+    <h2>Error <span class="status-code">@Model.CustomStatusCode</span>@if (Model.ApplicationCode > 0) { <text>/</text><span class="application-code">@Model.ApplicationCode</span> }</h2>
+    <p class="message-text">@Model.MessageText</p>
+    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
+</div>

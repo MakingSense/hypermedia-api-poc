@@ -28,5 +28,7 @@ namespace ApiPoc.Representations
             }
             return linkBag;
         }
+
+        public int? CustomStatusCode { get; set; }
     }
 }

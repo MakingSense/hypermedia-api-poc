@@ -1,0 +1,13 @@
+﻿@model ApiPoc.Representations.SubscriberDetailedCollection
+<div class="subscribers-detailed">
+    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers List with details")</h2>
+    <ul class="items">
+        @foreach (var item in Model.Items)
+        {
+            <li class="subscriber-detail">
+                @Html.Partial("Models/SubscriberDetail", item)
+            </li>
+        }
+    </ul>
+    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
+</div>

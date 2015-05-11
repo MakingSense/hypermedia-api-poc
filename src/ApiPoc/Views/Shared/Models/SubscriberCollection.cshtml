@@ -1,7 +1,4 @@
 ﻿@model ApiPoc.Representations.SubscriberCollection
-@{
-    ViewBag.Title = "Subscribers";
-}
 <div class="subscribers">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers")</h2>
     <ul class="items">

@@ -137,9 +137,10 @@ namespace ApiPoc.Controllers
             subscriber.FirstName = updated.FirstName;
             subscriber.LastName = updated.LastName;
 
-            return DoneResult(new OkRepresentation()
+            return NegotiatedResult(new Message("Subscriber modified!")
             {
-                Links = new[] {
+                Links = new[] 
+                {
                     Url.LinkHome(),
                     Url.Link<SubscribersController>(x => x.Detail(account.Id, subscriber.Id), Rel.SubscriberDetail | Rel.Suggested, "Subscriber"),
                     Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.SubscriberCollection, "Subscribers list")
@@ -166,8 +167,9 @@ namespace ApiPoc.Controllers
 
             if (subscriber.Unsubscribed)
             {
-                return NotModifiedResult(new OkRepresentation()
+                return NegotiatedResult(new Message("Subscriber already unsubscribed")
                 {
+                    CustomStatusCode = StatusCodes.Status304NotModified,
                     Links = new[]
                     {
                         Url.LinkHome(),
@@ -179,7 +181,7 @@ namespace ApiPoc.Controllers
             {
                 subscriber.Unsubscribed = true;
 
-                return DoneResult(new OkRepresentation()
+                return NegotiatedResult(new Message("Subscriber unsubscribed successfully")
                 {
                     Links = new[]
                     {
@@ -190,12 +192,10 @@ namespace ApiPoc.Controllers
             }
         }
 
-        private ErrorResult SubscriberNotFoundError(int accountId, int subscriberId)
+        private NegotiatedResult SubscriberNotFoundError(int accountId, int subscriberId)
         {
-            return ErrorResult(new ErrorRepresentation()
+            return NegotiatedResult(new Error($"Subscriber {subscriberId} does not exist for account {accountId}.", StatusCodes.Status404NotFound)
             {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = $"Subscriber {subscriberId} does not exist for account {accountId}.",
                 Links = new[]
                 {
                     Url.LinkHome(),
@@ -204,13 +204,11 @@ namespace ApiPoc.Controllers
             });
         }
 
-        private ErrorResult AccountNotFoundError(int accountId)
+        private NegotiatedResult AccountNotFoundError(int accountId)
         {
             var currentAccount = Database.GetCurrentAccount();
-            return ErrorResult(new ErrorRepresentation()
+            return NegotiatedResult(new Error($"Account {accountId} not found.", StatusCodes.Status404NotFound)
             {
-                StatusCode = StatusCodes.Status404NotFound,
-                Message = $"Account {accountId} not found.",
                 Links = new[]
                 {
                     Url.LinkHome(),

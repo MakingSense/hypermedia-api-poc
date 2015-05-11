@@ -23,29 +23,5 @@ namespace ApiPoc.Controllers
         {
             return new NegotiatedResult(value);
         }
-
-        public ErrorResult ErrorResult(ErrorRepresentation value)
-        {
-            return new ErrorResult(value);
-        }
-
-        public OperationResult DoneResult(OkRepresentation value)
-        {
-            return new OperationResult(value);
-        }
-
-        public OperationResult NotModifiedResult(OkRepresentation value)
-        {
-            return new OperationResult(value)
-            {
-                CustomStatusCode = StatusCodes.Status304NotModified
-            };
-        }
-
-        [Obsolete("Only for demo purposes, empty results should be avoided, see http://blog.ploeh.dk/2013/04/30/rest-lesson-learned-avoid-204-responses/")]
-        public OperationResult DoneResult()
-        {
-            return new OperationResult();
-        }
     }
 }

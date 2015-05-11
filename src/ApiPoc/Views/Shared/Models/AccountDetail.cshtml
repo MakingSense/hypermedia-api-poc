@@ -1,0 +1,17 @@
+﻿@model ApiPoc.Representations.AccountDetail
+<div class="account-detail">
+    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Account " + Model.Id)</h2>
+    <dl>
+        <dt ddclass="id">Id</dt>
+        <dd class="id">@Model.Id</dd>
+        <dt class="last-name">Last name</dt>
+        <dd class="last-name">@Model.LastName</dd>
+        <dt class="first-name">First name</dt>
+        <dd class="first-name">@Model.FirstName</dd>
+        <dt class="birthday">Birthday</dt>
+        <dd class="birthday">@Model.Birthday</dd>
+        <dt class="email">Email</dt>
+        <dd class="email">@Model.Email</dd>
+    </dl>
+    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
+</div>

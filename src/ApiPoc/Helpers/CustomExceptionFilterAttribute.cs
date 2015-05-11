@@ -18,11 +18,11 @@ namespace ApiPoc.Helpers
             var urlHelper = context.HttpContext.RequestServices.GetRequiredService<IUrlHelper>();
 
             var exception = context.Exception;
-            context.Result = new ErrorResult(new ErrorRepresentation()
+            context.Result = new NegotiatedResult(new Error($"Unexpected exception: {exception.Message}")
             {
-                Message = "Unexpected exception: " + exception.Message,
                 Exception = exception,
-                Links = new[] { urlHelper.LinkHome(Rel.Home) }
+                Links = new[] { urlHelper.LinkHome(Rel.Home) },
+                CustomStatusCode = StatusCodes.Status500InternalServerError
             });
         }
     }

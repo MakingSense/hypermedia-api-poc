@@ -1,11 +1,8 @@
-﻿@model ApiPoc.Representations.AccountDetail
-@{
-    ViewBag.Title = "Account detail";
-}
-<div class="account-detail">
-    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Account " + Model.Id)</h2>
+﻿@model ApiPoc.Representations.SubscriberDetail
+<div class="subscriber-detail">
+    <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscriber " + Model.Id)</h2>
     <dl>
-        <dt ddclass="id">Id</dt>
+        <dt class="id">Id</dt>
         <dd class="id">@Model.Id</dd>
         <dt class="last-name">Last name</dt>
         <dd class="last-name">@Model.LastName</dd>
@@ -17,4 +14,9 @@
         <dd class="email">@Model.Email</dd>
     </dl>
     @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
+    <div class="operations">
+        <h3>Operations</h3>
+        @Html.Partial("Forms/Unsubscribe", Model)
+        @Html.Partial("Forms/EditSubscriber", Model)
+    </div>
 </div>

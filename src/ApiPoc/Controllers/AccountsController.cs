@@ -51,10 +51,8 @@ namespace ApiPoc.Controllers
             if (account == null)
             {
                 var currentAccount = Database.GetCurrentAccount();
-                return ErrorResult(new ErrorRepresentation()
+                return NegotiatedResult(new Error($"Account {accountId} not found.", StatusCodes.Status404NotFound)
                 {
-                    StatusCode = StatusCodes.Status404NotFound,
-                    Message = $"Account {accountId} not found.",
                     Links = new[]
                     {
                         Url.LinkHome(),

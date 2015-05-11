@@ -1,9 +1,0 @@
-﻿@model ApiPoc.Representations.ErrorRepresentation
-@{
-    ViewBag.Title = "Error " + Model.StatusCode;
-}
-<div class="error">
-    <h2>Error <span class="status-code">@Model.StatusCode</span></h2>
-    <p class="message">@Model.Message</p>
-    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
-</div>

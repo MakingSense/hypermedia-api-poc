@@ -15,10 +15,6 @@ namespace ApiPoc.Helpers
     {
         public IRepresentation Value { get; private set; }
 
-        public int? CustomStatusCode { get; set; }
-
-        public string CustomHtmlView { get; set; }
-
         public NegotiatedResult(IRepresentation value)
         {
             Value = value;
@@ -33,14 +29,18 @@ namespace ApiPoc.Helpers
                 acceptHeader != null && acceptHeader.Contains("text/html") ? "text/html"
                 : "application/json";
 
+            var noContent = Value == null;
+            var viewName = noContent ? null : $"Models/{Value.GetType().Name}";
+            var statusCode = noContent ? StatusCodes.Status204NoContent : Value.CustomStatusCode ?? StatusCodes.Status200OK;
+
             // Only for demo purposes, it should not be automatic, it should depend on the model to 
             // Generate it automatically, to generate based on model information, to not include etag, etc
             var currentEtag = CalculateHashByValues(new
             {
                 Value = Value,
                 ResponseEncodding = responseEncodding,
-                CustomStatusCode = CustomStatusCode,
-                CustomHtmlView = CustomHtmlView
+                CustomStatusCode = statusCode,
+                CustomHtmlView = viewName
             }).ToString();
 
             string requestedEtag = context.HttpContext.Request.Headers["If-None-Match"];
@@ -48,22 +48,23 @@ namespace ApiPoc.Helpers
             {
                 context.HttpContext.Response.Headers["ETag"] = currentEtag;
             }
-            if (requestedEtag != null && requestedEtag == currentEtag)
-            {
-                innerActionResult = new HttpStatusCodeResult(StatusCodes.Status304NotModified);
-            }
-            else if (CustomStatusCode == StatusCodes.Status204NoContent)
+
+            if (noContent)
             {
                 innerActionResult = new NoContentResult();
             }
-            else
+            else if(requestedEtag != null && requestedEtag == currentEtag)
+            {
+                innerActionResult = new HttpStatusCodeResult(StatusCodes.Status304NotModified);
+            }
+            else 
             {
                 if (responseEncodding == "text/html")
                 {
                     innerActionResult = new ViewResult()
                     {
-                        StatusCode = CustomStatusCode,
-                        ViewName = CustomHtmlView,
+                        StatusCode = statusCode,
+                        ViewName = viewName,
                         ViewData = new ViewDataDictionary(
                             new EmptyModelMetadataProvider(),
                             context.ModelState ?? new ModelStateDictionary())
@@ -76,7 +77,7 @@ namespace ApiPoc.Helpers
                 {
                     innerActionResult = new ObjectResult(Value)
                     {
-                        StatusCode = CustomStatusCode
+                        StatusCode = statusCode
                     };
                 }
             }
@@ -85,7 +86,7 @@ namespace ApiPoc.Helpers
 
         protected virtual ulong CalculateHashByValues(object obj)
         {
-            //TODO> review this code, it could have holes
+            //TODO: review this code, it could have holes
             unchecked
             {
                 if (obj == null)

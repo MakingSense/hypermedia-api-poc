@@ -18,7 +18,7 @@ namespace ApiPoc.Controllers
         {
             var currentAccount = Database.GetCurrentAccount();
 
-            return NegotiatedResult(new SimpleRepresentation()
+            return NegotiatedResult(new Home()
             {
                 Links = new[] {
                     Url.LinkSelf(Rel.Home),
