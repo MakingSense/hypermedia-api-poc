@@ -2,5 +2,5 @@
 <div class="message">
     <h2>Message</h2>
     <p class="message-text">@Model.MessageText</p>
-    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
+    @Html.Partial("Forms/UnusedLinksAndForms", Model)
 </div>

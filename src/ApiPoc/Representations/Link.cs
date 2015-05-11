@@ -1,4 +1,6 @@
-﻿namespace ApiPoc.Representations
+﻿using System;
+
+namespace ApiPoc.Representations
 {
     public class Link
     {
@@ -8,7 +10,8 @@
 
         public string Description { get; set; }
 
-        internal Rel RawRel { get; set; }
+        //TODO: avoid to serialize it
+        public Rel RawRel { get; set; }
 
         public override int GetHashCode()
         {

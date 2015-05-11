@@ -56,14 +56,14 @@ namespace ApiPoc.Helpers
 
             bForm.Attributes.Add("action", link.Href);
             bForm.Attributes.Add("data-method",
-                (link.RawRel & Rel._Delete) == Rel._Delete ? "DELETE"
-                : (link.RawRel & Rel._Put) == Rel._Put ? "PUT"
-                : (link.RawRel & Rel._Post) == Rel._Post ? "POST"
+                link.RawRel.Is(Rel._Delete) ? "DELETE"
+                : link.RawRel.Is(Rel._Put) ? "PUT"
+                : link.RawRel.Is(Rel._Post) ? "POST"
                 : "GET");
             bForm.Attributes.Add("style", "display: none");
             html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
 
-            if ((link.RawRel & Rel._Template) == Rel._Template)
+            if (link.RawRel.Is(Rel._Template))
             {
                 //TODO: use fielset
                 var templateKeys = new Regex("{([^{}]*)")
@@ -110,23 +110,6 @@ namespace ApiPoc.Helpers
             }
             bAnchor.SetInnerText(customText ?? link.Description);
             return bAnchor.ToHtmlString(TagRenderMode.Normal);
-        }
-
-        public static HtmlString Links(this IHtmlHelper html, IEnumerable<Link> links, string customClass = null)
-        {
-            var bUl = new TagBuilder("ul");
-            bUl.AddCssClass("links");
-            if (customClass != null)
-            {
-                bUl.AddCssClass(customClass);
-            }
-            bUl.InnerHtml = string.Join("\n", links.Select(link =>
-            {
-                var bLi = new TagBuilder("li");
-                bLi.InnerHtml = Link(html, link).ToString();
-                return bLi.ToString(TagRenderMode.Normal);
-            }));
-            return bUl.ToHtmlString(TagRenderMode.Normal);
         }
     }
 }

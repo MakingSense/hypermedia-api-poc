@@ -1,26 +1,17 @@
-﻿@model ApiPoc.Representations.SubscriberDetail
-@{
-    var link = Model.GetLinkBag().GetFirstByRel(Rel.EditSubscriber);
-}
+﻿@model LinkWithParent<SubscriberDetail>
 
-@if (link != null)
+@using (Html.BeginForm(Model.Link, "Edit subscriber"))
 {
-    <div class="edit-subscriber">
-        <h4>Edit subscriber</h4>
-        @using (Html.BeginForm(link, "Edit subscriber"))
-        {
-            <div>
-                <label for="firstName" class="first-name">First Name</label>
-                <input name="firstName" class="first-name" type="text" value="@Model.FirstName" />
-            </div>
-            <div>
-                <label for="lastName" class="last-name">Last Name</label>
-                <input name="lastName" class="last-name" type="text" value="@Model.LastName" />
-            </div>
-            <div>
-                <label for="birthday" class="birthday">Birthday</label>
-                <input name="birthday" class="birthday" type="date" value="@string.Format("{0:yyyy-MM-dd}", Model.Birthday)" />
-            </div>
-        }
+    <div>
+        <label for="firstName" class="first-name">First Name</label>
+        <input name="firstName" class="first-name" type="text" value="@Model.Parent.FirstName" />
+    </div>
+    <div>
+        <label for="lastName" class="last-name">Last Name</label>
+        <input name="lastName" class="last-name" type="text" value="@Model.Parent.LastName" />
+    </div>
+    <div>
+        <label for="birthday" class="birthday">Birthday</label>
+        <input name="birthday" class="birthday" type="date" value="@string.Format("{0:yyyy-MM-dd}", Model.Parent.Birthday)" />
     </div>
 }

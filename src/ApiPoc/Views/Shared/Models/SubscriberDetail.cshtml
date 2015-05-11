@@ -13,10 +13,5 @@
         <dt class="email">Email</dt>
         <dd class="email">@Model.Email</dd>
     </dl>
-    @Html.Links(Model.GetLinkBag().GetUnusedPlainLinks())
-    <div class="operations">
-        <h3>Operations</h3>
-        @Html.Partial("Forms/Unsubscribe", Model)
-        @Html.Partial("Forms/EditSubscriber", Model)
-    </div>
+    @Html.Partial("Forms/UnusedLinksAndForms", Model)
 </div>

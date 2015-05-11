@@ -51,25 +51,26 @@ namespace ApiPoc.Helpers
             }
             return result;
         }
-
-        public Link[] GetUnusedLinks(bool? plain = null)
+        
+        public Link[] GetUnusedPlainLinks()
         {
             var links = Links.Where(x => !alreadyUsed.Contains(x));
-            if (plain.HasValue)
-            {
-                links = links.Where(x => (x.RawRel & Rel._Unsafe) == 0 && (x.RawRel & Rel._Template) == 0);
-            }
+            links = links.Where(x => x.RawRel.IsNot(Rel._Unsafe) && x.RawRel.IsNot(Rel._Template));
             return links.ToArray();
         }
 
-        public Link[] GetUnusedPlainLinks()
+        public Link[] GetUnusedSafeTemplateLinks()
         {
-            return GetUnusedLinks(true);
+            var links = Links.Where(x => !alreadyUsed.Contains(x));
+            links = links.Where(x => x.RawRel.Is(Rel._Template) && x.RawRel.IsNot(Rel._Unsafe));
+            return links.ToArray();
         }
 
-        public Link[] GetUnusedUnsafeLinks()
+        public Link[] GetUnusedUnsafeLinks(params Rel[] rels)
         {
-            return GetUnusedLinks(false);
+            var links = Links.Where(x => !alreadyUsed.Contains(x));
+            links = links.Where(x => x.RawRel.Is(Rel._Unsafe));
+            return links.ToArray();
         }
 
         public void Reset()

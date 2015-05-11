@@ -7,7 +7,8 @@ namespace ApiPoc.Representations
     {
         public int ApplicationCode { get; set; }
 
-        internal Exception Exception { get; set; }
+        //TODO: avoid to serialize it
+        public Exception Exception { get; set; }
 
         public Error(string messageText, int statusCode = StatusCodes.Status500InternalServerError, int applicationCode = 0)
             : base(messageText)

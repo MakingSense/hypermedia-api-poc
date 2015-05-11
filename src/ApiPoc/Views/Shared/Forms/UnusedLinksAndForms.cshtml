@@ -1,0 +1,51 @@
+﻿@model ApiPoc.Representations.IRepresentation
+@{
+    //TODO: re-factorize it to automatically detect the best rendering for each link
+    var plainLinks = Model.GetLinkBag().GetUnusedPlainLinks();
+    var templateLinks = Model.GetLinkBag().GetUnusedSafeTemplateLinks();
+    var unsafeLinks = Model.GetLinkBag().GetUnusedUnsafeLinks();
+}
+
+@if (plainLinks.Any())
+{
+    <ul class="links">
+        @foreach (var link in plainLinks)
+        {
+            <li class="link-item">
+                @Html.Link(link)
+            </li>
+        }
+    </ul>
+}
+
+@if (templateLinks.Any())
+{
+    <ul class="template-links">
+        @foreach (var link in templateLinks)
+        {
+            <li class="link-item">
+                @Html.EmptyForm(link)
+            </li>
+        }
+    </ul>
+}
+
+@if (unsafeLinks.Any())
+{
+    <ul class="unsafe-links">
+        @foreach (var link in unsafeLinks)
+        {
+            <li class="link-item">
+                @if (link.RawRel.Is(Rel.EditSubscriber))
+                {
+                    @Html.Partial("Forms/EditSubscriber", new LinkWithParent<SubscriberDetail>(link, (SubscriberDetail)Model))
+                }
+                else
+                {
+                    @Html.EmptyForm(link)
+                }
+            </li>
+        }
+    </ul>
+}
+
