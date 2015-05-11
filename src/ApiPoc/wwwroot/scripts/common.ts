@@ -75,12 +75,10 @@
                 obj[element.name] = element.value;
             }
         }
-        var uri = form.action;
-        uri = uri.replace(/{([^{}]*)}/g,
-            function (a, b) {
-                return obj[b];
-            });
-        return uri;
+        return form.action
+            .replace(/%7B/g, "{")
+            .replace(/%7D/g, "}")
+            .replace(/{([^{}]*)}/g, (a, b) => obj[b]);
     }
 
     function searchLinkByRel(links: LinkRepresentation[], rel: string): LinkRepresentation {
