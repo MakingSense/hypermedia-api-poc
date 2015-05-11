@@ -67,7 +67,7 @@
     }
 
     function readUri(form: HTMLFormElement): string {
-        var obj = <IDictionary<string>> null;
+        var obj = <IDictionary<string>> {};
         var length = form.elements.length;
         for (var i = 0; i < length; i++) {
             var element = <HTMLInputElement>form.elements[i];
@@ -75,8 +75,12 @@
                 obj[element.name] = element.value;
             }
         }
-        //TODO: Apply obj to override uri-template parameters
-        return form.action;
+        var uri = form.action;
+        uri = uri.replace(/{([^{}]*)}/g,
+            function (a, b) {
+                return obj[b];
+            });
+        return uri;
     }
 
     function searchLinkByRel(links: LinkRepresentation[], rel: string): LinkRepresentation {

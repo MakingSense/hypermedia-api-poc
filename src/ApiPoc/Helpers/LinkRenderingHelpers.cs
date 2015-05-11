@@ -3,6 +3,7 @@ using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ApiPoc.Helpers
 {
@@ -62,8 +63,34 @@ namespace ApiPoc.Helpers
             bForm.Attributes.Add("style", "display: none");
             html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
 
-            //TODO: render an input for each template item
-            //html.ViewContext.Writer.Write(...
+            if ((link.RawRel & Rel._Template) == Rel._Template)
+            {
+                //TODO: use fielset
+                var templateKeys = new Regex("{([^{}]*)")
+                    .Matches(link.Href).Cast<Match>()
+                    .Where(x => x.Length > 1)
+                    .Select(x => x.Value.Substring(1));
+
+                foreach (var templateKey in templateKeys)
+                {
+                    var bDiv = new TagBuilder("div");
+
+                    var bLabel = new TagBuilder("label");
+                    bLabel.Attributes.Add("for", templateKey);
+                    bLabel.SetInnerText(templateKey);
+
+                    bDiv.InnerHtml += bLabel.ToString(TagRenderMode.Normal);
+
+                    var bInput = new TagBuilder("input");
+                    bInput.Attributes.Add("name", templateKey);
+                    bInput.AddCssClass("uri-template");
+
+                    bDiv.InnerHtml += bInput.ToString(TagRenderMode.SelfClosing);
+                    html.ViewContext.Writer.Write(bDiv.ToString(TagRenderMode.Normal));
+                }
+
+                html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
+            }
 
             return new ActionForm(html.ViewContext);
         }

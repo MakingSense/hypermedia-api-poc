@@ -54,7 +54,7 @@ var ApiPoc;
         return obj;
     }
     function readUri(form) {
-        var obj = null;
+        var obj = {};
         var length = form.elements.length;
         for (var i = 0; i < length; i++) {
             var element = form.elements[i];
@@ -62,8 +62,11 @@ var ApiPoc;
                 obj[element.name] = element.value;
             }
         }
-        //TODO: Apply obj to override uri-template parameters
-        return form.action;
+        var uri = form.action;
+        uri = uri.replace(/{([^{}]*)}/g, function (a, b) {
+            return obj[b];
+        });
+        return uri;
     }
     function searchLinkByRel(links, rel) {
         for (var _i = 0; _i < links.length; _i++) {
