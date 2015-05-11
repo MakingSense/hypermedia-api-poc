@@ -63,7 +63,7 @@ namespace ApiPoc.Helpers
             bForm.Attributes.Add("style", "display: none");
             html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
 
-            if (link.Rel.Is(Rel._Template))
+            if (link.Rel.Is(Rel.Template))
             {
                 html.ViewContext.Writer.Write("<fieldset><legend>URI parameters</legend>");
 

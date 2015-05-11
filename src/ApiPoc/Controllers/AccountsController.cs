@@ -69,9 +69,9 @@ namespace ApiPoc.Controllers
                     Url.LinkSelf(Rel.AccountDetail),
                     Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.SubscriberCollection, "Subscribers list"),
 
-                    Url.Link<SubscribersController>(x => x.Detail(account.Id, TemplateParameter.Create<int>()), Rel.SubscriberDetail | Rel._Template, "Subscriber detail"),
-                    Url.Link<SubscribersController>(x => x.Unsubscribe(account.Id, TemplateParameter.Create<int>()), Rel.Unsubscribe | Rel._Template, "Unsubcribe subscriber"),
-                    Url.Link<SubscribersController>(x => x.Modify(account.Id, TemplateParameter.Create<int>(), null), Rel.EditSubscriber | Rel._Template, "Modify subscriber"),
+                    Url.Link<SubscribersController>(x => x.Detail(account.Id, TemplateParameter.Create<int>()), Rel.SubscriberDetail, "Subscriber detail"),
+                    Url.Link<SubscribersController>(x => x.Unsubscribe(account.Id, TemplateParameter.Create<int>()), Rel.Unsubscribe, "Unsubcribe subscriber"),
+                    Url.Link<SubscribersController>(x => x.Modify(account.Id, TemplateParameter.Create<int>(), null), Rel.EditSubscriber, "Modify subscriber"),
                     
                     // Hide because standard user does not need this list
                     // Url.Link<AccountsController>(x => x.Index(), Rel.Parent | Rel.AccountItem, "Accounts list"),

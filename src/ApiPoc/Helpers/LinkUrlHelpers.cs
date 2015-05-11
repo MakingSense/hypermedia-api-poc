@@ -12,9 +12,10 @@ namespace ApiPoc.Helpers
     public static class LinkUrlHelpers
     {
         // Quick and dirty patch to have type safety
-        private static string ActionWithValues<T>(this IUrlHelper helper, Expression<Action<T>> expression)
+        private static Link ActionWithValues<T>(this IUrlHelper helper, Expression<Action<T>> expression)
             where T : Controller
         {
+            var rel = Rel._None;
             var method = expression.Body as MethodCallExpression;
             var arguments = method.Arguments;
             var parameters = method.Method.GetParameters();
@@ -28,6 +29,7 @@ namespace ApiPoc.Helpers
                     if (unaryExpression != null && unaryExpression.Operand.Type.GetTypeInfo().IsSubclassOf(typeof(TemplateParameter)))
                     {
                         var templateParameter = Expression.Lambda(unaryExpression.Operand).Compile().DynamicInvoke() as TemplateParameter;
+                        rel |= Rel.Template;
                         return string.Format("{{{0}}}", templateParameter.CustomText ?? parameters[x].Name);
                     }
                     else
@@ -39,7 +41,13 @@ namespace ApiPoc.Helpers
             var controllerType = actionMember.DeclaringType.GetTypeInfo();
             var actionName = actionMember.Name;
             var controllerName = controllerType.Name.EndsWith("Controller") ? controllerType.Name.Substring(0, controllerType.Name.Length - "Controller".Length) : controllerType.Name;
-            return helper.Action(actionName, controllerName, values).Replace("%7B", "{").Replace("%7D", "}");
+            var href = helper.Action(actionName, controllerName, values).Replace("%7B", "{").Replace("%7D", "}");
+
+            return new Link()
+            {
+                Href = href,
+                Rel = rel
+            };
         }
 
         public static string ToRelString(this Rel relation)
@@ -53,13 +61,13 @@ namespace ApiPoc.Helpers
         public static Link Link<T>(this IUrlHelper helper, Expression<Action<T>> expression, Rel relation, string description = null)
             where T : Controller
         {
-            //TODO: obtain rels based on Action metadata
-            return new Link()
+            var link = helper.ActionWithValues<T>(expression);
+            if (description != null)
             {
-                Href = helper.ActionWithValues<T>(expression),
-                Description = description ?? relation.ToString(),
-                Rel = relation
-            };
+                link.Description = description;
+            }
+            link.Rel |= relation;
+            return link;
         }
 
         public static Link LinkSelf(this IUrlHelper helper, Rel relation = Rel._None, string description = null)
