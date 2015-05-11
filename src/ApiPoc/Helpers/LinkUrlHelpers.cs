@@ -57,9 +57,8 @@ namespace ApiPoc.Helpers
             return new Link()
             {
                 Href = helper.ActionWithValues<T>(expression),
-                Rel = relation.ToRelString(),
                 Description = description ?? relation.ToString(),
-                RawRel = relation
+                Rel = relation
             };
         }
 
@@ -69,9 +68,8 @@ namespace ApiPoc.Helpers
             return new Link()
             {
                 Href = helper.Action(),
-                Rel = relation.ToRelString(),
                 Description = description ?? "Self",
-                RawRel = relation
+                Rel = relation
             };
         }
 

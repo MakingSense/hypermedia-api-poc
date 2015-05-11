@@ -36,7 +36,7 @@
         @foreach (var link in unsafeLinks)
         {
             <li class="link-item">
-                @if (link.RawRel.Is(Rel.EditSubscriber))
+                @if (link.Rel.Is(Rel.EditSubscriber))
                 {
                     @Html.Partial("Forms/EditSubscriber", new LinkWithParent(link, Model))
                 }

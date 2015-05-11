@@ -56,14 +56,14 @@ namespace ApiPoc.Helpers
 
             bForm.Attributes.Add("action", link.Href);
             bForm.Attributes.Add("data-method",
-                link.RawRel.Is(Rel._Delete) ? "DELETE"
-                : link.RawRel.Is(Rel._Put) ? "PUT"
-                : link.RawRel.Is(Rel._Post) ? "POST"
+                link.Rel.Is(Rel._Delete) ? "DELETE"
+                : link.Rel.Is(Rel._Put) ? "PUT"
+                : link.Rel.Is(Rel._Post) ? "POST"
                 : "GET");
             bForm.Attributes.Add("style", "display: none");
             html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
 
-            if (link.RawRel.Is(Rel._Template))
+            if (link.Rel.Is(Rel._Template))
             {
                 html.ViewContext.Writer.Write("<fieldset><legend>URI parameters</legend>");
 
@@ -104,7 +104,7 @@ namespace ApiPoc.Helpers
                 return HtmlString.Empty;
             }
             var bAnchor = new TagBuilder("a");
-            bAnchor.Attributes.Add("rel", link.Rel);
+            bAnchor.Attributes.Add("rel", link.Rel.ToRelString());
             bAnchor.Attributes.Add("href", link.Href);
             if (customClass != null)
             {

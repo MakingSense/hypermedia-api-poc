@@ -5,8 +5,11 @@ using Microsoft.AspNet.Hosting;
 using Microsoft.AspNet.Mvc;
 using Microsoft.Framework.ConfigurationModel;
 using Microsoft.Framework.DependencyInjection;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.Linq;
+using System;
+using ApiPoc.Representations;
 
 namespace ApiPoc
 {
@@ -41,6 +44,7 @@ namespace ApiPoc
                     formater.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.Indented;
                     formater.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                     formater.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                    formater.SerializerSettings.Converters.Add(new RelValueConverter());
                     JsonOutputFormatter = formater;
                 }
 
@@ -54,6 +58,29 @@ namespace ApiPoc
                 options.Filters.Add(new CustomExceptionFilterAttribute());
             });
             services.AddSingleton<IDatabase, FakeDatabase>();
+        }
+
+        public class RelValueConverter : JsonConverter
+        {
+            public override bool CanRead { get { return false; } }
+
+            public override bool CanWrite { get { return true; } }
+
+            public override bool CanConvert(Type objectType)
+            {
+                return objectType == typeof(Rel);
+            }
+
+            public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
+            {
+                var rel = (Rel)value;
+                serializer.Serialize(writer, rel.ToRelString());
+            }
         }
     }
 }
