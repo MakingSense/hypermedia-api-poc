@@ -56,14 +56,14 @@ namespace ApiPoc.Helpers
         public Link[] GetUnusedPlainLinks()
         {
             var links = Links.Where(x => !alreadyUsed.Contains(x));
-            links = links.Where(x => x.Rel.IsNot(Rel._Unsafe) && x.Rel.IsNot(Rel.Template));
+            links = links.Where(x => x.Rel.IsNot(Rel._Unsafe) && x.Rel.IsNot(Rel._Template));
             return links.ToArray();
         }
 
         public Link[] GetUnusedSafeTemplateLinks()
         {
             var links = Links.Where(x => !alreadyUsed.Contains(x));
-            links = links.Where(x => x.Rel.Is(Rel.Template) && x.Rel.IsNot(Rel._Unsafe));
+            links = links.Where(x => x.Rel.Is(Rel._Template) && x.Rel.IsNot(Rel._Unsafe));
             return links.ToArray();
         }
 

@@ -63,7 +63,15 @@ namespace ApiPoc.Helpers
             bForm.Attributes.Add("style", "display: none");
             html.ViewContext.Writer.Write(bForm.ToHtmlString(TagRenderMode.StartTag));
 
-            if (link.Rel.Is(Rel.Template))
+            //read from settings
+            var documentationBaseUrl = "https://github.com/andresmoschini/hypermedia-api-poc/blob/master/src/ApiPoc/wwwroot/docs/";
+            var relList = link.Rel.ToRelString().Split(' ');
+            foreach (var relItem in relList)
+            {
+                html.ViewContext.Writer.Write("<small><a target=\"_blank\" href =\"" + documentationBaseUrl + "rels/" + relItem + ".md\")\">See documentation about <code>" + relItem + "</code> relation</a></small><br />");
+            }
+
+            if (link.Rel.Is(Rel._Template))
             {
                 html.ViewContext.Writer.Write("<fieldset><legend>URI parameters</legend>");
 

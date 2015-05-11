@@ -1,5 +1,7 @@
 ﻿@model ApiPoc.Representations.Home
+@inject Microsoft.Framework.OptionsModel.IOptions<ApiPoc.AppSettings> settings
 <div id="home">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Home")</h2>
+    <small><a target="_blank" href="@(settings.Options.DocumentationBaseUrl + "models/Home.md")">See documentation about <code>Home</code> model</a></small>
     @Html.Partial("Forms/UnusedLinksAndForms", Model)
 </div>

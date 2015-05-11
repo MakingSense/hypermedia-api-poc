@@ -1,6 +1,9 @@
 ﻿@model ApiPoc.Representations.SubscriberDetailedCollection
+@inject Microsoft.Framework.OptionsModel.IOptions<ApiPoc.AppSettings> settings
+
 <div class="subscribers-detailed">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscribers List with details")</h2>
+    <small><a target="_blank" href="@(settings.Options.DocumentationBaseUrl + "models/SubscriberDetailedCollection.md")">See documentation about <code>SubscriberDetailedCollection</code> model</a></small>
     <ul class="items">
         @foreach (var item in Model.Items)
         {

@@ -1,9 +1,8 @@
 ﻿@model ApiPoc.Representations.Error
-    @{ 
-        Console.WriteLine("DEBUG!");
-    }
+@inject Microsoft.Framework.OptionsModel.IOptions<ApiPoc.AppSettings> settings
 <div class="error">
     <h2>Error <span class="status-code">@Model.CustomStatusCode</span>@if (Model.ApplicationCode > 0) { <text>/</text><span class="application-code">@Model.ApplicationCode</span> }</h2>
+    <small><a target="_blank" href="@(settings.Options.DocumentationBaseUrl + "models/Error.md")">See documentation about <code>Error</code> model</a></small>
     <p class="message-text">@Model.MessageText</p>
     @Html.Partial("Forms/UnusedLinksAndForms", Model)
 </div>

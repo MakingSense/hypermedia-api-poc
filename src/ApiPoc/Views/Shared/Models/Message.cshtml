@@ -1,6 +1,8 @@
 ﻿@model ApiPoc.Representations.Message
+@inject Microsoft.Framework.OptionsModel.IOptions<ApiPoc.AppSettings> settings
 <div class="message">
     <h2>Message</h2>
+    <small><a target="_blank" href="@(settings.Options.DocumentationBaseUrl + "models/Message.md")">See documentation about <code>Message</code> model</a></small>
     <p class="message-text">@Model.MessageText</p>
     @Html.Partial("Forms/UnusedLinksAndForms", Model)
 </div>

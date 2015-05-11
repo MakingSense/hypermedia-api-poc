@@ -29,7 +29,7 @@ namespace ApiPoc.Helpers
                     if (unaryExpression != null && unaryExpression.Operand.Type.GetTypeInfo().IsSubclassOf(typeof(TemplateParameter)))
                     {
                         var templateParameter = Expression.Lambda(unaryExpression.Operand).Compile().DynamicInvoke() as TemplateParameter;
-                        rel |= Rel.Template;
+                        rel |= Rel._Template;
                         return string.Format("{{{0}}}", templateParameter.CustomText ?? parameters[x].Name);
                     }
                     else
@@ -63,9 +63,10 @@ namespace ApiPoc.Helpers
         public static string ToRelString(this Rel relation)
         {
             //UglyPatch
-            return relation == Rel._None
-                ? null
+            var str = relation == Rel._None
+                ? string.Empty
                 : string.Join("-", Regex.Split(relation.ToString().Replace(",", ""), "(?<=[a-z])(?=[A-Z])")).ToLower();
+            return string.Join(" ", str.Split(' ').Where(x => !x.StartsWith("_")));
         }
 
         public static Link Link<T>(this IUrlHelper helper, Expression<Action<T>> expression, Rel relation = Rel._None, string description = null)

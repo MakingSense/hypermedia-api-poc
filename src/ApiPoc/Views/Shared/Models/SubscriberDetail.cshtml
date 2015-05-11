@@ -1,6 +1,8 @@
 ﻿@model ApiPoc.Representations.SubscriberDetail
+@inject Microsoft.Framework.OptionsModel.IOptions<ApiPoc.AppSettings> settings
 <div class="subscriber-detail">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Subscriber " + Model.Id)</h2>
+    <small><a target="_blank" href="@(settings.Options.DocumentationBaseUrl + "models/SubscriberDetail.md")">See documentation about <code>SubscriberDetail</code> model</a></small>
     <dl>
         <dt class="id">Id</dt>
         <dd class="id">@Model.Id</dd>

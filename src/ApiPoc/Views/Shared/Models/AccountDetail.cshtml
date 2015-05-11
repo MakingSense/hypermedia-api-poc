@@ -1,6 +1,8 @@
 ﻿@model ApiPoc.Representations.AccountDetail
+@inject Microsoft.Framework.OptionsModel.IOptions<ApiPoc.AppSettings> settings
 <div class="account-detail">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Account " + Model.Id)</h2>
+    <small><a target="_blank" href="@(settings.Options.DocumentationBaseUrl + "models/AccountDetail.md")">See documentation about <code>AccountDetail</code> model</a></small>
     <dl>
         <dt ddclass="id">Id</dt>
         <dd class="id">@Model.Id</dd>

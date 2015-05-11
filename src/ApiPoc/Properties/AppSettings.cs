@@ -8,5 +8,6 @@ namespace ApiPoc
     public class AppSettings
     {
         public int PageSize { get; set; }
+        public string DocumentationBaseUrl { get; set; }
     }
 }

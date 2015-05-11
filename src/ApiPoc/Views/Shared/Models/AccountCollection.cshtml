@@ -1,6 +1,9 @@
 ﻿@model ApiPoc.Representations.AccountCollection
+@inject Microsoft.Framework.OptionsModel.IOptions<ApiPoc.AppSettings> settings
+
 <div class="accounts">
     <h2>@Html.Link(Model.GetLinkBag().GetFirstByRel(Rel.Self), customText: "Accounts")</h2>
+    <small><a target="_blank" href="@(settings.Options.DocumentationBaseUrl + "models/AccountColection.md")">See documentation about <code>AccountColection</code> model</a></small>
     <ul class="items">
         @foreach(var item in Model.Items)
         {

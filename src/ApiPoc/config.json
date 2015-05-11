@@ -1,5 +1,6 @@
 ﻿{
   "AppSettings": {
-    "PageSize": "20"
+    "PageSize": "20",
+    "DocumentationBaseUrl":  "https://github.com/andresmoschini/hypermedia-api-poc/blob/master/src/ApiPoc/wwwroot/docs/"
   }
 }
