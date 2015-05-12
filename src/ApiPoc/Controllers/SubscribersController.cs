@@ -168,31 +168,17 @@ namespace ApiPoc.Controllers
                 return SubscriberNotFoundError(accountId, subscriberId);
             }
 
-            if (subscriber.Unsubscribed)
-            {
-                return NegotiatedResult(new Message("Subscriber already unsubscribed")
-                {
-                    CustomStatusCode = StatusCodes.Status304NotModified,
-                    Links = new[]
-                    {
-                        Url.LinkHome(),
-                        Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.Suggested)
-                    }
-                });
-            }
-            else
-            {
-                subscriber.Unsubscribed = true;
+            var alreadyUnsubscribed = subscriber.Unsubscribed;
+            subscriber.Unsubscribed = true;
 
-                return NegotiatedResult(new Message("Subscriber unsubscribed successfully")
+            return NegotiatedResult(new Message(subscriber.Unsubscribed ? "Subscriber already unsubscribed" : "Subscriber unsubscribed successfully")
+            {
+                Links = new[]
                 {
-                    Links = new[]
-                    {
-                        Url.LinkHome(),
-                        Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.Suggested),
-                    }
-                });
-            }
+                    Url.LinkHome(),
+                    Url.Link<SubscribersController>(x => x.Index(account.Id, null), Rel.Parent | Rel.Suggested),
+                }
+            });
         }
 
         private NegotiatedResult SubscriberNotFoundError(int accountId, int subscriberId)
