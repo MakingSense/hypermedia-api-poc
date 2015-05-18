@@ -55,7 +55,7 @@ Hypermedia relations
 * Embedding Links
     * _There are not embedding link relations by the moment_
 * Operation Links
-    * [unsubscribe](res/unsubscribe.md)
-    * [edit-subscriber](res/edit-subscriber.md)
+    * [unsubscribe](rels/unsubscribe.md)
+    * [edit-subscriber](rels/edit-subscriber.md)
 
 
