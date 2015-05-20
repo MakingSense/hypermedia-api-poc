@@ -1,4 +1,4 @@
-﻿Hypermedia API POC
+Hypermedia API POC
 ==================
 
 See also [API Reference](src/ApiPoc/wwwroot/docs/documentation.md).
@@ -18,10 +18,20 @@ Objective
 The idea behind this proof of concept was to try to implement some of the concepts related to RESTful API (aka [Richardson Maturity Model Level 3](martinfowler.com/articles/richardsonMaturityModel.html#level3) or [Hypermedia API](http://blog.steveklabnik.com/posts/2012-02-23-rest-is-over)) in order to learn how difficult is to implement and maintain it and how useful could be this kind of API for a client.
 
 
+Important note
+--------------
+
+It is only a proof of concept, the idea was to check quickly how difficult could be to implement some ideas. The code **has not been tested**, it **could fail** in some scenarios, it **is not optimized**, it **is not even elegant**. Some examples are `LinkBag`, `NegotiatedResult`, `LinkUrlHelpers`, and how view binding is based on result class. 
+
+Please do not use it in production!
+
+And, of course, **your pull request is welcome** to improve it. 
+
+
 Desired approach
 ----------------
 
-Since in general I am working over Microsoft stack, and I like the way that they are taken, I choose _ASP.NET 5.0 MVC 6_ to implement it. Like other tools _ASP.NET 5.0 MVC 6_ to is very helpful and encourage to serialize existing programming objects into a common format (like JSON) and send the content to another party. 
+Since in general I am working over Microsoft stack, and I like the way that they are taken, I choose _ASP.NET 5.0 MVC 6_ to implement it. Like other tools, _ASP.NET 5.0 MVC 6_ is very helpful and encourage to serialize existing programming objects into a common format (like JSON) and send the content to another party, but...
 
 > This method of marshaling internal types over HTTP can easily lead to brittle and inflexible
 > implementations on the Web. Often, introduction of new arguments for requesting data, new
@@ -31,11 +41,11 @@ Since in general I am working over Microsoft stack, and I like the way that they
 > antithesis of how the Web was designed to work. 
 > ([Building Hypermedia APIs with HTML5 and Node, Mike Amundsen, 2012](http://shop.oreilly.com/product/0636920020530.do))
 
-For that reason my idea is not use it as an automatic mapping layer, instead to implement the mappings explicitly and expose a real hypermedia API.
+For that reason, my idea is not use it as an automatic mapping layer, instead to implement the mappings explicitly and expose a real hypermedia API.
 
-To ensure that I am taking the right path, I will expose both JSON and HTML results, and allow user to fully use the API within a browser. It will be useful to identify what implicit thinks should be documented, for example expected data for unsafe methods. It cold be also useful in a definitive implementation, for example for didactic purposes and as a playground.
+To ensure that I am taking the right path, I will expose both JSON and HTML results, and allow user to fully use the API within a browser. It will be useful to identify what implicit things should be documented, for example expected data for unsafe methods. It cold be also useful in a definitive implementation, for example for didactic purposes and as a playground.
 
-Research progress has been documented in a [Trello Board](https://trello.com/b/RxHiZuvz/hypermedia-api-research), and this document have the conclusions and current status of this POC.
+Research progress has been documented in a [Trello Board](https://trello.com/b/RxHiZuvz/hypermedia-api-research) (ask me for access), and this document have the conclusions and current status of this POC.
 
 
 Hypermedia
@@ -45,7 +55,7 @@ All representations will include links to related resources, each of them with t
 
 * `href`: URI of the related resource, it could be a template.
 * `description`: Human readable description of the role and meaning of the link.
-* `rel`:  List of typified strings that represents the relations with current resource and also the role, behavior and constraints o the link. Documented in [hypermedia-relations](https://github.com/andresmoschini/hypermedia-api-poc/blob/master/src/ApiPoc/wwwroot/docs/documentation.md#hypermedia-relations)
+* `rel`:  List of typified strings that represents the relations with current resource and also the role, behavior and constraints of the link. Documented in [hypermedia-relations](https://github.com/andresmoschini/hypermedia-api-poc/blob/master/src/ApiPoc/wwwroot/docs/documentation.md#hypermedia-relations)
 
 Links could represent different kinds of hypermedia factors (_Embedding Links_, _Outbound Links_, _Templated Links_, _Idempotent Links_ and _Non-Idempotent Links_), this information is defined in [hypermedia-relations](https://github.com/andresmoschini/hypermedia-api-poc/blob/master/src/ApiPoc/wwwroot/docs/documentation.md#hypermedia-relations) documentation, in JSON representions all of them are rendered in the same way, but in HTML representation _Embedding Links_ and _Outbound Links_ are rendered as `a` elements, and _Templated Links_, _Idempotent Links_ and _Non-Idempotent Links_ are rendered as _form_ elements.
 
@@ -54,28 +64,30 @@ Links could represent different kinds of hypermedia factors (_Embedding Links_, 
 
 There is a base model class that exposes a list of links. This list is filled on each controller explicitly, allowing to create them smartly. 
 
-    public class HomeController
+```csharp
+public class HomeController
+{
+    [HttpGet("/")]
+    [LinkDescription(Rel.Home, "Home")]
+    public NegotiatedResult Index()
     {
-        [HttpGet("/")]
-        [LinkDescription(Rel.Home, "Home")]
-        public NegotiatedResult Index()
+        var links = new List<Link>() {
+            Url.Link<Home>(x => x.Index(), Rel.Self),
+            Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), "Current account details"),
+            Url.Link<SubscribersController>(x => x.Index(currentAccount.Id, null), "Current account Subscribers")
+        };
+        if (currentUser.HasManyAccounts)
         {
-            var links = new List<Link>() {
-                Url.Link<Home>(x => x.Index(), Rel.Self),
-                Url.Link<AccountsController>(x => x.Detail(currentAccount.Id), "Current account details"),
-                Url.Link<SubscribersController>(x => x.Index(currentAccount.Id, null), "Current account Subscribers")
-            };
-            if (currentUser.HasManyAccounts)
-            {
-                links.Add(url.Link<AccountsController>(x => x.Index(), "All accounts"));
-            }
+            links.Add(url.Link<AccountsController>(x => x.Index(), "All accounts"));
+        }
 
-            return NegotiatedResult(new Home()
-            {
-                Links = links.ToArray()
-            }
+        return NegotiatedResult(new Home()
+        {
+            Links = links.ToArray()
         }
     }
+}
+```
 
 
 #### Links generation
@@ -88,6 +100,7 @@ On link representation we have enough information to render _Embedding Links_ an
 
 By the moment template resolution is not so smart, and requires changes on adding new relations:
 
+```html
     <ul class="links">
     @foreach (var link in plainLinks)
     {
@@ -118,7 +131,7 @@ By the moment template resolution is not so smart, and requires changes on addin
         </li>
     }
     </ul>
-
+```
 
 Errors
 ------
@@ -137,6 +150,7 @@ So, the idea is to have an own specific representation for errors.
 
 My first idea was to have actions result typed as expected object and dealing with error responses as exceptions mapping them to output representation within a filter, for example:
 
+```csharp
     public class AccountController
     {
         public Account Detail(int accountId)
@@ -151,9 +165,11 @@ My first idea was to have actions result typed as expected object and dealing wi
             }
         }
     }
+```
 
 But then I realized that sometimes errors are part of the normal flow, and also responses are not always representation of the same class of elements. So, I choose to loose result type in order to obtain flexibility:
 
+```csharp
     public class Account
     {
         public IActionResult Detail(int accountId)
@@ -168,12 +184,15 @@ But then I realized that sometimes errors are part of the normal flow, and also 
             }
         }
     }
+```
 
 
 Content type negotiation
 ------------------------
 
-As I explained before, the idea is to expose both JSON and HTML content. JSON results are simple JSON serializations of the object that represents the response. HTML, instead, have a some HTML layout based on the kind of represented model, well formed links using `a` or `form` elements depending of the link type. <!-- WORK IN PROGRESS --> 
+As I explained before, the idea is to expose both JSON and HTML content. JSON results are simple JSON serializations of the object that represents the response. HTML, instead, have a some HTML layout based on the kind of represented model, well formed links using `a` or `form` elements depending of the link type. 
+
+-- WORK IN PROGRESS -- 
 
 
 
