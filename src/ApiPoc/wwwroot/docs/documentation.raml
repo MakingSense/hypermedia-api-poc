@@ -1,0 +1,408 @@
+﻿#%RAML 0.8
+title: Hypermedia Email Marketing
+version: v0.0.1
+protocols: [ HTTPS ]
+mediaType: application/json
+
+documentation:
+  - title: Notes
+    content: |
+      #### Link relations
+
+      Vamos a usar link relations propias expresadas en forma de link a la especificación, por ejemplo `/rels/subscriber`. Además, podremos utilizar los [link relations standard de IANA](http://www.iana.org/assignments/link-relations/link-relations.xhtml), por ejemplo `item`, `self`, `parent` o `prev`.
+
+      #### JSON Schema information in headers
+
+      Las respuestas incluirán referencias al schema al final del header de content type, por ejemplo: `Content-Type: application/json; profile=/schemas/subscriber`, como se muestra en la sección 5.2.2. de [JSON Hyper-Schema: Hypertext definitions for JSON Schema](http://json-schema.org/latest/json-schema-hypermedia.html) 
+
+      #### Special folders
+
+      * `/rels`: Contendrá documentos sobre los link relations, indicando el significado en lenguage humano, el _HTTP method_ esperado, especificacion de la información requerida en lenguage humano y _content-type_ o _JSON Shema_, de la información devuelta en lenguage humano y _content-type_ o _JSON Shema_. Podrá incluir también información sobre posibles errores.
+      * `/schemas`: Contendrá los documentos de JSON schema de todas las posibles entradas y salidas.
+      * `/docs`: Contendrá documentos en lenguage humano sobre los tipos de entidades. Incluirán links a los recursos de la api relacionados, schemas y link relations.
+
+      #### Autenticación
+
+      Por ahora, se utilizará el `apikey` actualmente existente en Doppler. Se deberá incluir en     cada request siguiendo la especificacion de [Bearer Token Usage (RCF6750)](http://tools.ietf.org/html/rfc6750) o bien en el basic authentication [como hace GitHub](https://developer.github.com/v3/oauth/#use-the-access-token-to-access-the-api). Cualquiera de las siguientes opciones es válida:
+      * Incluir el `apikey` en el parámetro `access_token` _query string_ (solo recomendado para pruebas). Ejemplo: `https://testapi.com/?access_token=317F632427BCDA059B19EF241705BD2F`.
+      * Incluir el `apikey` en el header `Authorization` precedido por los literales `Bearer `, `OAuth2 `, `Token `, por ejemplo: `Authorization: token 317F632427BCDA059B19EF241705BD2F`.
+      * Incluir el `apikey` como password de basic authentication. Por ejemplo: `Authorization: basic BASE64("user:317F632427BCDA059B19EF241705BD2F")`.
+
+  - title: Some use cases
+    content: |
+      #### Test API connection
+
+      Usar autenticación por `apikey` para hacer un request a `/`. Si la _status code_ del response es `200`, la `apikey` utilizada es correcta.
+
+      ```
+      GET /
+      Authorization Token {apikey}
+      ```
+      
+      #### Get Server fields
+
+      Consultar por los campos
+
+      ```
+      GET /accounts/{accountId}/fields
+      ```
+
+      #### Add subscribers
+
+      1. Si es necesario, crear la lista en el servidor:
+          ```
+          POST /accounts/{accountId}/lists
+
+          {
+            listName: "NuevoNombre"
+          }
+          ```
+      2. Importar los subscribers en la lista correspondiente:
+          ```
+          POST /accounts/{accountId}/lists/members/import
+
+          {
+            items: [
+              {
+                emailAddress: "test@test.com",
+                fields: [
+                  { fieldName: "firstName", value: "Andres" },
+                  { fieldName: "lastName", value: "Test" },
+                ]
+              }, 
+              {
+                //...
+              }
+            ], 
+            callback: "http://myownserver.com/importtask"
+          }
+          ```
+      3. Esperar a recibir el callback de finalización de la importación. O también es posible verificar el estado de la tarea:
+          ```
+          GET /accounts/{accountId}/tasks/{taskId}
+          ```
+
+
+/:
+  description: |
+    API entry point, we encourage clients to use exposed links in this page to access resources.
+  get:
+    description: |
+      Devuelve un listado de los links más útils para el usuario actual.
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              {
+                message: "Welcome to Email Marketing Hypermedia API",
+                links: [
+                  { rel:"self", href:"/" },
+                  { rel:"/rels/lists-collection", href:"/accounts/username/lists" },
+                  { rel:"/rels/create-list", href:"/accounts/username/lists" },
+                  { rel:"/rels/update-list", href:"/accounts/username/lists/{listId}" },
+                  { rel:"/rels/delete-list", href:"/accounts/username/lists/{listId}" },
+                  { rel:"/rels/subscribers-collection", href:"/accounts/username/lists/{listId}/members" },
+                  { rel:"/rels/subscribe-to-list", href:"/accounts/username/lists/{listId}/members" },
+                  { rel:"/rels/import-to-list", href:"/accounts/username/lists/{listId}/members/import" },
+                  { rel:"/rels/remove-from-list", href:"/accounts/username/lists/{listId}/members/{emailMd5}" },
+                  { rel:"/rels/subscribers-collection", href:"/accounts/username/subscribers" },
+                  { rel:"/rels/create-subscriber", href:"/accounts/username/subscribers" },
+                  { rel:"/rels/subscriber", href:"/accounts/username/subscribers/{emailMd5}" },
+                  { rel:"/rels/unsubscribe", href:"/accounts/username/subscribers/{emailMd5}/unsubscribe" },
+                  { rel:"/rels/import", href:"/accounts/username/subscribers/import" },
+                  { rel:"/rels/tasks-collection", href:"/accounts/username/tasks" },
+                  { rel:"/rels/task", href:"/accounts/username/tasks/{taskId}" },
+                  { rel:"/rels/stop-task", href:"/accounts/username/tasks/{taskId}/stop" },
+                  { rel:"/rels/pause-task", href:"/accounts/username/tasks/{taskId}/pause" },
+                  { rel:"/rels/start-task", href:"/accounts/username/tasks/{taskId}/start" },
+                  { rel:"/rels/fields-collection", href:"/accounts/username/fields" },
+                  { rel:"/rels/create-field", href:"/accounts/username/fields" },
+                  { rel:"/rels/field", href:"/accounts/username/fields/{fieldId}" },
+                  { rel:"/rels/delete-field", href:"/accounts/username/fields/{fieldId}" }
+                ]
+              }
+
+
+/accounts/{accountId}/lists:
+  description: |
+    Colección de _Lists_ de _Subscribers_.
+  get:
+    description: |
+      Devuelve una _List_ paginada de _List_ con una información reducida de cada una.
+    queryParameters:
+      page: { type: integer }
+      per_page: { type: integer }
+  post:
+    description: | 
+      Crea una nueva _List_ vacía.
+
+  /{listId}:
+    description: |
+      Detalles de una _List_ específica.
+    get: 
+      description: |
+        Devuelve los detalles de una _List_, con información sumarizada de sus _Subscribers_.
+    put:
+      description: |
+        Actualiza los detalles de una _List_ (no los _Subscribers_).
+    delete:
+      description: |
+        Elimina una _List_ quitando de ella a sus _Subscribers_.
+
+    /members:
+      description: |
+        Colección de _Subscribers_ de una _List_ en particular.
+      get:
+        description: | 
+          Devuelve una _List_ paginada de los _Subscribers_ activos de una _List_ específica.
+        queryParameters:
+          page: { type: integer }
+          per_page: { type: integer }
+        responses:
+          200:
+            body:
+              application/json:
+                example: | 
+                  {
+                    items: [
+                      {
+                        emailAddress: "test@test.com",
+                        emailMd5: "d41d8cd98f00b204e9800998ecf8427e",
+                        listId: "5123",
+                        links: [
+                          { rel: "item /rels/subscriber", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" },
+                          { rel: "edit /rels/update-subscriber", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" },
+                          { rel: "/rels/unsubscribe", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe" },
+                          { rel: "/rels/remove-from-list", href: "/accounts/username/lists/5123/members" }
+                        ]
+                      },
+                      {
+                        // ...
+                      }
+                    ],
+                    pageSize: 20,
+                    currentPage: 3,
+                    itemsCount: 483,
+                    pagesCount: 25,
+                    links: [
+                      { rel: "self /rels/subscribers-collection", href: "/accounts/username/lists/5123/members?page=3" },
+                      { rel: "prev /rels/subscribers-collection", href: "/accounts/username/lists/5123/members?page=2" },
+                      { rel: "next /rels/subscribers-collection", href: "/accounts/username/lists/5123/members?page=4" },
+                      { rel: "first /rels/subscribers-collection", href: "/accounts/username/lists/5123/members" },
+                      { rel: "last /rels/subscribers-collection", href: "/accounts/username/lists/5123/members/page=25" },
+                      { rel: "/rels/specific-page /rels/subscribers-collection", href: "/accounts/username/lists/5123/members/page={page}" },
+                      { rel: "parent /rels/list", href: "/accounts/username/lists/5123" },
+                      { rel: "/rels/subscribe-to-list", href: "/accounts/username/lists/5123/members" },
+                      { rel: "/rels/import-to-list", href: "/accounts/username/lists/5123/import" }
+                    ]
+                  }
+      post:
+        description: |
+          Agrega un _Subscriber_ a la _List_. 
+          Si en la _Account_ no existe un _Subscriber_ con el _email address_, lo crea y lo asocia a la _List_. 
+          Si ya existe, actualiza sus datos y lo asocia a la _List_. Solo se actualizarán los datos incluidos en el payload. El único valor requerido es `emailAddress`.
+        body:
+          application/json:
+            example: |
+              {
+                emailAddress: "test@test.com",
+                fields: [
+                  { fieldName: "firstName", value: "Andres" },
+                  { fieldName: "lastName", value: "Test" },
+                  { fieldName: "City", value: "Mar del Plata" }
+                ]
+              }
+        responses:
+          201:
+            description: |
+              Devuelve un mensaje de confirmación de la creación del _Subscriber_ con el header y el link correspondiente al recurso creado.
+            headers:
+              Location: 
+                description: |
+                  URI del recurso creado.
+                example: |
+                  /accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e
+            body:
+              application/json:
+                example: |
+                  {
+                    message: "Subscriber successfully created"
+                    links: [
+                      { rel: "related /rels/subscriber", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" },
+                      { rel: "edit /rels/update-subscriber", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" },
+                      { rel: "/rels/unsubscribe", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe" }
+                    ]
+                  }
+          200:
+            description: |
+              Devuelve un mensaje de confirmación de la actualización del _Subscriber_ con el header y el link correspondiente al recurso.
+            headers:
+              Location: 
+                description: |
+                  URI del recurso actualizado.
+                example: |
+                  /subscribers/d41d8cd98f00b204e9800998ecf8427e
+            body:
+              application/json:
+                example: |
+                  {
+                    message: "Subscriber successfully updated"
+                    links: [
+                      { rel: "related /rels/subscriber", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" },
+                      { rel: "edit /rels/subscriber", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" },
+                      { rel: "/rels/unsubscribe", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" }
+                    ]
+                  }
+
+      /import:
+        description: |
+          Permite crear tareas para importar una colección de _Subscribers_ a una _List_ en particular.
+        post:
+          description: |
+            Importa un conjunto de _Subscribers_. Agrega los nuevos _Subscribers_ asociándolos a la _List_ y actualiza los preexistentes al igual que `POST /accounts/{accountId}/lists/members`.
+          body:
+            application/json:
+              example: |
+                {
+                  items: [
+                    {
+                      emailAddress: "test@test.com",
+                      fields: [
+                        { fieldName: "firstName", value: "Andres" },
+                        { fieldName: "lastName", value: "Test" }
+                      ]
+                    }, 
+                    {
+                      //...
+                    }
+                  ], 
+                  callback: "http://myownserver.com/importtask"
+                }
+            application/csv:
+              example: |
+                emailAddress, firstName, lastName
+                test@test.com, Andres, Test
+                test2@test.com, Juan, Perez
+                ...
+            application/x-www-form-urlencoded:
+              formParameters:
+                file:
+                  description: The file to be uploaded
+                  required: true
+                  type: file
+                content-type: 
+                  description: The file to be uploaded
+          responses:
+            201:
+              description: |
+                Devuelve un mensaje de confirmación de la creación de la tarea de importación, con un link al recurso para ver el detalle y progreso de la tarea.
+              headers:
+                Location: 
+                  description: |
+                    URI de la tarea creada.
+                  example: |
+                    /accounts/username/tasks/55421
+              body:
+                application/json:
+                  example: |
+                    {
+                      message: "Import task successfully created"
+                      links: [
+                        { rel: "related /rels/task", href: "/accounts/username/tasks/55421" },
+                        { rel: "edit /rels/update-task", href: "/accounts/username/tasks/55421" },
+                        { rel: "/rels/stop", href: "/accounts/username/tasks/55421/stop" }
+                        { rel: "/rels/pause", href: "/accounts/username/tasks/55421/pause" }
+                      ]
+                    }
+
+
+      /{emailMd5}:
+        description: |
+          Representación de la relación entre una _List_ y un _Subscriber_, **solo permite DELETE**.
+        delete:
+          description: |
+            Quita el _Subscriber_ de la _List_, **pero lo mantiene en activo**
+          responses:
+            200:
+              body:
+                application/json:
+                  example: |
+                    {
+                      message: "Subscriber successfully removed from list"
+                      links: [
+                        { rel: "related /rels/subscriber", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" },
+                        { rel: "edit /rels/subscriber", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e" },
+                        { rel: "/rels/unsubscribe", href: "/accounts/username/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe" }
+                      ]
+                    }
+
+
+/accounts/{accountId}/subscribers:
+  description: |
+    Colección de todos los _Subscribers_ de la _Account_.
+  get:
+    description: |
+      Devuelve la colección completa paginada de _Subscribers_, incluyendo todas las _Lists_, _Subscribers_ sin _Lists_, inactivos, etc.
+    queryParameters:
+      page: { type: integer }
+      per_page: { type: integer }
+      list: { type: integer }
+      status: { type: string }
+  post:
+    description: |
+      Agrega (o si ya existe actualiza) un _Subscriber_ según la misma lógica de `POST /accounts/{accountId}/lists/members`.
+  /{emailMd5}:
+    description: |
+      Representación de un _Subscriber_ en particular.
+    get: 
+      description: |
+        Obtiene la representación completa de un _Subscriber_
+    /unsubscribe: 
+      description: |
+        Marca el _Subscriber_ como inactivo, requiere información de la razón, etc.
+
+
+/accounts/{accountId}/tasks:
+  description: |
+    Colección de los _Tasks_ del sistema.
+  get:
+    description: |
+      Devuelve la colección de _Tasks_ paginada y filtrable por estado, u otros campos.
+  /{taskId}:
+    description: |
+      Detalles de una _Task_ en particular. 
+    get:
+      description: |
+        Devuelve los detalles de una _Task_ en particular con los links correspondientes a las posibles operaciones sobre ella y los recursos relacionados, por ejemplo _Lists_.
+    /stop: 
+      description: |
+        Permite detener y cancelar la _Task_.
+      post:
+    /pause: 
+      description: |
+        Permite pausar _Task_ con la idea de continuarla luego.
+      post:
+    /start:
+      description: |
+        Permite iniciar una _Task_ no iniciada o continuar una pausada.
+      post:
+
+/accounts/{accountId}/fields:
+  description: |
+    Listado de campos asociables a los _Subscribers_.
+  get:
+    description: |
+      Devuelve la colección de fields incluyendo los standard y los custom fields.
+  post:
+    description: |
+      Permite agregar un nuevo custom field.
+  /{fieldId}:
+    description: |
+      Detalles de un campo en particular.
+    get:
+      description: |
+        Devuelve la representación completa de un field o custom field.
+    delete:
+      description: |
+        Permite eliminar un custom fields.
