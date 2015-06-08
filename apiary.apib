@@ -1,0 +1,1269 @@
+FORMAT: 1A
+HOST: http://amoschinipoc.apiblueprint.org/
+
+# Email Marketing API
+
+Email Marketing API is a Hypermedia API for allowing consumers to manage an email marketing application.
+
+## Group Conventions and references
+
+#### Links
+
+Each response and collection item will contain a `_links` property as array of `link` objects.
+
+Each `link` has `href` field (an URI), and optional `description` field and a `rel` field to describe the link role, expected payload, return format. `rel` field could contains one or more _relation types_ separated by white spaces.
+
+A valid _relation type_ could be any [IANA standard link relation type](http://www.iana.org/assignments/link-relations/link-relations.xhtml), like `item`, `self`, `parent` o `prev`. Or it also could be an URI to the specification, for example: `/rels/subscriber` or `/rels/lists-collection`.
+
+#### JSON Schemas
+
+_Relation type_ specifications will include [JSON schema](http://json-schema.org/) documents for expected and result payloads. 
+
+Also, `application/json` responses will include a Schema reference in _content type_ header, for example: `Content-Type: application/json; profile=/schemas/subscriber` (in the same way that it is done [JSON Hyper-Schema: Hypertext definitions for JSON Schema - Section 5.2.2](http://json-schema.org/latest/json-schema-hypermedia.html)).
+
+#### Special folders
+
+* `/models`: Will contain human readable information about models types, like `/models/subscriber` or `/models/lists-collection`.
+* `/errors`: Will contain human readable description about expected problem types, like `/errors/400.38-duplicated-name`.
+* `/rels`: Will contain human readable specification about custom _relation types_, including expected _HTTP method_ and _content-type_ or _JSON Shema_ of expected and result payloads. It could also contain information about possible errors. For example: `/rels/subscriber` or `/rels/lists-collection`.
+* `/schemas`: Will contain _JSON schema_ documents for all possible input and output `application/json` payloads. For example: `/schemas/subscriber`.
+
+#### Authentication
+
+By the moment, we will still use current `apikey` generated in [Doppler API control panel section in Doppler](http://app2.fromdoppler.com/ControlPanel/AdvancedPreferences/GetDopplerApiInformation).
+
+To authenticate your requests you can follow [Bearer Token Usage (RCF6750)](http://tools.ietf.org/html/rfc6750) or also include it in basic authentication password field [like GitHub does](https://developer.github.com/v3/oauth/#use-the-access-token-to-access-the-api). 
+
+Basically, the options are the follow:
+
+* Include `apikey` in `access_token` parameter in _query string_ (not recommended for production usage). 
+
+    ```
+    GET https://testapi.com/?access_token=317F632427BCDA059B19EF241705BD2F
+    ```
+
+* Include `apikey` in `Authorization` header with some of these literals: `Bearer `, `OAuth2 `, `Token `.
+
+    ```
+    GET https://testapi.com/
+    Authorization: token 317F632427BCDA059B19EF241705BD2F`
+    ```
+
+* Include `apikey` as basic authentication password.
+
+    ```
+    GET https://testapi.com/
+    Authorization: basic dXNlcjozMTdGNjMyNDI3QkNEQTA1OUIxOUVGMjQxNzA1QkQyRg==
+    ```
+
+    _`dXNlcjozMTdGNjMyNDI3QkNEQTA1OUIxOUVGMjQxNzA1QkQyRg==` corresponds to `BASE64("user:317F632427BCDA059B19EF241705BD2F")`_.
+
+
+## Group Indexes
+
+See [Message Model](/models/message).
+
+# Hypermedia Email Marketing API Root [/]
+
+This resource does not have any attributes. Instead it offers the initial
+API affordances in the form of the links in the JSON body.
+
+It is recommend to follow the "url" link values,
+[Link](https://tools.ietf.org/html/rfc5988) or Location headers where
+applicable to retrieve resources. Instead of constructing your own URLs,
+to keep your client decoupled from implementation details.
+
+## Retrieve the General Entry Point [GET] 
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Headers
+
+        ```
+        Cache-Control: private, max-age=86400
+        ```
+
+    + Body
+
+        ```
+        {
+          "message": "Welcome to Email Marketing Hypermedia API",
+          "_links": [
+            { "href": "/", "rel": "self index", "description": "General Index" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+# Account Index [/accounts/{accountName}]
+
+This resource does not have any attributes. Instead it offers the initial
+API affordances in the form of the links in the JSON body.
+
+It is recommend to follow the “url” link values,
+[Link](https://tools.ietf.org/html/rfc5988) or Location headers where
+applicable to retrieve resources. Instead of constructing your own URLs,
+to keep your client decoupled from implementation details.
+
+## Retrieve Account Entry Point [GET] 
+
+**`To be implemented in first release`**
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Headers
+
+        ```
+        Cache-Control: private, max-age=86400
+        ```
+
+    + Body
+
+        ```
+        {
+          "message": "Welcome to Email Marketing Hypermedia API",
+          "_links": [
+            { "href": "/", "rel": "parent index", "description": "General Index" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "self /rels/account-home", "description": "Account Index" },
+
+            { "href": "/accounts/jsmith@mail.com/lists", "rel": "/rels/lists-collection", "description": "Lists" },
+            { "href": "/accounts/jsmith@mail.com/lists", "rel": "/rels/create-list", "description": "Create a list" },
+            { "href": "/accounts/jsmith@mail.com/lists/{listId}", "rel": "edit", "description": "Edit a list" },
+            { "href": "/accounts/jsmith@mail.com/lists/{listId}", "rel": "delete", "description": "Delete a list" },
+            { "href": "/accounts/jsmith@mail.com/lists/{listId}/subscribers". "rel": "/rels/subscribers-collection", "description": "Subscribers in a list" },
+            { "href": "/accounts/jsmith@mail.com/lists/{listId}/subscribers", "rel": "/rels/subscribe-to-list", "description": "Subscribe" },
+            { "href": "/accounts/jsmith@mail.com/lists/{listId}/subscribers/import", "rel": "/rels/import-to-list", "description": "Import subscribers to a list" },
+            { "href": "/accounts/jsmith@mail.com/lists/{listId}/subscribers/{emailMd5}", "rel": "/rels/remove-from-list", "description": "Remove a subscriber from a list" },
+
+            { "href": "/accounts/jsmith@mail.com/subscribers", "rel": "/rels/subscribers-collection", "description": "Subscribers in account" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/{emailMd5}", "rel": "/rels/subscriber", "description": "Subscriber details" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/{emailMd5}", "rel": "/rels/edit-subscriber", "description": "Edit subscriber" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/{emailMd5}/unsubscribe", "rel": "/rels/unsubscribe", "description": "Unsubscribe" },
+
+            { "href": "/accounts/jsmith@mail.com/tasks", "rel": "/rels/tasks-collection", "description": "Tasks" },
+            { "href": "/accounts/jsmith@mail.com/tasks/{taskId}", "rel": "/rels/task", "description": "Task details" },
+            { "href": "/accounts/jsmith@mail.com/tasks/{taskId}/stop", "rel": "/rels/stop-task", "description": "Stop task" },
+            { "href": "/accounts/jsmith@mail.com/tasks/{taskId}/pause", "rel": "/rels/pause-task", "description": "Pause task" },
+            { "href": "/accounts/jsmith@mail.com/tasks/{taskId}/start", "rel": "/rels/start-task", "description": "Start task" },
+
+            { "href": "/accounts/jsmith@mail.com/fields", "rel": "/rels/fields-collection", "description": "Fields" },
+            { "href": "/accounts/jsmith@mail.com/fields", "rel": "/rels/create-field", "description": "Create field" },
+            { "href": "/accounts/jsmith@mail.com/fields/{fieldId}", "rel": "/rels/edit-field", "description": "Edit field" },
+            { "href": "/accounts/jsmith@mail.com/fields/{fieldId}", "rel": "/rels/delete-field", "description": "Delete field" }
+          ]
+        }
+        ```
+
+## Group Lists
+
+Resources related to _Subscribers Lists_. See [List Model](/models/list).
+
+### Lists Collection [/accounts/{accountName}/lists]
+
+Collection of all _Subscribers Lists_ for a specified _Account_.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_.
+
+#### Get Lists [GET /accounts/{accountName}/lists{?page}{?per_page}]
+
+**`To be implemented in first release`**
+
+Returns a _paginated_ collection of _Lists_ into selected _Account_.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_.
+    + page: `2` (optional, number) - The number of page to return.
+        + Default: `1`
+    + per_page: `15` (optional, number) - Number of items in each page (max value: 50, min value:  5).
+        + Default: `20`
+
++ Response 200 (application/json; profile=/schemas/lists-collection)
+
+    + Body
+
+        ```
+        {
+          "items": [
+            { 
+              "listId": 345,
+              "name": "North Section", 
+              "subcribersQuantity": 34,
+              "_links": [
+                { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "/rels/list", "description": "List details" },
+                { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "edit /rels/edit-list", "description": "Edit list" },
+                { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "delete", "description": "Delete list" },
+              ]
+            }
+            //, ...
+          ],
+          "pageSize": 20,
+          "currentPage": 2,
+          "itemsCount": 483,
+          "pagesCount": 25,
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/lists?page=2", "rel":  "self /rels/lists-collection", "description": "Current page" },
+            { "href": "/accounts/jsmith@mail.com/lists", "rel":  "first prev /rels/lists-collection", "description": "First page" },
+            { "href": "/accounts/jsmith@mail.com/lists?page=3", "rel":  "next /rels/lists-collection", "description": "Next page" },
+            { "href": "/accounts/jsmith@mail.com/lists?page=25", "rel":  "last /rels/lists-collection", "description": "Last page" },
+            { "href": "/accounts/jsmith@mail.com/lists?page={page}", "rel":  "/rels/specific-page /rels/lists-collection", "description": "Go to page" },
+            { "href": "/accounts/jsmith@mail.com/lists", "rel":  "/rels/create-list", "description": "Create a new list" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+#### Create a list [POST]
+
+**`To be implemented in first release`**
+
++ Attributes
+    + name: `TestList` (string) - Name of the new list.
+    + active: `true` (string, optional) - Status of the list.
+        + Default: `true`
+
++ Request (application/json)
+
+    + Body
+
+        ```
+        {
+          "name": "TestList",
+          "active": true
+        }
+
+        ```
+
++ Response 201 (application/json; profile=/schemas/message)
+
+    + Headers
+
+        ```
+        Location: /accounts/jsmith@mail.com/lists/345
+        ```
+
+    + Body
+
+        ```
+        {
+          "message": "List successfully created",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "related /rels/list", "description": "Created list" },
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "delete", "Delete list" },
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "edit rels/edit-list", "description": "Edit list" },
+            { "href": "/accounts/jsmith@mail.com/lists", "rel":  "parent /rels/lists-collection", "description": "Lists" },
+            { "href": "/accounts/jsmith@mail.com/lists", "rel":  "/rels/create-list", "description": "Create a new list" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
++ Response 400 (application/problem+json)
+
+    + Body
+
+        ```
+        {
+          "type": "/errors/400.38-duplicated-name",
+          "title": "The name already exists for another resource.",
+          "detail": "Already exists an active list with the name 'TestList'.",
+          "status": 400,
+          "errorCode": 38
+        }
+        ```
+
+### List [/accounts/{accountName}/lists/{listId}]
+
+Details of a specific _Subscribers List_.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + listId: `345` (required, string) - Selected _List_ identifier.
+
+#### Get a List [GET]
+
+Gets details about an specific _Subscribers List_ and some summarized information about its _Subscribers_.
+
++ Response 200 (application/json; profile=/schemas/list)
+
+    + Body
+
+        ```
+        {
+          "listId": "345",
+          "name": "TestList",
+          "subcribersQuantity": 34,
+          "active": true,
+          "creation-date": "2015-02-04T10:45:12+03:00",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "self /rels/list" },
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "delete", "description": "Delete list" },
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "edit /rels/edit-list", "description": "Edit list" },
+            { "href": "/accounts/jsmith@mail.com/lists", "rel":  "parent /rels/lists-collection", "description": "Lists" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+
+#### Edit a List [PUT]
+
+Updates _Subscribers List_ values (not _Subscribers_ nor summarized data).
+
++ Attributes
+    + name: `TestList` (string) - Name of the new list.
+    + active: `true` (string) - Status of the list.
+
++ Request (application/json)
+
+    + Body
+
+        ```
+        {
+          "name": "TestList-Old",
+          "active": false
+        }
+
+        ```
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "List updated successfully",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "related /rels/list", "description": "Updated list" },
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "delete", "description": "Delete list" },
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "edit /rels/edit-list", "description": "Edit list" },
+            { "href": "/accounts/jsmith@mail.com/lists", "rel":  "parent /rels/lists-collection", "description": "Lists" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+#### Delete a List [DELETE]
+
+Deletes a _Subscribers List_ removing the _Subscribers_ but not deleting them.
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "List deleted successfully",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/lists", "rel":  "parent /rels/lists-collection", "description": "Lists" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+## Group Subscribers
+
+See [Subscriber Model](/docs/subscriber).
+
+### Subscribers of a List [/accounts/{accountName}/lists/{listId}/subscribers]
+
+Represents the active _Subscribers_ associated to a _Subscribers List_.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + listId: `345` (required, string) - Selected _List_ identifier.
+
+#### Get List Subscribers [GET /accounts/{accountName}/lists/{listId}/subscribers{?page}{?per_page}]
+
+Returns a _paginated_ collection of _Subscribers_ related to selected _List_.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + listId: `345` (required, string) - Selected _List_ identifier.
+    + page: `2` (optional, number) - The number of page to return.
+        + Default: `1`
+    + per_page: `15` (optional, number) - Number of items in each page (max value: 50, min value:  5).
+        + Default: `20`
+
++ Response 200 (application/json; profile=/schemas/subscribers-collection)
+
+    + Body
+
+        ```
+        {
+          "items": [
+            {
+              "emailAddress": "jsmith@mail.com",
+              "emailMd5": "d41d8cd98f00b204e9800998ecf8427e",
+              "belongsToLists": [ "345", "346" ],
+              "_links": [
+                { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "item /rels/subscriber", "description": "Subscriber details" },
+                { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "edit /rels/edit-subscriber", "description": "Edit subscriber" },
+                { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe", "rel": "/rels/unsubscribe", "description": "Unsubscribe" },
+                { "href": "/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "/rels/remove-from-list", "description": "Remove from current list" }
+              ]
+            }
+            //, ...
+          ],
+          "pageSize": 20,
+          "currentPage": 2,
+          "itemsCount": 483,
+          "pagesCount": 25,
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers?page=2", "rel":  "self /rels/subscribers-collection", "description": "Current page" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", "rel":  "first prev /rels/subscribers-collection", "description": "First page" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers?page=3", "rel":  "next /rels/subscribers-collection", "description": "Next page" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers?page=25", "rel":  "last /rels/subscribers-collection", "description": "Last page" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers?page={page}", "rel":  "/rels/specific-page /rels/subscribers-collection", "description": "Go to page" },
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "parent /rels/list", "description": "Parent List" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", "rel": "/rels/subscribe-to-list", "description": "Subscribe" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/import", "rel": "/rels/import-to-list", "description": "Import subscribers" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+#### Subscribe to List [POST]
+
+**`To be implemented in first release`**
+
+Associate a _Subscriber_ to the _List_. If _Subscriber's email address_ already exists in current _Account_, the existent _Subscriber_ is updated. Only data included in the payload is applied. 
+
++ Attributes
+    + emailAddress: test@mail.com (string, required) - Subscriber email.
+    + fields: [ { fieldName: "firstName", value: "Andres" } ] (array, optional) - List of fields to set or unset (with empty value).
+
++ Request (application/json)
+
+    + Body
+
+        ```
+        {
+          "name": "test@mail.com"
+        }
+
+        ```
+
++ Response 201 (application/json; profile=/schemas/message)
+
+    + Headers
+
+        ```
+        Location: /accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e
+        ```
+
+    + Body
+
+        ```
+        {
+          "message": "Subscriber successfully created",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel":  "related /rels/subscriber", "description": "Created subscriber" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel":  "/rels/unsubscribe", "description": "Unsubscribe" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel":  "/rels/remove-from-list", "description": "Remove from list 345" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", "rel":  "parent /rels/subscribers-collection", "description": "Other subscribers" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", "rel":  "/rels/subscribe-to-list", "description": "Subscribe another" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Headers
+
+        ```
+        Location: /accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e
+        ```
+
+    + Body
+
+        ```
+        {
+          "message": "Subscriber successfully updated",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel":  "related /rels/subscriber", "description": "Subscribers" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel":  "/rels/unsubscribe", "description": "Unsubscribe" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel":  "/rels/remove-from-list", "description": "Remove from list 345" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", "rel": "parent /rels/subscribers-collection", "description": "List subscribers" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", "rel":  "/rels/subscribe-to-list", "description": "Subscribe" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
++ Response 400 (application/problem+json)
+
+    + Body
+
+        ```
+        {
+          "type": "/errors/400.24-missing-data",
+          "title": "Required data is missing.",
+          "detail": "To add a subscriber to a list email address is required.",
+          "status": 400,
+          "errorCode": 24
+        }
+        ```
+
+#### Import Subscribers to List [POST /accounts/{accountName}/lists/{listId}/subscribers/import]
+
+**`To be implemented in first release`** (Only JSON input)
+
+Creates a _Task_ to import a collection of _Subscribers_ to a specified _List_. Items with new email address will be added as new subscribers, and items with already existent email address will be updated. Only will be updated the data included in the payload.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + listId: `345` (required, string) - Selected _List_ identifier.
+
++ Request JSON (application/json)
+
+    + Body
+
+        ```
+        {
+          "items": [
+            {
+              "emailAddress": "jsmith@mail.com",
+              fields: [
+                { "fieldName": "firstName", "value": "John" },
+                { "fieldName": "lastName", "value": "Smith" }
+              ]
+            }
+            //, ...
+          ], 
+          "callback": "http://myownserver.com/importtask"
+        }
+        ```
+
++ Request CSV (application/csv)
+
++ Request Legacy Excel (application/vnd.ms-excel)
+
++ Request Excel (application/vnd.openxmlformats-officedocument.spreadsheetml.sheet)
+
++ Request HTML Form (x-www-form-urlencoded)
+
+    + Attributes
+        + file - Attached file.
+        + content-type: `true` (string, optional) - ContentType of attached file.
+
+
++ Response 202 (application/json; profile=/schemas/message)
+
+    + Headers
+
+        ```
+        Location: /accounts/jsmith@mail.com/tasks/567
+        ```
+
+    + Body
+
+        ```
+        {
+          "message": "Import task successfully created",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/tasks/567", "rel":  "related /rels/task", "description": "Created task" },
+            { "href": "/accounts/jsmith@mail.com/tasks/567/cancel", "rel":  "related /rels/cancel-task", "description": "Cancel task" },
+            { "href": "/accounts/jsmith@mail.com/lists/345", "rel":  "parent /rels/list", "description": "Related list" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+### Subscribers Collection [/accounts/{accountName}/subscribers]
+
+Collection of all _Subscribers_ into an specific _Account_.
+
+#### Get subscribers [GET /accounts/{accountName}/subscribers{?page}{?per_page}{?status}]
+
+Returns a _paginated_ collection of _Subscribers_ related to selected _Account_. It includes active and inactive _Subscribers_ and could be filtered by status.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + page: `2` (optional, number) - The number of page to return.
+        + Default: `1`
+    + per_page: `15` (optional, number) - Number of items in each page (max value: 50, min value:  5).
+        + Default: `20`
+    + status: `active` (optional, enum[string]) - Returns only _Subscribers_ with specified status.
+        + `active`
+        + `soft-bounce`
+        + `hard-bounce`
+        + `unsubscribed-by-user`
+        + `unsubscribed-by-admin`
+        + `never-open`
+
++ Response 200 (application/json; profile=/schemas/subscribers-collection)
+
+    + Body
+
+        ```
+        {
+          "items": [
+            {
+              "emailAddress": "jsmith@mail.com",
+              "emailMd5": "d41d8cd98f00b204e9800998ecf8427e",
+              "belongsToLists": [ "345", "346" ],
+              "_links": [
+                { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "item /rels/subscriber", "description": "Subscriber details" },
+                { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "edit /rels/edit-subscriber", "description": "Edit subscriber" },
+                { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe", "rel": "/rels/unsubscribe", "description": "Unsubscribe" },
+                { "href": "/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "/rels/remove-from-list", "description": "Remove from list 345" },
+                { "href": "/accounts/jsmith@mail.com/lists/346/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "/rels/remove-from-list", "description": "Remove from list 346" }
+              ]
+            }
+            //, ...
+          ],
+          "pageSize": 20,
+          "currentPage": 2,
+          "itemsCount": 483,
+          "pagesCount": 25,
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/subscribers?page=2", "rel":  "self /rels/subscribers-collection", "description": "Current page" },
+            { "href": "/accounts/jsmith@mail.com/subscribers", "rel":  "first prev /rels/subscribers-collection", "description": "First page" },
+            { "href": "/accounts/jsmith@mail.com/subscribers?page=3", "rel":  "next /rels/subscribers-collection", "description": "Next page" },
+            { "href": "/accounts/jsmith@mail.com/subscribers?page=25", "rel":  "last /rels/subscribers-collection", "description": "Last page" },
+            { "href": "/accounts/jsmith@mail.com/subscribers?page={page}", "rel":  "/rels/specific-page /rels/subscribers-collection", "description": "Go to page" },
+            { "href": "/accounts/jsmith@mail.com", "rel":  "parent /rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+### Subscriber [/accounts/{accountName}/subscribers/{emailMd5}]
+
+Specific _Subscriber_ identified by the application of MD5 hash function on its email address.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + emailMd5: `d41d8cd98f00b204e9800998ecf8427e` (required, string) - Selected _Subscriber_ identifier (`hashMD5(emailAddress)`).
+
+### Get a Subscriber [GET]
+
+Gets details about an specific _Subscriber_.
+
++ Response 200 (application/json; profile=/schemas/subscriber)
+
+    + Body
+
+        ```
+        {
+          "emailAddress": "jsmith@mail.com",
+          "emailMd5": "d41d8cd98f00b204e9800998ecf8427e",
+          "belongsToLists": [ "345", "346" ],
+          "status": "active",
+          "fields": [
+            { "fieldName": "firstName", "value": "John", "type": "string" },
+            { "fieldName": "lastName", "value": "Smith", "type": "string" },
+            { "fieldName": "income", "value": "450000", "type": "number" }
+          ],
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "self /rels/subscriber" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "edit /rels/edit-subscriber", "description": "Edit" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe", "rel": "/rels/unsubscribe", "description": "Unsubscribe" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "/rels/remove-from-list", "description": "Remove from list 345" },
+            { "href": "/accounts/jsmith@mail.com/lists/346/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "/rels/remove-from-list", "description": "Remove from list 346" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+### Edit a Subscriber [PUT]
+
+Edits a _Subscriber_. It expects full representation of the _Subscriber_.
+
++ Request (application/json)
+
+    + Body
+
+        ```
+        {
+          "emailAddress": "jsmith@mail.com",
+          "belongsToLists": [ "345", "346", "247" ],
+          "status": "active",
+          "fields": [
+            { "fieldName": "firstName", "value": "John" },
+            { "fieldName": "lastName", "value": "Smith" },
+            { "fieldName": "annualIncome", "value": "450000" }
+          ]
+        }
+        ```
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "Subscriber updated successfully",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "related /rels/subscriber", "description": "Updated subscriber" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "edit /rels/edit-subscriber", "description": "Edit subscriber" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe", "rel": "/rels/unsubscribe", "description": "Unsubscriber" },
+            { "href": "/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "/rels/remove-from-list", "description": "Remove from list 345" },
+            { "href": "/accounts/jsmith@mail.com/lists/346/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "/rels/remove-from-list", "description": "Remove from list 346" },
+            { "href": "/accounts/jsmith@mail.com/lists/247/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "/rels/remove-from-list", "description": "Remove from list 247" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+### Unsubscribe [POST /accounts/{accountName}/subscribers/{emailMd5}/unsubscribe]
+
+Mark a _Subscriber_ as _unsubscribed_, it expects an special payload with reason and other unsubscription information.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + emailMd5: `d41d8cd98f00b204e9800998ecf8427e` (required, string) - Selected _Subscriber_ identifier (`hashMD5(emailAddress)`).
+
++ Request (application/json)
+
+    + Body
+
+        ```
+        {
+          "reason": "You are too annoying!"
+        }
+        ```
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "Subscriber unsubscribed successfully",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "related /rels/subscriber", "description": "Unsubscribed subscriber" },
+            { "href": "/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e", "rel": "edit /rels/edit-subscriber", "description": "Edit subscriber" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+## Group Fields
+
+Represents the possible fields that a _Subscriber_ could have, including predefined and custom fields. See [Field Model](/models/field).
+
+### Fields Definition Collection [/accounts/{accountName}/fields]
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+
+#### Get Fields [GET]
+
+**`To be implemented in first release`**
+
+Gets all field definitions.
+
++ Response 200 (application/json; profile=/schemas/fields-collection)
+
+    + Body
+
+        ```
+        {
+          "items": [
+            {
+              "fieldName": "firstName",
+              "label": "First Name",
+              "type": "string",
+              "predefined": true,
+              "_links": [
+                { "href": "/accounts/jsmith@mail.com/fields/firstName", "rel": "item /rels/field" },
+                { "href": "/accounts/jsmith@mail.com/fields/firstName", "rel": "/rels/edit-field", "description": "Edit field" }
+              ]
+            },
+            {
+              "fieldName": "lastName",
+              "label": "Last Name",
+              "type": "string",
+              "predefined": true,
+              "_links": [
+                { "href": "/accounts/jsmith@mail.com/fields/lastName", "rel": "item /rels/field" },
+                { "href": "/accounts/jsmith@mail.com/fields/lastName", "rel": "/rels/edit-field", "description": "Edit field" }
+              ]
+            },
+            {
+              "fieldName": "income",
+              "label": "Annual Income",
+              "type": "number",
+              "predefined": false,
+              "_links": [
+                { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "item /rels/field" },
+                { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "/rels/edit-field", "description": "Edit field" },
+                { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "/rels/delete-field", "description": "Delete field" }
+              ]
+            }
+          ],
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/", "rel": "parent /rels/account-home", "description": "Account index" },
+            { "href": "/accounts/jsmith@mail.com/fields", "rel": "self /rels/fields-collection", "description": "Fields" },
+            { "href": "/accounts/jsmith@mail.com/fields", "rel": "self /rels/add-field", "description": "Create a new field" }
+          ]
+        }
+        ```
+
+#### Create a Field [POST]
+
+Creates a new custom field.
+
++ Request (application/json)
+
+    + Body
+
+        ```
+        {
+          "fieldName": "city",
+          "label": "City",
+          "type": "string"
+        }
+        ```
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "Field created successfully",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/fields", "rel": "parent /rels/fields-collection", "description": "Fields" },
+            { "href": "/accounts/jsmith@mail.com/fields/city", "rel": "related /rels/field", "description": "Created field" },
+            { "href": "/accounts/jsmith@mail.com/fields/city", "rel": "/rels/edit-field", "description": "Edit field" },
+            { "href": "/accounts/jsmith@mail.com/fields/city", "rel": "/rels/delete-field", "description": "Delete field" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+### Field [/accounts/{accountName}/fields/{fieldName}]
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + fieldName: `income` (required, string) - Selected Field
+
+#### Get a Field [GET]
+
+Gets a specified field definition.
+
++ Response 200 (application/json; profile=/schemas/field)
+
+    + Body
+
+        ```
+        {
+          "fieldName": "income",
+          "label": "Annual Income",
+          "type": "number",
+          "predefined": false,
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "self /rels/field" },
+            { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "/rels/edit-field", "description": "Edit field" },
+            { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "/rels/delete-field", "description": "Delete field" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+#### Edit a Field [PUT]
+
+Edit a field definition. Only editable fields are required.
+
++ Request (application/json)
+
+    + Body
+
+        ```
+        {
+          "label": "Income"
+        }
+        ```
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "Field updated successfully",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/fields", "rel": "parent /rels/fields-collection", "description": "Fields" },
+            { "href": "/accounts/jsmith@mail.com/fields/city", "rel": "related /rels/field", "description": "Updated field" },
+            { "href": "/accounts/jsmith@mail.com/fields/city", "rel": "/rels/edit-field", "description": "Edit field" },
+            { "href": "/accounts/jsmith@mail.com/fields/city", "rel": "/rels/delete-field", "description": "Delete field" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+#### Delete a Field [DELETE]
+
+Deletes a field definition. Only custom fields are deletable. When a field definition is deleted, all data related to that field in _Subscribers_ is removed.
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "Field deleted successfully",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/fields", "rel": "parent /rels/fields-collection", "description": "Fields" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+## Group Tasks
+
+See [Task Model](/models/task).
+
+### Tasks Collection [/accounts/{accountName}/tasks]
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+
+#### Get Tasks [GET /accounts/{accountName}/tasks{?page}{?per_page}{?status}]
+
+Returns a _paginated_ collection of _Tasks_ related to selected _Account_. It includes active and inactive _Tasks_ and could be filtered by status.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + page: `2` (optional, number) - The number of page to return.
+        + Default: `1`
+    + per_page: `15` (optional, number) - Number of items in each page (max value: 50, min value:  5).
+        + Default: `20`
+    + status: `queued` (optional, enum[string]) - Returns only _Tasks_ with specified status.
+        + `queued`
+        + `in-progress`
+        + `canceled`
+        + `paused`
+        + `done`
+        + `error`
+
++ Response 200 (application/json; profile=/schemas/tasks-collection)
+
+    + Body
+
+        ```
+        {
+          "items": [
+            {
+              "taskId": "567",
+              "status": "in-progress",
+              "_links": [
+                { "href": "/accounts/jsmith@mail.com/tasks/567", "rel": "item /rels/task", "description": "Task details" },
+                { "href": "/accounts/jsmith@mail.com/tasks/567/cancel", "rel": "item /rels/cancel-task", "description": "Cancel task" }
+              ]
+            }
+            //, ...
+          ],
+          "pageSize": 20,
+          "currentPage": 2,
+          "itemsCount": 483,
+          "pagesCount": 25,
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/tasks/?page=2", "rel":  "self /rels/tasks-collection", "description": "Current page" },
+            { "href": "/accounts/jsmith@mail.com/tasks", "rel":  "first prev /rels/tasks-collection", "description": "First page" },
+            { "href": "/accounts/jsmith@mail.com/tasks?page=3", "rel":  "next /rels/tasks-collection", "description": "Next page" },
+            { "href": "/accounts/jsmith@mail.com/tasks?page=25", "rel":  "last /rels/tasks-collection", "description": "Last page" },
+            { "href": "/accounts/jsmith@mail.com/tasks?page={page}", "rel":  "/rels/specific-page /rels/tasks-collection", "description": "Go to page" },
+            { "href": "/accounts/jsmith@mail.com", "rel":  "parent /rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+### Task [/accounts/{accountName}/tasks/{taskId}]
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + taskId: `567` (required, string) - Selected _Account_ identifier.
+
+#### Get a Task [GET]
+
+**`To be implemented in first release`**
+
+Gets details of a specified _Task_ including links to related actions and resources.
+
++ Response 200 (application/json; profile=/schemas/task)
+
+    + Body
+
+        ```
+        {
+          "taskId": "567",
+          "status": "in-progress",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/tasks/567", "rel": "self /rels/task" },
+            { "href": "/accounts/jsmith@mail.com/tasks/567/cancel", "rel": "item /rels/cancel-task", "description": "Cancel task" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+#### Cancel a Task [POST /accounts/{accountName}/tasks/{taskId}/cancel]
+
+Cancels task execution. **Already applied changes are not reverted** (TBD).
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + taskId: `567` (required, string) - Selected _Account_ identifier.
+
++ Request (application/json)
+
+    + Body
+
+        ```
+        {
+          "message": "Canceled because data was wrong."
+        }
+        ```
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "Task successfully canceled.",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/tasks", "rel": "parent /rels/tasks-collections", "description": "Tasks" },
+            { "href": "/accounts/jsmith@mail.com/tasks/567", "rel": "related /rels/task", "description": "Canceled task" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+#### Pause a Task [POST /accounts/{accountName}/tasks/{taskId}/pause]
+
+Pauses task execution allowing to continue later.
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + taskId: `567` (required, string) - Selected _Account_ identifier.
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "Task successfully paused.",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/tasks", "rel": "parent /rels/tasks-collections", "description": "Tasks" },
+            { "href": "/accounts/jsmith@mail.com/tasks/567", "rel": "related /rels/task", "description": "Paused task" },
+            { "href": "/accounts/jsmith@mail.com/tasks/567/start", "rel": "related /rels/start-task", "description": "Start task" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+#### Start a Task [POST /accounts/{accountName}/tasks/{taskId}/start]
+
+Start task execution (or continues paused task).
+
++ Parameters
+    + accountName: `jsmith@mail.com` (required, string) - Selected _Account_ identifier.
+    + taskId: `567` (required, string) - Selected _Account_ identifier.
+
++ Response 200 (application/json; profile=/schemas/message)
+
+    + Body
+
+        ```
+        {
+          "message": "Task successfully started.",
+          "_links": [
+            { "href": "/accounts/jsmith@mail.com/tasks", "rel": "parent /rels/tasks-collections", "description": "Tasks" },
+            { "href": "/accounts/jsmith@mail.com/tasks/567", "rel": "related /rels/task", "description": "Started task" },
+            { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+          ]
+        }
+        ```
+
+## Group Use Cases Examples
+
+#### Test API connection
+
+Use `apikey` authentication to request [`/accounts/{accountName}`](#indexes-account-index-get). If status code is `200` then `apikey` is fine.
+
+**Request:**
+
+```
+GET /accounts/jsmith@mail.com
+Authorization Token 317F632427BCDA059B19EF241705BD2F
+```
+
+**Server Response:**
+
+```
+HTTP/1.1 200 Ok
+
+{
+    //...
+}
+```
+
+#### Get Server fields
+
+Ask server for existent fields requesting [`/accounts/accountName/fields`](#fields-fields-definition-collection-get).
+
+**Request:**
+
+```
+GET /accounts/jsmith@mail.com/fields
+Authorization Token 317F632427BCDA059B19EF241705BD2F
+```
+
+**Server Response:**
+
+```
+HTTP/1.1 200 Ok
+
+{
+  "items": [
+    { 
+      "fielName": "firstName", 
+      "type": "string", 
+      "label": "First Name",
+      "_links": [
+        { "href": "/accounts/jsmith@mail.com/fields/firstName", "rel": "item /rels/field" },
+        { "href": "/accounts/jsmith@mail.com/fields/firstName", "rel": "delete" }
+      ]
+    }, 
+    { 
+      "fielName": "lastName", 
+      "type": "string", 
+      "label": "Last Name",
+      "_links": [
+        { "href": "/accounts/jsmith@mail.com/fields/lastName", "rel": "item /rels/field" },
+        { "href": "/accounts/jsmith@mail.com/fields/lastName", "rel": "delete" }
+      ]
+    }
+    //, ...
+  ],
+  "_links": [
+    { "href": "/accounts/jsmith@mail.com/fields", "rel": "self /rels/fields-collection" },
+    { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+  ]
+}
+```
+
+#### Import subscribers
+
+1. If the _List_ is new, create it in the server posting to [`/accounts/{accountName}/lists`](#lists-lists-collection-post)
+
+    **Request:**
+
+    ```
+    POST /accounts/jsmith@mail.com/lists
+    Authorization Token 317F632427BCDA059B19EF241705BD2F
+
+    {
+      "listName": "NuevoNombre"
+    }
+    ```
+
+    **Server Response:**
+
+    ```
+    HTTP/1.1 201 Created
+    Location: /accounts/jsmith@mail.com/lists/345
+
+    {
+      "message": "List successfully created",
+      "_links": [
+        { "href": "/accounts/jsmith@mail.com/lists", "rel": "parent /rels/lists-collection" },
+        { "href": "/accounts/jsmith@mail.com/lists/345", "rel": "related /rels/list" },
+        { "href": "/accounts/jsmith@mail.com/lists/345", "rel": "edit" },
+        { "href": "/accounts/jsmith@mail.com/lists/345", "rel": "delete" },
+        { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", rel:"/rels/subscribers-collection" },
+        { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", rel:"/rels/subscribe-to-list" },
+        { "href": "/accounts/jsmith@mail.com/lists/345/subscribers", rel:"/rels/import-to-list" },
+        { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+      ]
+    }
+    ```
+
+2. Import _Subscribers_ to the _List_ posting to [`/accounts/{accountName}/lists/{listId}/subscribers`](#subscribers-subscribers-of-a-list-import-post):
+
+    **Request:**
+
+    ```
+    POST /accounts/jsmith@mail.com/lists/345/subscribers/import
+    Authorization Token 317F632427BCDA059B19EF241705BD2F
+
+    {
+      "items": [
+        {
+          "emailAddress": "jsmith@mail.com",
+          "fields": [
+            { "fieldName": "firstName", "value": "Andres" },
+            { "fieldName": "lastName", "value": "Test" },
+          ]
+        }
+        //, ...
+      ], 
+      "callback": "http://myownserver.com/importtask?id=5656"
+    }
+    ```
+
+    **Server Response:**
+
+    ```
+    HTTP/1.1 202 Accepted
+    Location: /accounts/jsmith@mail.com/tasks/55421
+
+    {
+      "message": "Import task successfully created",
+      "_links": [
+        { "href": "/accounts/jsmith@mail.com/tasks/55421", "rel": "related /rels/task", "description": "Import task" },
+        { "href": "/accounts/jsmith@mail.com/tasks/55421/stop", "rel": "/rels/stop", "description": "Stop task" }
+        { "href": "/accounts/jsmith@mail.com/tasks/55421/pause", "rel": "/rels/pause", "description": "Pause task" },
+        { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+      ]
+    }
+    ```
+
+    **Callback Example:**
+
+    ```
+    POST /importtask?id=5656 HTTP/1.1
+    Host: myownserver.com
+    Content-Type: application/json; profile=/schemas/message
+
+    {
+      "message": "Import to 345 list successfully done",
+      "_links": [
+        { "href": "/accounts/jsmith@mail.com/tasks/55421", "rel": "related /rels/task", "description": "Import task" },
+        { "href": "/accounts/jsmith@mail.com/lists/345", "rel": "related /rels/list", "description": "Tasks" },
+        { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+      ]
+    }
+    ```
+
+3. Wait to receive the finalization callback, or it is also possible to request for task status to [`/accounts/{accountName}/tasks/{taskId}`](#tasks-task-get):
+
+    **Request:** 
+
+    ```
+    GET /accounts/jsmith@mail.com/tasks/55421
+    Authorization Token 317F632427BCDA059B19EF241705BD2F
+    ```
+
+    **Server Response:**
+
+    ```
+    HTTP/1.1 200
+
+    {
+      "status": "Working",
+      "progress": 50,
+      //...
+      "_links": [
+        { "href": "/accounts/jsmith@mail.com/tasks/55421", "rel": "self /rels/task" }
+        { "href": "/accounts/jsmith@mail.com/tasks/55421/stop", "rel": "/rels/stop", "description": "Stop task" }
+        { "href": "/accounts/jsmith@mail.com/tasks/55421/pause", "rel": "/rels/pause" },
+        { "href": "/accounts/jsmith@mail.com", "rel": "/rels/account-home", "description": "Account Index" }
+      ]
+    }
+    ```
