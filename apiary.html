@@ -1,0 +1,895 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Email Marketing API</title><link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200"><style>/* Highlight.js Theme Tomorrow */
+.hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}</style><style>body,
+h4,
+h5 {
+  font-family: 'Roboto' sans-serif !important;
+}
+h1,
+h2,
+h3,
+.aglio {
+  font-family: 'Raleway' sans-serif !important;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a {
+  display: none;
+}
+h1:hover a,
+h2:hover a,
+h3:hover a,
+h4:hover a,
+h5:hover a {
+  display: inline;
+}
+code {
+  color: #444;
+  background-color: #ddd;
+  font-family: 'Inconsolata' monospace !important;
+}
+a[data-target] {
+  cursor: pointer;
+}
+h4 {
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.back-to-top {
+  position: fixed;
+  z-index: 1;
+  bottom: 0px;
+  right: 24px;
+  padding: 4px 8px;
+  background-color: #eee;
+  text-decoration: none !important;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-left: 1px solid rgba(0,0,0,0.1);
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.panel {
+  overflow: hidden;
+}
+.panel-heading code {
+  margin-left: 3px;
+  color: #c7254e;
+  background-color: rgba(255,255,255,0.7);
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.panel-heading h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+a.list-group-item:hover {
+  background-color: #f8f8f8;
+  border-left: 2px solid #555;
+  padding-left: 15px;
+}
+.indent {
+  display: block;
+  text-indent: 16px;
+}
+.list-group-item {
+  padding-left: 16px;
+}
+.list-group-item .toggle .open {
+  display: block;
+}
+.list-group-item .toggle .closed {
+  display: none;
+}
+.list-group-item.collapsed .toggle .open {
+  display: none;
+}
+.list-group-item.collapsed .toggle .closed {
+  display: block;
+}
+a.list-group-item {
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+a.list-group-item.heading {
+  font-size: 15px;
+  background-color: #f5f5f5;
+}
+a.list-group-item.heading:hover {
+  background-color: #f8f8f8;
+}
+.list-group-item.collapse {
+  display: none;
+}
+.list-group-item.collapse.in {
+  display: block;
+}
+.list-group-item a span.closed {
+  display: none;
+}
+.list-group-item a span.open {
+  display: block;
+}
+.list-group-item a.collapsed span.closed {
+  display: block;
+}
+.list-group-item a.collapsed span.open {
+  display: none;
+}
+#nav {
+  width: inherit;
+  margin-top: 38px;
+  max-width: 255px;
+  top: 0;
+  bottom: 0;
+  padding-right: 12px;
+  padding-bottom: 12px;
+  overflow-y: auto;
+}
+@media (max-width: 1199px) {
+  #nav {
+    max-width: 212px;
+  }
+}
+</style></head><body><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav"><div class="list-group"><a data-toggle="" data-target="#conventions-and-references-menu" href="#conventions-and-references" class="list-group-item heading collapsed">Conventions and references</a><div id="conventions-and-references-menu"></div></div><div class="list-group"><a data-toggle="" data-target="#indexes-menu" href="#indexes" class="list-group-item heading collapsed">Indexes</a><div id="indexes-menu"><a href="#indexes-hypermedia-email-marketing-api-root" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Hypermedia Email Marketing API Root</a><a href="#indexes-account-index" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Account Index</a></div></div><div class="list-group"><a data-toggle="" data-target="#lists-menu" href="#lists" class="list-group-item heading collapsed">Lists</a><div id="lists-menu"><a href="#lists-lists-collection" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Lists Collection</a><a href="#lists-lists-collection-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Get Lists</span></a><a href="#lists-lists-collection-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Create a list</span></a><a href="#lists-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">List</a><a href="#lists-list-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Get a List</span></a><a href="#lists-list-put" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-warning"><i class="fa fa-pencil"></i></span><span class="indent">Edit a List</span></a><a href="#lists-list-delete" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-danger"><i class="fa fa-times"></i></span><span class="indent">Delete a List</span></a></div></div><div class="list-group"><a data-toggle="" data-target="#subscribers-menu" href="#subscribers" class="list-group-item heading collapsed">Subscribers</a><div id="subscribers-menu"><a href="#subscribers-subscribers-of-a-list" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Subscribers of a List</a><a href="#subscribers-subscribers-of-a-list-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Get List Subscribers</span></a><a href="#subscribers-subscribers-of-a-list-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Subscribe to List</span></a><a href="#subscribers-subscribers-of-a-list-import-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Import Subscribers to List</span></a><a href="#subscribers-subscribers-collection" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Subscribers Collection</a><a href="#subscribers-subscriber" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Subscriber</a><a href="#subscribers-subscriber-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Get a Subscriber</span></a><a href="#subscribers-subscriber-put" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-warning"><i class="fa fa-pencil"></i></span><span class="indent">Edit a Subscriber</span></a><a href="#subscribers-subscriber-unsubscribe-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Unsubscribe</span></a></div></div><div class="list-group"><a data-toggle="" data-target="#fields-menu" href="#fields" class="list-group-item heading collapsed">Fields</a><div id="fields-menu"><a href="#fields-fields-definition-collection" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Fields Definition Collection</a><a href="#fields-fields-definition-collection-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Get Fields</span></a><a href="#fields-fields-definition-collection-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Create a Field</span></a><a href="#fields-field" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Field</a><a href="#fields-field-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Get a Field</span></a><a href="#fields-field-put" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-warning"><i class="fa fa-pencil"></i></span><span class="indent">Edit a Field</span></a><a href="#fields-field-delete" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-danger"><i class="fa fa-times"></i></span><span class="indent">Delete a Field</span></a></div></div><div class="list-group"><a data-toggle="" data-target="#tasks-menu" href="#tasks" class="list-group-item heading collapsed">Tasks</a><div id="tasks-menu"><a href="#tasks-tasks-collection" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span>Tasks Collection</a><a href="#tasks-task" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Task</a><a href="#tasks-task-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Get a Task</span></a><a href="#tasks-task-cancel-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Cancel a Task</span></a><a href="#tasks-task-pause-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Pause a Task</span></a><a href="#tasks-task-start-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Start a Task</span></a></div></div><div class="list-group"><a data-toggle="" data-target="#use-cases-examples-menu" href="#use-cases-examples" class="list-group-item heading collapsed">Use Cases Examples</a><div id="use-cases-examples-menu"></div></div><p style="text-align: center; word-wrap: break-word;"><a href="http://amoschinipoc.apiblueprint.org/">http://amoschinipoc.apiblueprint.org/</a></p></nav></div><div class="col-md-8"><div><header><div class="page-header"><h1 id="top">Email Marketing API</h1></div></header><div class="description"><p>Email Marketing API is a Hypermedia API for allowing consumers to manage an email marketing application.</p>
+</div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="conventions-and-references">Conventions and references&nbsp;<a href="#conventions-and-references"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4>Links</h4>
+<p>Each response and collection item will contain a <code>_links</code> property as array of <code>link</code> objects.</p>
+<p>Each <code>link</code> has <code>href</code> field (an URI), and optional <code>description</code> field and a <code>rel</code> field to describe the link role, expected payload, return format. <code>rel</code> field could contains one or more <em>relation types</em> separated by white spaces.</p>
+<p>A valid <em>relation type</em> could be any <a href="http://www.iana.org/assignments/link-relations/link-relations.xhtml">IANA standard link relation type</a>, like <code>item</code>, <code>self</code>, <code>parent</code> o <code>prev</code>. Or it also could be an URI to the specification, for example: <code>/rels/subscriber</code> or <code>/rels/lists-collection</code>.</p>
+<h4>JSON Schemas</h4>
+<p><em>Relation type</em> specifications will include <a href="http://json-schema.org/">JSON schema</a> documents for expected and result payloads.</p>
+<p>Also, <code>application/json</code> responses will include a Schema reference in <em>content type</em> header, for example: <code>Content-Type: application/json; profile=/schemas/subscriber</code> (in the same way that it is done <a href="http://json-schema.org/latest/json-schema-hypermedia.html">JSON Hyper-Schema: Hypertext definitions for JSON Schema - Section 5.2.2</a>).</p>
+<h4>Special folders</h4>
+<ul>
+<li><p><code>/models</code>: Will contain human readable information about models types, like <code>/models/subscriber</code> or <code>/models/lists-collection</code>.</p></li>
+<li><p><code>/errors</code>: Will contain human readable description about expected problem types, like <code>/errors/400.38-duplicated-name</code>.</p></li>
+<li><p><code>/rels</code>: Will contain human readable specification about custom <em>relation types</em>, including expected <em>HTTP method</em> and <em>content-type</em> or <em>JSON Shema</em> of expected and result payloads. It could also contain information about possible errors. For example: <code>/rels/subscriber</code> or <code>/rels/lists-collection</code>.</p></li>
+<li><p><code>/schemas</code>: Will contain <em>JSON schema</em> documents for all possible input and output <code>application/json</code> payloads. For example: <code>/schemas/subscriber</code>.</p></li>
+</ul>
+<h4>Authentication</h4>
+<p>By the moment, we will still use current <code>apikey</code> generated in <a href="http://app2.fromdoppler.com/ControlPanel/AdvancedPreferences/GetDopplerApiInformation">Doppler API control panel section in Doppler</a>.</p>
+<p>To authenticate your requests you can follow <a href="http://tools.ietf.org/html/rfc6750">Bearer Token Usage (RCF6750)</a> or also include it in basic authentication password field <a href="https://developer.github.com/v3/oauth/#use-the-access-token-to-access-the-api">like GitHub does</a>.</p>
+<p>Basically, the options are the follow:</p>
+<ul>
+<li><p>Include <code>apikey</code> in <code>access_token</code> parameter in <em>query string</em> (not recommended for production usage).</p>
+<pre><code>GET <span class="hljs-string">https:</span><span class="hljs-comment">//testapi.com/?access_token=317F632427BCDA059B19EF241705BD2F</span>
+</code></pre></li>
+<li><p>Include <code>apikey</code> in <code>Authorization</code> header with some of these literals: <code>Bearer</code>, <code>OAuth2</code>, <code>Token</code>.</p>
+<pre><code>GET <span class="hljs-string">https:</span><span class="hljs-comment">//testapi.com/</span>
+<span class="hljs-string">Authorization:</span> token <span class="hljs-number">317</span>F632427BCDA059B19EF241705BD2F`
+</code></pre></li>
+<li><p>Include <code>apikey</code> as basic authentication password.</p>
+<pre><code>GET <span class="hljs-string">https:</span><span class="hljs-comment">//testapi.com/</span>
+<span class="hljs-string">Authorization:</span> basic dXNlcjozMTdGNjMyNDI3QkNEQTA1OUIxOUVGMjQxNzA1QkQyRg==
+</code></pre>
+<p><em><code>dXNlcjozMTdGNjMyNDI3QkNEQTA1OUIxOUVGMjQxNzA1QkQyRg==</code> corresponds to <code>BASE64(&quot;user:317F632427BCDA059B19EF241705BD2F&quot;)</code></em>.</p></li>
+</ul>
+</div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="indexes">Indexes&nbsp;<a href="#indexes"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>See <a href="/models/message">Message Model</a>.</p>
+<h4 id="indexes-hypermedia-email-marketing-api-root">Hypermedia Email Marketing API Root&nbsp;<a href="#indexes-hypermedia-email-marketing-api-root"><i class="fa fa-link"></i></a></h4><p>This resource does not have any attributes. Instead it offers the initial
+API affordances in the form of the links in the JSON body.</p>
+<p>It is recommend to follow the “url” link values,
+<a href="https://tools.ietf.org/html/rfc5988">Link</a> or Location headers where
+applicable to retrieve resources. Instead of constructing your own URLs,
+to keep your client decoupled from implementation details.</p>
+<section id="indexes-hypermedia-email-marketing-api-root-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve the General Entry Point</span></div><div style="float:left"><a href="#indexes-hypermedia-email-marketing-api-root-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#020aa4cd7530ca864c87f120ee1c9906" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="020aa4cd7530ca864c87f120ee1c9906" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br><span class="hljs-attribute">Cache-Control</span>: <span class="hljs-string">private, max-age=86400</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Welcome to Email Marketing Hypermedia API"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self index"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"General Index"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><h4 id="indexes-account-index">Account Index&nbsp;<a href="#indexes-account-index"><i class="fa fa-link"></i></a></h4><p>This resource does not have any attributes. Instead it offers the initial
+API affordances in the form of the links in the JSON body.</p>
+<p>It is recommend to follow the “url” link values,
+<a href="https://tools.ietf.org/html/rfc5988">Link</a> or Location headers where
+applicable to retrieve resources. Instead of constructing your own URLs,
+to keep your client decoupled from implementation details.</p>
+<section id="indexes-account-index-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve Account Entry Point</span></div><div style="float:left"><a href="#indexes-account-index-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}</code></div></div><div class="panel-body"><p><strong><code>To be implemented in first release</code></strong></p>
+</div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#9aace55328f42c5b8ea22ee17894af2e" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="9aace55328f42c5b8ea22ee17894af2e" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br><span class="hljs-attribute">Cache-Control</span>: <span class="hljs-string">private, max-age=86400</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Welcome to Email Marketing Hypermedia API"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent index"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"General Index"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self /rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>},
+
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Lists"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/create-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Create a list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/{listId}"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"edit"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit a list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/{listId}"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"delete"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete a list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/{listId}/subscribers"</span>. <span class="hljs-string">"rel"</span>: <span class="hljs-string">"/rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscribers in a list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/{listId}/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/subscribe-to-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscribe"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/{listId}/subscribers/import"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/import-to-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Import subscribers to a list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/{listId}/subscribers/{emailMd5}"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove a subscriber from a list"</span> </span>},
+
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscribers in account"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/{emailMd5}"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscriber details"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/{emailMd5}"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit subscriber"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/{emailMd5}/unsubscribe"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/unsubscribe"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unsubscribe"</span> </span>},
+
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/tasks-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Tasks"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/{taskId}"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Task details"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/{taskId}/stop"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/stop-task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Stop task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/{taskId}/pause"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/pause-task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Pause task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/{taskId}/start"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/start-task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Start task"</span> </span>},
+
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/fields-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Fields"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/create-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Create field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/{fieldId}"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/{fieldId}"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/delete-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete field"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="lists">Lists&nbsp;<a href="#lists"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>Resources related to <em>Subscribers Lists</em>. See <a href="/models/list">List Model</a>.</p>
+<h4 id="lists-lists-collection">Lists Collection&nbsp;<a href="#lists-lists-collection"><i class="fa fa-link"></i></a></h4><p>Collection of all <em>Subscribers Lists</em> for a specified <em>Account</em>.</p>
+<section id="lists-lists-collection-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get Lists</span></div><div style="float:left"><a href="#lists-lists-collection-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/lists</code></div></div><div class="panel-body"><p><strong><code>To be implemented in first release</code></strong></p>
+<p>Returns a <em>paginated</em> collection of <em>Lists</em> into selected <em>Account</em>.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em>.</p>
+</dd><dt>page</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>1</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>The number of page to return.</p>
+</dd><dt>per_page</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>20</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>15</span></span><p>Number of items in each page (max value: 50, min value:  5).</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#0315fa28048f25bd1c92502e335d5370" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="0315fa28048f25bd1c92502e335d5370" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/lists-collection</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">items</span>": <span class="hljs-value">[
+    { 
+      "<span class="hljs-attribute">listId</span>": <span class="hljs-value"><span class="hljs-number">345</span></span>,
+      "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"North Section"</span></span>, 
+      "<span class="hljs-attribute">subcribersQuantity</span>": <span class="hljs-value"><span class="hljs-number">34</span></span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"List details"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"edit /rels/edit-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit list"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"delete"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete list"</span> </span>},
+      ]
+    </span>}
+    //, ...
+  ]</span>,
+  "<span class="hljs-attribute">pageSize</span>": <span class="hljs-value"><span class="hljs-number">20</span></span>,
+  "<span class="hljs-attribute">currentPage</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+  "<span class="hljs-attribute">itemsCount</span>": <span class="hljs-value"><span class="hljs-number">483</span></span>,
+  "<span class="hljs-attribute">pagesCount</span>": <span class="hljs-value"><span class="hljs-number">25</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists?page=2"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"self /rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Current page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"first prev /rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"First page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists?page=3"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"next /rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Next page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists?page=25"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"last /rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Last page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists?page={page}"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/specific-page /rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Go to page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/create-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Create a new list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="lists-lists-collection-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Create a list</span></div><div style="float:left"><a href="#lists-lists-collection-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/lists</code></div></div><div class="panel-body"><p><strong><code>To be implemented in first release</code></strong></p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em>.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#8853bb8e4a4ef5158277cd63ef12f62b" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="8853bb8e4a4ef5158277cd63ef12f62b" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"TestList"</span></span>,
+  "<span class="hljs-attribute">active</span>": <span class="hljs-value"><span class="hljs-literal">true</span>
+</span>}
+
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>201</code></strong><a data-toggle="collapse" data-target="#8b41a7f2ea3c1631296c901c415c2be8" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="8b41a7f2ea3c1631296c901c415c2be8" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br><span class="hljs-attribute">Location</span>: <span class="hljs-string">/accounts/jsmith@mail.com/lists/345</span><br></code></pre><h5>Body</h5><pre><code><span class="hljs-collection">{
+  <span class="hljs-string">"message"</span>: <span class="hljs-string">"List successfully created"</span>,
+  <span class="hljs-string">"_links"</span>: <span class="hljs-collection">[
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span>, <span class="hljs-string">"rel"</span>:  <span class="hljs-string">"related /rels/list"</span>, <span class="hljs-string">"description"</span>: <span class="hljs-string">"Created list"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span>, <span class="hljs-string">"rel"</span>:  <span class="hljs-string">"delete"</span>, <span class="hljs-string">"Delete list"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span>, <span class="hljs-string">"rel"</span>:  <span class="hljs-string">"edit rels/edit-list"</span>, <span class="hljs-string">"description"</span>: <span class="hljs-string">"Edit list"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span>, <span class="hljs-string">"rel"</span>:  <span class="hljs-string">"parent /rels/lists-collection"</span>, <span class="hljs-string">"description"</span>: <span class="hljs-string">"Lists"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span>, <span class="hljs-string">"rel"</span>:  <span class="hljs-string">"/rels/create-list"</span>, <span class="hljs-string">"description"</span>: <span class="hljs-string">"Create a new list"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"/rels/account-home"</span>, <span class="hljs-string">"description"</span>: <span class="hljs-string">"Account Index"</span> }</span>
+  ]</span>
+}</span>
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>400</code></strong><a data-toggle="collapse" data-target="#be8775c1cc293d55f9240430d744d1a4" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="be8775c1cc293d55f9240430d744d1a4" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/problem+json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"/errors/400.38-duplicated-name"</span></span>,
+  "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"The name already exists for another resource."</span></span>,
+  "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"Already exists an active list with the name 'TestList'."</span></span>,
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">400</span></span>,
+  "<span class="hljs-attribute">errorCode</span>": <span class="hljs-value"><span class="hljs-number">38</span>
+</span>}
+</code></pre></li></ul></section><h4 id="lists-list">List&nbsp;<a href="#lists-list"><i class="fa fa-link"></i></a></h4><p>Details of a specific <em>Subscribers List</em>.</p>
+<section id="lists-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get a List</span></div><div style="float:left"><a href="#lists-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/lists/{listId}</code></div></div><div class="panel-body"><p>Gets details about an specific <em>Subscribers List</em> and some summarized information about its <em>Subscribers</em>.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>listId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>345</span></span><p>Selected <em>List</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#089eec62ce668c8a68a5a7f29354d111" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="089eec62ce668c8a68a5a7f29354d111" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/list</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">listId</span>": <span class="hljs-value"><span class="hljs-string">"345"</span></span>,
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"TestList"</span></span>,
+  "<span class="hljs-attribute">subcribersQuantity</span>": <span class="hljs-value"><span class="hljs-number">34</span></span>,
+  "<span class="hljs-attribute">active</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+  "<span class="hljs-attribute">creation-date</span>": <span class="hljs-value"><span class="hljs-string">"2015-02-04T10:45:12+03:00"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"self /rels/list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"delete"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"edit /rels/edit-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"parent /rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Lists"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="lists-list-put" class="panel panel-warning"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Edit a List</span></div><div style="float:left"><a href="#lists-list-put" class="btn btn-xs btn-warning">PUT</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/lists/{listId}</code></div></div><div class="panel-body"><p>Updates <em>Subscribers List</em> values (not <em>Subscribers</em> nor summarized data).</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>listId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>345</span></span><p>Selected <em>List</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#ae5ac69f9862daf79c77a11909d22bf2" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="ae5ac69f9862daf79c77a11909d22bf2" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"TestList-Old"</span></span>,
+  "<span class="hljs-attribute">active</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+</span>}
+
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#8ad1429f8167befa531f564dd56578f7" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="8ad1429f8167befa531f564dd56578f7" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"List updated successfully"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"related /rels/list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Updated list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"delete"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"edit /rels/edit-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"parent /rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Lists"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="lists-list-delete" class="panel panel-danger"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Delete a List</span></div><div style="float:left"><a href="#lists-list-delete" class="btn btn-xs btn-danger">DELETE</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/lists/{listId}</code></div></div><div class="panel-body"><p>Deletes a <em>Subscribers List</em> removing the <em>Subscribers</em> but not deleting them.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>listId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>345</span></span><p>Selected <em>List</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#e3a24b34c33fbbbd79a78bd4fa2ad3c4" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e3a24b34c33fbbbd79a78bd4fa2ad3c4" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"List deleted successfully"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"parent /rels/lists-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Lists"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="subscribers">Subscribers&nbsp;<a href="#subscribers"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>See <a href="/docs/subscriber">Subscriber Model</a>.</p>
+<h4 id="subscribers-subscribers-of-a-list">Subscribers of a List&nbsp;<a href="#subscribers-subscribers-of-a-list"><i class="fa fa-link"></i></a></h4><p>Represents the active <em>Subscribers</em> associated to a <em>Subscribers List</em>.</p>
+<section id="subscribers-subscribers-of-a-list-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get List Subscribers</span></div><div style="float:left"><a href="#subscribers-subscribers-of-a-list-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/lists/{listId}/subscribers</code></div></div><div class="panel-body"><p>Returns a <em>paginated</em> collection of <em>Subscribers</em> related to selected <em>List</em>.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>listId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>345</span></span><p>Selected <em>List</em> identifier.</p>
+</dd><dt>page</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>1</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>The number of page to return.</p>
+</dd><dt>per_page</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>20</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>15</span></span><p>Number of items in each page (max value: 50, min value:  5).</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#b3624f87f3b2a015bca365ef17e83957" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="b3624f87f3b2a015bca365ef17e83957" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/subscribers-collection</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">items</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">emailAddress</span>": <span class="hljs-value"><span class="hljs-string">"jsmith@mail.com"</span></span>,
+      "<span class="hljs-attribute">emailMd5</span>": <span class="hljs-value"><span class="hljs-string">"d41d8cd98f00b204e9800998ecf8427e"</span></span>,
+      "<span class="hljs-attribute">belongsToLists</span>": <span class="hljs-value">[ <span class="hljs-string">"345"</span>, <span class="hljs-string">"346"</span> ]</span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscriber details"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"edit /rels/edit-subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit subscriber"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/unsubscribe"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unsubscribe"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from current list"</span> </span>}
+      ]
+    </span>}
+    //, ...
+  ]</span>,
+  "<span class="hljs-attribute">pageSize</span>": <span class="hljs-value"><span class="hljs-number">20</span></span>,
+  "<span class="hljs-attribute">currentPage</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+  "<span class="hljs-attribute">itemsCount</span>": <span class="hljs-value"><span class="hljs-number">483</span></span>,
+  "<span class="hljs-attribute">pagesCount</span>": <span class="hljs-value"><span class="hljs-number">25</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers?page=2"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"self /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Current page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"first prev /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"First page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers?page=3"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"next /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Next page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers?page=25"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"last /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Last page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers?page={page}"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/specific-page /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Go to page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"parent /rels/list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Parent List"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/subscribe-to-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscribe"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/import"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/import-to-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Import subscribers"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="subscribers-subscribers-of-a-list-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Subscribe to List</span></div><div style="float:left"><a href="#subscribers-subscribers-of-a-list-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/lists/{listId}/subscribers</code></div></div><div class="panel-body"><p><strong><code>To be implemented in first release</code></strong></p>
+<p>Associate a <em>Subscriber</em> to the <em>List</em>. If <em>Subscriber’s email address</em> already exists in current <em>Account</em>, the existent <em>Subscriber</em> is updated. Only data included in the payload is applied.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>listId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>345</span></span><p>Selected <em>List</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#008e6ff357b986a9f942460d5ea3cb4d" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="008e6ff357b986a9f942460d5ea3cb4d" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"test@mail.com"</span>
+</span>}
+
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>201</code></strong><a data-toggle="collapse" data-target="#39820ff81b2a8be29c1d25227c5c4d4b" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="39820ff81b2a8be29c1d25227c5c4d4b" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br><span class="hljs-attribute">Location</span>: <span class="hljs-string">/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Subscriber successfully created"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"related /rels/subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Created subscriber"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/unsubscribe"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unsubscribe"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 345"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"parent /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Other subscribers"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/subscribe-to-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscribe another"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#370ff3cbc8de45c9de9adf9a860121fa" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="370ff3cbc8de45c9de9adf9a860121fa" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br><span class="hljs-attribute">Location</span>: <span class="hljs-string">/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Subscriber successfully updated"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"related /rels/subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscribers"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/unsubscribe"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unsubscribe"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 345"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"List subscribers"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/subscribe-to-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscribe"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>400</code></strong><a data-toggle="collapse" data-target="#d7f66574251e963470c595752ffadab5" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="d7f66574251e963470c595752ffadab5" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/problem+json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"/errors/400.24-missing-data"</span></span>,
+  "<span class="hljs-attribute">title</span>": <span class="hljs-value"><span class="hljs-string">"Required data is missing."</span></span>,
+  "<span class="hljs-attribute">detail</span>": <span class="hljs-value"><span class="hljs-string">"To add a subscriber to a list email address is required."</span></span>,
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-number">400</span></span>,
+  "<span class="hljs-attribute">errorCode</span>": <span class="hljs-value"><span class="hljs-number">24</span>
+</span>}
+</code></pre></li></ul></section><section id="subscribers-subscribers-of-a-list-import-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Import Subscribers to List</span></div><div style="float:left"><a href="#subscribers-subscribers-of-a-list-import-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/lists/{listId}/subscribers/import</code></div></div><div class="panel-body"><p><strong><code>To be implemented in first release</code></strong> (Only JSON input)</p>
+<p>Creates a <em>Task</em> to import a collection of <em>Subscribers</em> to a specified <em>List</em>. Items with new email address will be added as new subscribers, and items with already existent email address will be updated. Only will be updated the data included in the payload.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>listId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>345</span></span><p>Selected <em>List</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request&nbsp;&nbsp;<code>JSON</code></strong><a data-toggle="collapse" data-target="#a07bade1231a0bf33076c39fbe20d0b3" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="a07bade1231a0bf33076c39fbe20d0b3" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code><span class="hljs-collection">{
+  <span class="hljs-string">"items"</span>: <span class="hljs-collection">[
+    <span class="hljs-collection">{
+      <span class="hljs-string">"emailAddress"</span>: <span class="hljs-string">"jsmith@mail.com"</span>,
+      fields: <span class="hljs-collection">[
+        <span class="hljs-collection">{ <span class="hljs-string">"fieldName"</span>: <span class="hljs-string">"firstName"</span>, <span class="hljs-string">"value"</span>: <span class="hljs-string">"John"</span> }</span>,
+        <span class="hljs-collection">{ <span class="hljs-string">"fieldName"</span>: <span class="hljs-string">"lastName"</span>, <span class="hljs-string">"value"</span>: <span class="hljs-string">"Smith"</span> }</span>
+      ]</span>
+    }</span>
+    //, ...
+  ]</span>, 
+  <span class="hljs-string">"callback"</span>: <span class="hljs-string">"http://myownserver.com/importtask"</span>
+}</span>
+</code></pre></li><li class="list-group-item"><strong>Request&nbsp;&nbsp;<code>CSV</code></strong><a data-toggle="collapse" data-target="#f7c6d18b556b97586013d28b5c326de7" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="f7c6d18b556b97586013d28b5c326de7" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/csv</span><br></code></pre></li><li class="list-group-item"><strong>Request&nbsp;&nbsp;<code>Legacy Excel</code></strong><a data-toggle="collapse" data-target="#ecb2932e15cebe8079b6e59a0e53ced4" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="ecb2932e15cebe8079b6e59a0e53ced4" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.ms-excel</span><br></code></pre></li><li class="list-group-item"><strong>Request&nbsp;&nbsp;<code>Excel</code></strong><a data-toggle="collapse" data-target="#cc1caabba1bffe1c16d823aa8daca480" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="cc1caabba1bffe1c16d823aa8daca480" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</span><br></code></pre></li><li class="list-group-item"><strong>Request&nbsp;&nbsp;<code>HTML Form</code></strong><a data-toggle="collapse" data-target="#d0554be58c86938bd762ea63add8c42f" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="d0554be58c86938bd762ea63add8c42f" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">x-www-form-urlencoded</span><br></code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>202</code></strong><a data-toggle="collapse" data-target="#7b93dc39f9d2e8cbb72b0ea64c8e1b7d" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="7b93dc39f9d2e8cbb72b0ea64c8e1b7d" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br><span class="hljs-attribute">Location</span>: <span class="hljs-string">/accounts/jsmith@mail.com/tasks/567</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Import task successfully created"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"related /rels/task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Created task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567/cancel"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"related /rels/cancel-task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Cancel task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"parent /rels/list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Related list"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><h4 id="subscribers-subscribers-collection">Subscribers Collection&nbsp;<a href="#subscribers-subscribers-collection"><i class="fa fa-link"></i></a></h4><p>Collection of all <em>Subscribers</em> into an specific <em>Account</em>.</p>
+<section id="subscribers-subscribers-collection-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get subscribers</span></div><div style="float:left"><a href="#subscribers-subscribers-collection-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/subscribers</code></div></div><div class="panel-body"><p>Returns a <em>paginated</em> collection of <em>Subscribers</em> related to selected <em>Account</em>. It includes active and inactive <em>Subscribers</em> and could be filtered by status.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>page</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>1</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>The number of page to return.</p>
+</dd><dt>per_page</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>20</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>15</span></span><p>Number of items in each page (max value: 50, min value:  5).</p>
+</dd><dt>status</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>active</span></span><p>Returns only <em>Subscribers</em> with specified status.</p>
+<ul>
+<li><p><code>active</code></p></li>
+<li><p><code>soft-bounce</code></p></li>
+<li><p><code>hard-bounce</code></p></li>
+<li><p><code>unsubscribed-by-user</code></p></li>
+<li><p><code>unsubscribed-by-admin</code></p></li>
+<li><p><code>never-open</code></p></li>
+</ul>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#1c91d4ea7a78825f73c651a21ccd71b6" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="1c91d4ea7a78825f73c651a21ccd71b6" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/subscribers-collection</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">items</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">emailAddress</span>": <span class="hljs-value"><span class="hljs-string">"jsmith@mail.com"</span></span>,
+      "<span class="hljs-attribute">emailMd5</span>": <span class="hljs-value"><span class="hljs-string">"d41d8cd98f00b204e9800998ecf8427e"</span></span>,
+      "<span class="hljs-attribute">belongsToLists</span>": <span class="hljs-value">[ <span class="hljs-string">"345"</span>, <span class="hljs-string">"346"</span> ]</span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Subscriber details"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"edit /rels/edit-subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit subscriber"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/unsubscribe"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unsubscribe"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 345"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/346/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 346"</span> </span>}
+      ]
+    </span>}
+    //, ...
+  ]</span>,
+  "<span class="hljs-attribute">pageSize</span>": <span class="hljs-value"><span class="hljs-number">20</span></span>,
+  "<span class="hljs-attribute">currentPage</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+  "<span class="hljs-attribute">itemsCount</span>": <span class="hljs-value"><span class="hljs-number">483</span></span>,
+  "<span class="hljs-attribute">pagesCount</span>": <span class="hljs-value"><span class="hljs-number">25</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers?page=2"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"self /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Current page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"first prev /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"First page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers?page=3"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"next /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Next page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers?page=25"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"last /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Last page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers?page={page}"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/specific-page /rels/subscribers-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Go to page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"parent /rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><h4 id="subscribers-subscriber">Subscriber&nbsp;<a href="#subscribers-subscriber"><i class="fa fa-link"></i></a></h4><p>Specific <em>Subscriber</em> identified by the application of MD5 hash function on its email address.</p>
+<section id="subscribers-subscriber-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get a Subscriber</span></div><div style="float:left"><a href="#subscribers-subscriber-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/subscribers/{emailMd5}</code></div></div><div class="panel-body"><p>Gets details about an specific <em>Subscriber</em>.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>emailMd5</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>d41d8cd98f00b204e9800998ecf8427e</span></span><p>Selected <em>Subscriber</em> identifier (<code>hashMD5(emailAddress)</code>).</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#02428ef39385f86b78c3c5c46eca3d18" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="02428ef39385f86b78c3c5c46eca3d18" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/subscriber</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">emailAddress</span>": <span class="hljs-value"><span class="hljs-string">"jsmith@mail.com"</span></span>,
+  "<span class="hljs-attribute">emailMd5</span>": <span class="hljs-value"><span class="hljs-string">"d41d8cd98f00b204e9800998ecf8427e"</span></span>,
+  "<span class="hljs-attribute">belongsToLists</span>": <span class="hljs-value">[ <span class="hljs-string">"345"</span>, <span class="hljs-string">"346"</span> ]</span>,
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-string">"active"</span></span>,
+  "<span class="hljs-attribute">fields</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"firstName"</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"John"</span></span>, "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span> </span>},
+    { "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"lastName"</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"Smith"</span></span>, "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span> </span>},
+    { "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"income"</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"450000"</span></span>, "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"number"</span> </span>}
+  ]</span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self /rels/subscriber"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"edit /rels/edit-subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/unsubscribe"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unsubscribe"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 345"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/346/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 346"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="subscribers-subscriber-put" class="panel panel-warning"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Edit a Subscriber</span></div><div style="float:left"><a href="#subscribers-subscriber-put" class="btn btn-xs btn-warning">PUT</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/subscribers/{emailMd5}</code></div></div><div class="panel-body"><p>Edits a <em>Subscriber</em>. It expects full representation of the <em>Subscriber</em>.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>emailMd5</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>d41d8cd98f00b204e9800998ecf8427e</span></span><p>Selected <em>Subscriber</em> identifier (<code>hashMD5(emailAddress)</code>).</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#e3decd5f602707e972f4956e7c6897b0" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e3decd5f602707e972f4956e7c6897b0" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">emailAddress</span>": <span class="hljs-value"><span class="hljs-string">"jsmith@mail.com"</span></span>,
+  "<span class="hljs-attribute">belongsToLists</span>": <span class="hljs-value">[ <span class="hljs-string">"345"</span>, <span class="hljs-string">"346"</span>, <span class="hljs-string">"247"</span> ]</span>,
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-string">"active"</span></span>,
+  "<span class="hljs-attribute">fields</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"firstName"</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"John"</span> </span>},
+    { "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"lastName"</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"Smith"</span> </span>},
+    { "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"annualIncome"</span></span>, "<span class="hljs-attribute">value</span>": <span class="hljs-value"><span class="hljs-string">"450000"</span> </span>}
+  ]
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#e516f8ff90dc6a6b7ab708e0b19fae2a" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e516f8ff90dc6a6b7ab708e0b19fae2a" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Subscriber updated successfully"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Updated subscriber"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"edit /rels/edit-subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit subscriber"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e/unsubscribe"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/unsubscribe"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unsubscriber"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 345"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/346/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 346"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/247/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/remove-from-list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Remove from list 247"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="subscribers-subscriber-unsubscribe-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Unsubscribe</span></div><div style="float:left"><a href="#subscribers-subscriber-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/subscribers/{emailMd5}/unsubscribe</code></div></div><div class="panel-body"><p>Mark a <em>Subscriber</em> as <em>unsubscribed</em>, it expects an special payload with reason and other unsubscription information.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>emailMd5</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>d41d8cd98f00b204e9800998ecf8427e</span></span><p>Selected <em>Subscriber</em> identifier (<code>hashMD5(emailAddress)</code>).</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#85e5d02bfbdde3b553c1261ded47ff72" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="85e5d02bfbdde3b553c1261ded47ff72" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">reason</span>": <span class="hljs-value"><span class="hljs-string">"You are too annoying!"</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#df3b264f0e596d43270ee408eea838c1" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="df3b264f0e596d43270ee408eea838c1" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Subscriber unsubscribed successfully"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Unsubscribed subscriber"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/subscribers/d41d8cd98f00b204e9800998ecf8427e"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"edit /rels/edit-subscriber"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit subscriber"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="fields">Fields&nbsp;<a href="#fields"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>Represents the possible fields that a <em>Subscriber</em> could have, including predefined and custom fields. See <a href="/models/field">Field Model</a>.</p>
+<h4 id="fields-fields-definition-collection">Fields Definition Collection&nbsp;<a href="#fields-fields-definition-collection"><i class="fa fa-link"></i></a></h4><section id="fields-fields-definition-collection-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get Fields</span></div><div style="float:left"><a href="#fields-fields-definition-collection-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/fields</code></div></div><div class="panel-body"><p><strong><code>To be implemented in first release</code></strong></p>
+<p>Gets all field definitions.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#5fea39f46488ffd6ba12663eb29c5836" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="5fea39f46488ffd6ba12663eb29c5836" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/fields-collection</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">items</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"firstName"</span></span>,
+      "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"First Name"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">predefined</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/firstName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/field"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/firstName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>}
+      ]
+    </span>},
+    {
+      "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"lastName"</span></span>,
+      "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Last Name"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+      "<span class="hljs-attribute">predefined</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/lastName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/field"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/lastName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>}
+      ]
+    </span>},
+    {
+      "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"income"</span></span>,
+      "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Annual Income"</span></span>,
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"number"</span></span>,
+      "<span class="hljs-attribute">predefined</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/field"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/delete-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete field"</span> </span>}
+      ]
+    </span>}
+  ]</span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent /rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account index"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self /rels/fields-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Fields"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self /rels/add-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Create a new field"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="fields-fields-definition-collection-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Create a Field</span></div><div style="float:left"><a href="#fields-fields-definition-collection-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/fields</code></div></div><div class="panel-body"><p>Creates a new custom field.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#b5ecd3dab59166836388e554386b5cd5" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="b5ecd3dab59166836388e554386b5cd5" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"city"</span></span>,
+  "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"City"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+  "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#1c1b8d0771f35edaf88d2a3c72aa8e2a" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="1c1b8d0771f35edaf88d2a3c72aa8e2a" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Field created successfully"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent /rels/fields-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Fields"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/city"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Created field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/city"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/city"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/delete-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><h4 id="fields-field">Field&nbsp;<a href="#fields-field"><i class="fa fa-link"></i></a></h4><section id="fields-field-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get a Field</span></div><div style="float:left"><a href="#fields-field-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/fields/{fieldName}</code></div></div><div class="panel-body"><p>Gets a specified field definition.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>fieldName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>income</span></span><p>Selected Field</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#ba5716890e26935ec81340aad6af07b9" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="ba5716890e26935ec81340aad6af07b9" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/field</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"income"</span></span>,
+  "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Annual Income"</span></span>,
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"number"</span></span>,
+  "<span class="hljs-attribute">predefined</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self /rels/field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/delete-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="fields-field-put" class="panel panel-warning"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Edit a Field</span></div><div style="float:left"><a href="#fields-field-put" class="btn btn-xs btn-warning">PUT</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/fields/{fieldName}</code></div></div><div class="panel-body"><p>Edit a field definition. Only editable fields are required.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>fieldName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>income</span></span><p>Selected Field</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#e3e994a472bca71737fda4c24e240092" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e3e994a472bca71737fda4c24e240092" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Income"</span></span>,
+  "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#a3d03f4f2ea54b18c6c9ec888637b462" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="a3d03f4f2ea54b18c6c9ec888637b462" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Field updated successfully"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent /rels/fields-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Fields"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/city"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Updated field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/city"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/city"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/delete-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Delete field"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="fields-field-delete" class="panel panel-danger"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Delete a Field</span></div><div style="float:left"><a href="#fields-field-delete" class="btn btn-xs btn-danger">DELETE</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/fields/{fieldName}</code></div></div><div class="panel-body"><p>Deletes a field definition. Only custom fields are deletable. When a field definition is deleted, all data related to that field in <em>Subscribers</em> is removed.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>fieldName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>income</span></span><p>Selected Field</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#e8dad0448f45ac89448c0e5b4edb50c8" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e8dad0448f45ac89448c0e5b4edb50c8" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Field deleted successfully"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent /rels/fields-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Fields"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="tasks">Tasks&nbsp;<a href="#tasks"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>See <a href="/models/task">Task Model</a>.</p>
+<h4 id="tasks-tasks-collection">Tasks Collection&nbsp;<a href="#tasks-tasks-collection"><i class="fa fa-link"></i></a></h4><section id="tasks-tasks-collection-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get Tasks</span></div><div style="float:left"><a href="#tasks-tasks-collection-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/tasks</code></div></div><div class="panel-body"><p>Returns a <em>paginated</em> collection of <em>Tasks</em> related to selected <em>Account</em>. It includes active and inactive <em>Tasks</em> and could be filtered by status.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>page</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>1</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>2</span></span><p>The number of page to return.</p>
+</dd><dt>per_page</dt><dd><code>number</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-info default"><strong>Default:&nbsp;</strong><span>20</span></span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>15</span></span><p>Number of items in each page (max value: 50, min value:  5).</p>
+</dd><dt>status</dt><dd><code>string</code>&nbsp;<span>(optional)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>queued</span></span><p>Returns only <em>Tasks</em> with specified status.</p>
+<ul>
+<li><p><code>queued</code></p></li>
+<li><p><code>in-progress</code></p></li>
+<li><p><code>canceled</code></p></li>
+<li><p><code>paused</code></p></li>
+<li><p><code>done</code></p></li>
+<li><p><code>error</code></p></li>
+</ul>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#b834d14524e59e827f9d0286d0da4ac0" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="b834d14524e59e827f9d0286d0da4ac0" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/tasks-collection</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">items</span>": <span class="hljs-value">[
+    {
+      "<span class="hljs-attribute">taskId</span>": <span class="hljs-value"><span class="hljs-string">"567"</span></span>,
+      "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-string">"in-progress"</span></span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Task details"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567/cancel"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/cancel-task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Cancel task"</span> </span>}
+      ]
+    </span>}
+    //, ...
+  ]</span>,
+  "<span class="hljs-attribute">pageSize</span>": <span class="hljs-value"><span class="hljs-number">20</span></span>,
+  "<span class="hljs-attribute">currentPage</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+  "<span class="hljs-attribute">itemsCount</span>": <span class="hljs-value"><span class="hljs-number">483</span></span>,
+  "<span class="hljs-attribute">pagesCount</span>": <span class="hljs-value"><span class="hljs-number">25</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/?page=2"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"self /rels/tasks-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Current page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"first prev /rels/tasks-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"First page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks?page=3"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"next /rels/tasks-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Next page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks?page=25"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"last /rels/tasks-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Last page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks?page={page}"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"/rels/specific-page /rels/tasks-collection"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Go to page"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>":  <span class="hljs-value"><span class="hljs-string">"parent /rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><h4 id="tasks-task">Task&nbsp;<a href="#tasks-task"><i class="fa fa-link"></i></a></h4><section id="tasks-task-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get a Task</span></div><div style="float:left"><a href="#tasks-task-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/tasks/{taskId}</code></div></div><div class="panel-body"><p><strong><code>To be implemented in first release</code></strong></p>
+<p>Gets details of a specified <em>Task</em> including links to related actions and resources.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>taskId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>567</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#6735d8800e04a470b293271f6b266448" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="6735d8800e04a470b293271f6b266448" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/task</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">taskId</span>": <span class="hljs-value"><span class="hljs-string">"567"</span></span>,
+  "<span class="hljs-attribute">status</span>": <span class="hljs-value"><span class="hljs-string">"in-progress"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self /rels/task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567/cancel"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/cancel-task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Cancel task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="tasks-task-cancel-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Cancel a Task</span></div><div style="float:left"><a href="#tasks-task-cancel-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/tasks/{taskId}/cancel</code></div></div><div class="panel-body"><p>Cancels task execution. <strong>Already applied changes are not reverted</strong> (TBD).</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>taskId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>567</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#6ac447eecfd33054f4be32c6de943837" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="6ac447eecfd33054f4be32c6de943837" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Canceled because data was wrong."</span>
+</span>}
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#15df75b884663cdc290a8dd5c1fa03ca" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="15df75b884663cdc290a8dd5c1fa03ca" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Task successfully canceled."</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent /rels/tasks-collections"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Tasks"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Canceled task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="tasks-task-pause-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Pause a Task</span></div><div style="float:left"><a href="#tasks-task-pause-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/tasks/{taskId}/pause</code></div></div><div class="panel-body"><p>Pauses task execution allowing to continue later.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>taskId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>567</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#f4bb5230c53164dcf3f412120797a5c4" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="f4bb5230c53164dcf3f412120797a5c4" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Task successfully paused."</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent /rels/tasks-collections"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Tasks"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Paused task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567/start"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/start-task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Start task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section><section id="tasks-task-start-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Start a Task</span></div><div style="float:left"><a href="#tasks-task-start-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/tasks/{taskId}/start</code></div></div><div class="panel-body"><p>Start task execution (or continues paused task).</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd><dt>taskId</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>567</span></span><p>Selected <em>Account</em> identifier.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#fe3da4af4e89f0ddf7ea527aa00492db" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="fe3da4af4e89f0ddf7ea527aa00492db" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Task successfully started."</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"parent /rels/tasks-collections"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Tasks"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/567"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Started task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="use-cases-examples">Use Cases Examples&nbsp;<a href="#use-cases-examples"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4>Test API connection</h4>
+<p>Use <code>apikey</code> authentication to request <a href="#indexes-account-index-get"><code>/accounts/{accountName}</code></a>. If status code is <code>200</code> then <code>apikey</code> is fine.</p>
+<p><strong>Request:</strong></p>
+<pre><code>GET <span class="hljs-regexp">/accounts/</span>jsmith<span class="hljs-annotation">@mail</span>.com
+Authorization Token <span class="hljs-number">317</span>F632427BCDA059B19EF241705BD2F
+</code></pre>
+<p><strong>Server Response:</strong></p>
+<pre><code><span class="hljs-status">HTTP/1.1 <span class="hljs-number">200</span> Ok</span>
+
+<span class="1c">{
+    <span class="hljs-comment">//...</span>
+}
+</span></code></pre>
+<h4>Get Server fields</h4>
+<p>Ask server for existent fields requesting <a href="#fields-fields-definition-collection-get"><code>/accounts/accountName/fields</code></a>.</p>
+<p><strong>Request:</strong></p>
+<pre><code>GET <span class="hljs-regexp">/accounts/</span>jsmith<span class="hljs-annotation">@mail</span>.com/fields
+Authorization Token <span class="hljs-number">317</span>F632427BCDA059B19EF241705BD2F
+</code></pre>
+<p><strong>Server Response:</strong></p>
+<pre><code><span class="hljs-status">HTTP/1.1 <span class="hljs-number">200</span> Ok</span>
+
+<span class="json">{
+  "<span class="hljs-attribute">items</span>": <span class="hljs-value">[
+    { 
+      "<span class="hljs-attribute">fielName</span>": <span class="hljs-value"><span class="hljs-string">"firstName"</span></span>, 
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>, 
+      "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"First Name"</span></span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/firstName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/field"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/firstName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"delete"</span> </span>}
+      ]
+    </span>}, 
+    { 
+      "<span class="hljs-attribute">fielName</span>": <span class="hljs-value"><span class="hljs-string">"lastName"</span></span>, 
+      "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>, 
+      "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Last Name"</span></span>,
+      "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/lastName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/field"</span> </span>},
+        { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/lastName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"delete"</span> </span>}
+      ]
+    </span>}
+    //, ...
+  ]</span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self /rels/fields-collection"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</span></code></pre>
+<h4>Import subscribers</h4>
+<ol>
+<li><p>If the <em>List</em> is new, create it in the server posting to <a href="#lists-lists-collection-post"><code>/accounts/{accountName}/lists</code></a></p>
+<p><strong>Request:</strong></p>
+<pre><code>POST <span class="hljs-regexp">/accounts/</span>jsmith<span class="hljs-annotation">@mail</span>.com/lists
+Authorization Token <span class="hljs-number">317</span>F632427BCDA059B19EF241705BD2F
+
+{
+  <span class="hljs-string">"listName"</span>: <span class="hljs-string">"NuevoNombre"</span>
+}
+</code></pre>
+<p><strong>Server Response:</strong></p>
+<pre><code><span class="hljs-status">HTTP/1.1 <span class="hljs-number">201</span> Created</span>
+<span class="hljs-attribute">Location</span>: <span class="hljs-string">/accounts/jsmith@mail.com/lists/345</span>
+
+<span class="clojure"><span class="hljs-collection">{
+  <span class="hljs-string">"message"</span>: <span class="hljs-string">"List successfully created"</span>,
+  <span class="hljs-string">"_links"</span>: <span class="hljs-collection">[
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"parent /rels/lists-collection"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"related /rels/list"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"edit"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"delete"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span>, rel:<span class="hljs-string">"/rels/subscribers-collection"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span>, rel:<span class="hljs-string">"/rels/subscribe-to-list"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/lists/345/subscribers"</span>, rel:<span class="hljs-string">"/rels/import-to-list"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"/rels/account-home"</span>, <span class="hljs-string">"description"</span>: <span class="hljs-string">"Account Index"</span> }</span>
+  ]</span>
+}</span>
+</span></code></pre></li>
+<li><p>Import <em>Subscribers</em> to the <em>List</em> posting to <a href="#subscribers-subscribers-of-a-list-import-post"><code>/accounts/{accountName}/lists/{listId}/subscribers</code></a>:</p>
+<p><strong>Request:</strong></p>
+<pre><code>POST <span class="hljs-regexp">/accounts/</span>jsmith<span class="hljs-annotation">@mail</span>.com<span class="hljs-regexp">/lists/</span><span class="hljs-number">345</span><span class="hljs-regexp">/subscribers/</span><span class="hljs-keyword">import</span>
+Authorization Token <span class="hljs-number">317</span>F632427BCDA059B19EF241705BD2F
+
+{
+  <span class="hljs-string">"items"</span>: [
+    {
+      <span class="hljs-string">"emailAddress"</span>: <span class="hljs-string">"jsmith@mail.com"</span>,
+      <span class="hljs-string">"fields"</span>: [
+        { <span class="hljs-string">"fieldName"</span>: <span class="hljs-string">"firstName"</span>, <span class="hljs-string">"value"</span>: <span class="hljs-string">"Andres"</span> },
+        { <span class="hljs-string">"fieldName"</span>: <span class="hljs-string">"lastName"</span>, <span class="hljs-string">"value"</span>: <span class="hljs-string">"Test"</span> },
+      ]
+    }
+    <span class="hljs-comment">//, ...</span>
+  ], 
+  <span class="hljs-string">"callback"</span>: <span class="hljs-string">"http://myownserver.com/importtask?id=5656"</span>
+}
+</code></pre>
+<p><strong>Server Response:</strong></p>
+<pre><code><span class="hljs-status">HTTP/1.1 <span class="hljs-number">202</span> Accepted</span>
+<span class="hljs-attribute">Location</span>: <span class="hljs-string">/accounts/jsmith@mail.com/tasks/55421</span>
+
+<span class="json">{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Import task successfully created"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/55421"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Import task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/55421/stop"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/stop"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Stop task"</span> </span>}
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/55421/pause"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/pause"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Pause task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</span></code></pre>
+<p><strong>Callback Example:</strong></p>
+<pre><code><span class="hljs-request">POST <span class="hljs-string">/importtask?id=5656</span> HTTP/1.1</span>
+<span class="hljs-attribute">Host</span>: <span class="hljs-string">myownserver.com</span>
+<span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span>
+
+<span class="json">{
+  "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Import to 345 list successfully done"</span></span>,
+  "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/tasks/55421"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/task"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Import task"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/lists/345"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"related /rels/list"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Tasks"</span> </span>},
+    { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/account-home"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Account Index"</span> </span>}
+  ]
+</span>}
+</span></code></pre></li>
+<li><p>Wait to receive the finalization callback, or it is also possible to request for task status to <a href="#tasks-task-get"><code>/accounts/{accountName}/tasks/{taskId}</code></a>:</p>
+<p><strong>Request:</strong></p>
+<pre><code>GET <span class="hljs-regexp">/accounts/</span>jsmith<span class="hljs-annotation">@mail</span>.com<span class="hljs-regexp">/tasks/</span><span class="hljs-number">55421</span>
+Authorization Token <span class="hljs-number">317</span>F632427BCDA059B19EF241705BD2F
+</code></pre>
+<p><strong>Server Response:</strong></p>
+<pre><code><span class="hljs-status">HTTP/1.1 <span class="hljs-number">200</span></span>
+
+<span class="clojure"><span class="hljs-collection">{
+  <span class="hljs-string">"status"</span>: <span class="hljs-string">"Working"</span>,
+  <span class="hljs-string">"progress"</span>: <span class="hljs-number">50</span>,
+  //...
+  <span class="hljs-string">"_links"</span>: <span class="hljs-collection">[
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/tasks/55421"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"self /rels/task"</span> }</span>
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/tasks/55421/stop"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"/rels/stop"</span>, <span class="hljs-string">"description"</span>: <span class="hljs-string">"Stop task"</span> }</span>
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com/tasks/55421/pause"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"/rels/pause"</span> }</span>,
+    <span class="hljs-collection">{ <span class="hljs-string">"href"</span>: <span class="hljs-string">"/accounts/jsmith@mail.com"</span>, <span class="hljs-string">"rel"</span>: <span class="hljs-string">"/rels/account-home"</span>, <span class="hljs-string">"description"</span>: <span class="hljs-string">"Account Index"</span> }</span>
+  ]</span>
+}</span>
+</span></code></pre></li>
+</ol>
+</div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 10 Jun 2015</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+
+</div></body><script src="http://code.jquery.com/jquery-1.11.0.min.js"></script><script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script>(function() {
+  if (location.protocol === 'file:') {
+    //document.getElementById('localFile').style.display = 'block';
+  }
+
+}).call(this);
+</script><script>(function() {
+  $('table').addClass('table');
+
+}).call(this);
+</script></html>
