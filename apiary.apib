@@ -767,6 +767,7 @@ Gets all field definitions.
               "label": "First Name",
               "type": "string",
               "predefined": true,
+              "private": false,
               "_links": [
                 { "href": "/accounts/jsmith@mail.com/fields/firstName", "rel": "item /rels/field" },
                 { "href": "/accounts/jsmith@mail.com/fields/firstName", "rel": "/rels/edit-field", "description": "Edit field" }
@@ -777,6 +778,7 @@ Gets all field definitions.
               "label": "Last Name",
               "type": "string",
               "predefined": true,
+              "private": false,
               "_links": [
                 { "href": "/accounts/jsmith@mail.com/fields/lastName", "rel": "item /rels/field" },
                 { "href": "/accounts/jsmith@mail.com/fields/lastName", "rel": "/rels/edit-field", "description": "Edit field" }
@@ -787,6 +789,7 @@ Gets all field definitions.
               "label": "Annual Income",
               "type": "number",
               "predefined": false,
+              "private": false,
               "_links": [
                 { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "item /rels/field" },
                 { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "/rels/edit-field", "description": "Edit field" },
@@ -814,7 +817,8 @@ Creates a new custom field.
         {
           "fieldName": "city",
           "label": "City",
-          "type": "string"
+          "type": "string",
+          "private": false
         }
         ```
 
@@ -855,6 +859,7 @@ Gets a specified field definition.
           "label": "Annual Income",
           "type": "number",
           "predefined": false,
+          "private": false,
           "_links": [
             { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "self /rels/field" },
             { "href": "/accounts/jsmith@mail.com/fields/income", "rel": "/rels/edit-field", "description": "Edit field" },
@@ -874,7 +879,8 @@ Edit a field definition. Only editable fields are required.
 
         ```
         {
-          "label": "Income"
+          "label": "Income",
+          "private": false
         }
         ```
 

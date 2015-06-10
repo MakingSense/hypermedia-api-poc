@@ -547,6 +547,7 @@ to keep your client decoupled from implementation details.</p>
       "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"First Name"</span></span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
       "<span class="hljs-attribute">predefined</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
         { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/firstName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/field"</span> </span>},
         { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/firstName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>}
@@ -557,6 +558,7 @@ to keep your client decoupled from implementation details.</p>
       "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Last Name"</span></span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
       "<span class="hljs-attribute">predefined</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
         { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/lastName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/field"</span> </span>},
         { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/lastName"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>}
@@ -567,6 +569,7 @@ to keep your client decoupled from implementation details.</p>
       "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Annual Income"</span></span>,
       "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"number"</span></span>,
       "<span class="hljs-attribute">predefined</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
       "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
         { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"item /rels/field"</span> </span>},
         { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>},
@@ -585,7 +588,8 @@ to keep your client decoupled from implementation details.</p>
 </dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#b5ecd3dab59166836388e554386b5cd5" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="b5ecd3dab59166836388e554386b5cd5" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">fieldName</span>": <span class="hljs-value"><span class="hljs-string">"city"</span></span>,
   "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"City"</span></span>,
-  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span>
+  "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"string"</span></span>,
+  "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
 </span>}
 </code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#1c1b8d0771f35edaf88d2a3c72aa8e2a" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="1c1b8d0771f35edaf88d2a3c72aa8e2a" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Field created successfully"</span></span>,
@@ -605,6 +609,7 @@ to keep your client decoupled from implementation details.</p>
   "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Annual Income"</span></span>,
   "<span class="hljs-attribute">type</span>": <span class="hljs-value"><span class="hljs-string">"number"</span></span>,
   "<span class="hljs-attribute">predefined</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+  "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
   "<span class="hljs-attribute">_links</span>": <span class="hljs-value">[
     { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"self /rels/field"</span> </span>},
     { "<span class="hljs-attribute">href</span>": <span class="hljs-value"><span class="hljs-string">"/accounts/jsmith@mail.com/fields/income"</span></span>, "<span class="hljs-attribute">rel</span>": <span class="hljs-value"><span class="hljs-string">"/rels/edit-field"</span></span>, "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Edit field"</span> </span>},
@@ -615,8 +620,9 @@ to keep your client decoupled from implementation details.</p>
 </code></pre></li></ul></section><section id="fields-field-put" class="panel panel-warning"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Edit a Field</span></div><div style="float:left"><a href="#fields-field-put" class="btn btn-xs btn-warning">PUT</a></div><div style="overflow:hidden"><code>/accounts/{accountName}/fields/{fieldName}</code></div></div><div class="panel-body"><p>Edit a field definition. Only editable fields are required.</p>
 </div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>accountName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>jsmith@mail.com</span></span><p>Selected <em>Account</em> identifier.</p>
 </dd><dt>fieldName</dt><dd><code>string</code>&nbsp;<span class="required">(required)</span>&nbsp;<span class="text-muted example"><strong>Example:&nbsp;</strong><span>income</span></span><p>Selected Field</p>
-</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#8828dbe5f56f2123c748d179cc93c214" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="8828dbe5f56f2123c748d179cc93c214" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
-  "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Income"</span>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#e3e994a472bca71737fda4c24e240092" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e3e994a472bca71737fda4c24e240092" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{
+  "<span class="hljs-attribute">label</span>": <span class="hljs-value"><span class="hljs-string">"Income"</span></span>,
+  "<span class="hljs-attribute">private</span>": <span class="hljs-value"><span class="hljs-literal">false</span>
 </span>}
 </code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#a3d03f4f2ea54b18c6c9ec888637b462" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="a3d03f4f2ea54b18c6c9ec888637b462" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; profile=/schemas/message</span><br></code></pre><h5>Body</h5><pre><code>{
   "<span class="hljs-attribute">message</span>": <span class="hljs-value"><span class="hljs-string">"Field updated successfully"</span></span>,
