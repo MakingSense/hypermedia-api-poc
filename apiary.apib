@@ -425,9 +425,17 @@ Returns a _paginated_ collection of _Subscribers_ related to selected _List_.
 
 #### Subscribe to List [POST]
 
-**`To be implemented in first release`**
+<strike>**To be implemented in first release**</strike>
 
 Associate a _Subscriber_ to the _List_. If _Subscriber's email address_ already exists in current _Account_, the existent _Subscriber_ is updated. Only data included in the payload is applied. 
+
+##### To consider
+
+It could be possible to do it in async way, responding that the subscriber will be updated and store the task in a queue.
+
+There could be a problem because of account limit of subscribers, a possible solution could be to validate if the account has a limit of subscribers, in that case check it sinchronouly before store the task in the queue.
+
+Or, the worker could store the overflow in a special disabled list.
 
 + Attributes
     + emailAddress: test@mail.com (string, required) - Subscriber email.
